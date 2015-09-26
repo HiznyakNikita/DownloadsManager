@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+[assembly: CLSCompliant(true)]
+
 namespace DownloadsManager
 {
     /// <summary>
@@ -20,6 +22,9 @@ namespace DownloadsManager
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// MainWindow ctor
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
