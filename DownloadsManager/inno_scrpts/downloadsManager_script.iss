@@ -29,7 +29,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "D:\C#\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\projects\downloadsmanager\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.exe"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
