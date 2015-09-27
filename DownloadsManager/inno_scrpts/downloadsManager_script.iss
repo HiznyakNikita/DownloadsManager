@@ -1,5 +1,5 @@
 
-#define MyAppName GetStringFileInfo(AddBackslash(SourcePath), "ProductName")
+#define MyAppName $APPVEYOR_PROJECT_NAME
 #define MyAppVersion GetFileVersion(AddBackslash(SourcePath))
 #define MyAppPublisher GetStringFileInfo(AddBackslash(SourcePath), "CompanyName")
 #define MyAppExeName "DownloadsManager.exe"
@@ -9,7 +9,7 @@
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{02177978-739E-4939-8282-B82A4644F128}
-AppName= $APPVEYOR_PROJECT_NAME
+AppName= {#MyAppName}
 AppVersion=$APPVEYOR_BUILD_NUMBER
 ;AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher=$APPVAYOR_REPO_NAME
