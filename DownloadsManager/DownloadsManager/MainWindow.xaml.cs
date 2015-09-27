@@ -28,6 +28,7 @@ namespace DownloadsManager
         public MainWindow()
         {
             InitializeComponent();
+            
         }
     }
 }
