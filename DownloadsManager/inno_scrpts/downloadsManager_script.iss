@@ -1,7 +1,7 @@
 
-#define public MyAppName DownloadsManager
+#define public MyAppName "DownloadsManager"
 #define public MyAppVersion GetFileVersion("C:\projects\downloadsmanager\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.exe")
-#define public MyAppPublisher HiznyakNikita
+#define public MyAppPublisher "HiznyakNikita"
 #define public MyAppExeName "DownloadsManager.exe"
 
 [Setup]
