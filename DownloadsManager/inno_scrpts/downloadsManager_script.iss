@@ -9,12 +9,12 @@
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{02177978-739E-4939-8282-B82A4644F128}
-AppName={#MyAppName}
-AppVersion={#MyAppVersion}
+AppName= $APPVEYOR_PROJECT_NAME
+AppVersion=$APPVEYOR_BUILD_NUMBER
 ;AppVerName={#MyAppName} {#MyAppVersion}
-AppPublisher={#MyAppPublisher}
-DefaultDirName={pf}\{#MyAppName}
-DefaultGroupName={#MyAppName}
+AppPublisher=$APPVAYOR_REPO_NAME
+DefaultDirName={pf}\$APPVEYOR_PROJECT_NAME
+DefaultGroupName=$APPVEYOR_PROJECT_NAME
 OutputDir=D:\Developer\InnoSetupFiles
 OutputBaseFilename=setup
 Compression=lzma
