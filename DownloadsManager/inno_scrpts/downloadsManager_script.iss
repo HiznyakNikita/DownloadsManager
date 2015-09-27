@@ -1,5 +1,5 @@
 
-#define public MyAppName GetStringFileInfo(C:\projects\downloadsmanager\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.exe", "ProductName")
+#define public MyAppName GetStringFileInfo("C:\projects\downloadsmanager\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.exe", "ProductName")
 #define public MyAppVersion GetFileVersion("C:\projects\downloadsmanager\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.exe")
 #define public MyAppPublisher GetStringFileInfo("C:\projects\downloadsmanager\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.exe", "CompanyName")
 #define public MyAppExeName "DownloadsManager.exe"
