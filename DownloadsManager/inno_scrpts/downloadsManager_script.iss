@@ -1,4 +1,3 @@
-
 #define public MyAppName "DownloadsManager"
 #define public MyAppVersion GetFileVersion("C:\projects\downloadsmanager\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.exe")
 #define public MyAppPublisher "HiznyakNikita"
@@ -15,7 +14,7 @@ AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
-OutputDir=D:\Developer\InnoSetupFiles
+;OutputDir=D:\Developer\InnoSetupFiles
 OutputBaseFilename=setup
 Compression=lzma
 SolidCompression=yes
