@@ -1,8 +1,8 @@
 
-#define MyAppName $APPVEYOR_PROJECT_NAME
-#define MyAppVersion GetFileVersion(AddBackslash(SourcePath))
-#define MyAppPublisher GetStringFileInfo(AddBackslash(SourcePath), "CompanyName")
-#define MyAppExeName "DownloadsManager.exe"
+#define public MyAppName GetStringFileInfo(AddBackslash(SourcePath), "ProductName")
+#define public MyAppVersion GetFileVersion(AddBackslash(SourcePath))
+#define public MyAppPublisher GetStringFileInfo(AddBackslash(SourcePath), "CompanyName")
+#define public MyAppExeName "DownloadsManager.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -10,11 +10,11 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{02177978-739E-4939-8282-B82A4644F128}
 AppName= {#MyAppName}
-AppVersion=$APPVEYOR_BUILD_NUMBER
+AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
-AppPublisher=$APPVAYOR_REPO_NAME
-DefaultDirName={pf}\$APPVEYOR_PROJECT_NAME
-DefaultGroupName=$APPVEYOR_PROJECT_NAME
+AppPublisher={#MyAppPublisher}
+DefaultDirName={pf}\{#MyAppName}
+DefaultGroupName={#MyAppName}
 OutputDir=D:\Developer\InnoSetupFiles
 OutputBaseFilename=setup
 Compression=lzma
