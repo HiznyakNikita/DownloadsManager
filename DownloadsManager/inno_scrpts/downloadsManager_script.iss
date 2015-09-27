@@ -1,7 +1,7 @@
 
-#define public MyAppName GetStringFileInfo(AddBackslash(SourcePath), "ProductName")
-#define public MyAppVersion GetFileVersion(AddBackslash(SourcePath))
-#define public MyAppPublisher GetStringFileInfo(AddBackslash(SourcePath), "CompanyName")
+#define public MyAppName GetStringFileInfo("C:\projects\downloadsmanager\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.exe", "ProductName")
+#define public MyAppVersion GetFileVersion("C:\projects\downloadsmanager\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.exe")
+#define public MyAppPublisher GetStringFileInfo("C:\projects\downloadsmanager\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.exe", "CompanyName")
 #define public MyAppExeName "DownloadsManager.exe"
 
 [Setup]
