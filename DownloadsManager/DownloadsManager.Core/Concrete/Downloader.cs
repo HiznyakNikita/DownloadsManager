@@ -10,19 +10,23 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.Core.Concrete
 {
+    /// <summary>
+    /// Class which represent every download
+    /// TODO State,Download providers, segments (for pause and speed manipulations)
+    /// </summary>
     public class Downloader : IDownloader
     {
-
         private string localFile;
         private DateTime createdDateTime;
         //used to show information about file
         private RemoteFileInfo remoteFileInfo;
         private string statusMessage;
 
-        public Downloader(string localFile)
+        public Downloader(string localFile, RemoteFileInfo remoteInfo, DateTime createdDateTime)
         {
             this.localFile = localFile;
-            this.createdDateTime = DateTime.Now;
+            this.remoteFileInfo = remoteInfo;
+            this.createdDateTime = createdDateTime;
         }
         #region Properties
 
@@ -92,13 +96,13 @@ namespace DownloadsManager.Core.Concrete
 
         #endregion
 
-        public void Download(string url, string path)
+        public void Download(string uri, string path)
         {
             WebClient client = new WebClient();
             // Hookup DownloadFileCompleted Event
             client.DownloadFileCompleted += new AsyncCompletedEventHandler(DownloadFileCompleted);
 
-            client.DownloadFileAsync(new Uri(url), path);
+            client.DownloadFileAsync(new Uri(uri), path);
         }
 
         private void DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)

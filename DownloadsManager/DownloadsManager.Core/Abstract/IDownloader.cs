@@ -8,6 +8,6 @@ namespace DownloadsManager.Core.Abstract
 {
     interface IDownloader
     {
-        void Download(string url, string path);
+        void Download(string uri, string path);
     }
 }

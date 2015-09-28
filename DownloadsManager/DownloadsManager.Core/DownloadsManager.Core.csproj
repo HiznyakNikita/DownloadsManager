@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Abstract\IDownloader.cs" />
     <Compile Include="Concrete\Downloader.cs" />
+    <Compile Include="Concrete\DownloaderManager.cs" />
     <Compile Include="Concrete\RemoteFileInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
