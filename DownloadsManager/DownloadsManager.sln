@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{95396E
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DownloadsManager.Core", "DownloadsManager.Core\DownloadsManager.Core.csproj", "{1CD6E6B9-7743-4540-9EDC-B6C5DAAC6897}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,6 +24,10 @@ Global
 		{74846916-DC5F-4AC7-AC7C-2C560A5002BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74846916-DC5F-4AC7-AC7C-2C560A5002BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74846916-DC5F-4AC7-AC7C-2C560A5002BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CD6E6B9-7743-4540-9EDC-B6C5DAAC6897}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CD6E6B9-7743-4540-9EDC-B6C5DAAC6897}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CD6E6B9-7743-4540-9EDC-B6C5DAAC6897}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CD6E6B9-7743-4540-9EDC-B6C5DAAC6897}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
