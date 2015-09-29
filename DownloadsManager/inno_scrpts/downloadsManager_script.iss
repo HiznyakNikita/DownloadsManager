@@ -1,22 +1,14 @@
-<<<<<<< HEAD
 #define Path "..\DownloadsManager\DownloadsManager\bin\Debug\DownloadsManager.exe"
 #define Name GetStringFileInfo(Path, "ProductName")
 #define Publisher GetStringFileInfo(Path, "CompanyName")
 #define ExeName "DownloadsManager.exe"     
 #define AppVersion GetFileVersion(Path)
 #define GUID "674DC930-9FA6-42BE-9602-C4653197B721"
-=======
-#define public MyAppName "DownloadsManager"
-#define public MyAppVersion GetFileVersion("C:\projects\downloadsmanager\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.exe")
-#define public MyAppPublisher "HiznyakNikita"
-#define public MyAppExeName "DownloadsManager.exe"
->>>>>>> origin/master
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-<<<<<<< HEAD
 AppId={#GUID}
 AppName={#Name}
 AppVersion={#AppVersion}
@@ -26,21 +18,6 @@ DefaultDirName={pf}\{#Name}
 DefaultGroupName={#Name}
 AllowNoIcons=yes
 OutputDir=..\DownloadsManager\DownloadsManager\bin\Debug\
-=======
-AppId={{02177978-739E-4939-8282-B82A4644F128}}
-AppName= {#MyAppName}
-AppVersion={#MyAppVersion}
-;AppVerName={#MyAppName} {#MyAppVersion}
-AppPublisher={#MyAppPublisher}
-DefaultDirName={pf}\{#MyAppName}
-DefaultGroupName={#MyAppName}
-;OutputDir=D:\Developer\InnoSetupFiles
->>>>>>> origin/master
-OutputBaseFilename=setup
-Compression=lzma
-SolidCompression=yes
-
-
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"
@@ -51,12 +28,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-<<<<<<< HEAD
 Source: {#Path}; DestDir: "{app}"; Flags: ignoreversion
-=======
-Source: "C:\projects\downloadsmanager\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.exe"; DestDir: "{app}"; Flags: ignoreversion
->>>>>>> origin/master
-; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
