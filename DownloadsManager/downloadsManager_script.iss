@@ -1,4 +1,4 @@
-#define Path "..\DownloadsManager\DownloadsManager\bin\Debug\DownloadsManager.exe"
+#define Path "..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Debug\DownloadsManager.exe"
 #define Name GetStringFileInfo(Path, "ProductName")
 #define Publisher GetStringFileInfo(Path, "CompanyName")
 #define ExeName "DownloadsManager.exe"     
