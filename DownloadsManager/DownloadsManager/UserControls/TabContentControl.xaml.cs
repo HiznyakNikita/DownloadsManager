@@ -1,5 +1,4 @@
-﻿using DownloadsManager.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,22 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-[assembly: CLSCompliant(true)]
-
-namespace DownloadsManager
+namespace DownloadsManager.UserControls
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for TabContentControl.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class TabContentControl : UserControl
     {
-        /// <summary>
-        /// MainWindow ctor
-        /// </summary>
-        public MainWindow()
+        public TabContentControl()
         {
             InitializeComponent();
-            this.DataContext = new MainWindowVM();
         }
     }
 }
