@@ -16,7 +16,7 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="ContentSite"  Property="TextElement.Foreground"  Value="WhiteSmoke" />
+                            <Setter TargetName="ContentSite"  Property="TextElement.Foreground"  Value="Gray" />
                             <Setter TargetName="Panel" Property="Background" Value="#FF575757"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="False">
