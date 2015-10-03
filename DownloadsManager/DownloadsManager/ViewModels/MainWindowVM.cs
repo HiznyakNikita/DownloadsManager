@@ -13,11 +13,6 @@ namespace DownloadsManager.ViewModels
     public class MainWindowVM
     {
         /// <summary>
-        /// DownloadManagerInstance
-        /// </summary>
-        private DownloaderManager downloadManager;
-
-        /// <summary>
         /// List of pownloads
         /// </summary>
         private List<Downloader> downloads;
