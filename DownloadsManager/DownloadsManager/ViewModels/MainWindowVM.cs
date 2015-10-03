@@ -13,11 +13,27 @@ namespace DownloadsManager.ViewModels
     public class MainWindowVM
     {
         /// <summary>
+        /// List of pownloads
+        /// </summary>
+        private List<Downloader> downloads;
+
+        /// <summary>
         /// ctor
         /// </summary>
         public MainWindowVM()
         {
 
+        }
+
+        /// <summary>
+        /// Gets DownloadsCollection
+        /// </summary>
+        public IReadOnlyCollection<Downloader> Downloads
+        {
+            get
+            {
+                return downloads.AsReadOnly();
+            }
         }
     }
 }
