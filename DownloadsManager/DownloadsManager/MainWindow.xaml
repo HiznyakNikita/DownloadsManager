@@ -8,19 +8,24 @@
         <DataTemplate DataType="{x:Type vm:MainWindowVM}"/>
     </Window.Resources>
     <Grid>
-        <TabControl x:Name="tabControl" Background="#FF575757" BorderBrush="Transparent" Margin="0,1,0,-1">
+        <TabControl  x:Name="tabControl" Background="#FF575757" Style="{StaticResource TabControlStyle}" BorderBrush="Transparent">
             <TabControl.Resources>
                 <Style TargetType="TabItem" BasedOn="{StaticResource TabItemsStyle}"/>
             </TabControl.Resources>
             <TabItem Header="ALL">
                 <DataGrid ItemsSource="{Binding Downloads}" AutoGenerateColumns="True"/>
             </TabItem>
-            <TabItem Header="MUSIC"></TabItem>
-            <TabItem Header="VIDEO"></TabItem>
+            <TabItem Header="MUSIC">
+                <DataGrid ItemsSource="{Binding Downloads}" AutoGenerateColumns="True"/>
+            </TabItem>
+            <TabItem Header="VIDEO">
+                <DataGrid ItemsSource="{Binding Downloads}" AutoGenerateColumns="True"/>
+            </TabItem>
             <TabItem Header="PICTURES"></TabItem>
             <TabItem Header="DOCUMENTS"></TabItem>
             <TabItem Header="APPLICATIONS"></TabItem>
             <TabItem Header="STATISTIC"></TabItem>
         </TabControl>
+        <Button HorizontalAlignment="Right" Click="BtnCloseWindow_Click" Margin="556,3,0,0" VerticalAlignment="Top" Width="20" Height="20" x:Name="BtnCloseWindow" Style="{StaticResource closeWindowButtonStyle}"/>
     </Grid>
 </Window>

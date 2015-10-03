@@ -85,6 +85,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -179,6 +180,14 @@
       <Project>{1cd6e6b9-7743-4540-9edc-b6c5daac6897}</Project>
       <Name>DownloadsManager.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icons\close_selected.png" />
+    <Resource Include="Resources\icons\close_unselected.png" />
+    <Resource Include="Resources\icons\left_selected.png" />
+    <Resource Include="Resources\icons\left_unselected.png" />
+    <Resource Include="Resources\icons\right_selected.png" />
+    <Resource Include="Resources\icons\right_unselected.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

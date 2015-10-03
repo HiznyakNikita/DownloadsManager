@@ -31,5 +31,10 @@ namespace DownloadsManager
             InitializeComponent();
             this.DataContext = new MainWindowVM();
         }
+
+        private void BtnCloseWindow_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }
