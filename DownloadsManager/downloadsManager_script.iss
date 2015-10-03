@@ -1,4 +1,4 @@
-#define Path "..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Debug\DownloadsManager.exe"
+#define Path "..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.exe"
 #define Name GetStringFileInfo(Path, "ProductName")
 #define Publisher GetStringFileInfo(Path, "CompanyName")
 #define ExeName "DownloadsManager.exe"     
@@ -17,7 +17,7 @@ AppPublisher={#Publisher}
 DefaultDirName={pf}\{#Name}
 DefaultGroupName={#Name}
 AllowNoIcons=yes
-OutputDir=..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Debug\
+OutputDir=..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"
