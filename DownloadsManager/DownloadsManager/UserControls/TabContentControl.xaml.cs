@@ -20,6 +20,9 @@ namespace DownloadsManager.UserControls
     /// </summary>
     public partial class TabContentControl : UserControl
     {
+        /// <summary>
+        /// ctor
+        /// </summary>
         public TabContentControl()
         {
             InitializeComponent();

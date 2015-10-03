@@ -12,27 +12,33 @@ namespace DownloadsManager.ViewModels
     /// </summary>
     public class MainWindowVM
     {
+        /// <summary>
+        /// DownloadManagerInstance
+        /// </summary>
         private DownloaderManager downloadManager;
 
+        /// <summary>
+        /// List of pownloads
+        /// </summary>
         private List<Downloader> downloads;
 
+        /// <summary>
+        /// ctor
+        /// </summary>
+        public MainWindowVM()
+        {
+
+        }
+
+        /// <summary>
+        /// Gets DownloadsCollection
+        /// </summary>
         public IReadOnlyCollection<Downloader> Downloads
         {
-            get 
+            get
             {
                 return downloads.AsReadOnly();
             }
-        }
-
-        public MainWindowVM()
-        {
-            downloadManager = new DownloaderManager();
-            //FOR TEST DELETE AFTER TESTING
-            downloadManager.Add("TEST FILE1", new RemoteFileInfo() { FileSize = 12, LastModified = DateTime.Now }, DateTime.Now, "http://www.codeproject.com/KB/architecture/362986/IteratorTestApp.zip", System.Reflection.Assembly.GetEntryAssembly().Location);
-            downloadManager.Add("TEST FILE2", new RemoteFileInfo() { FileSize = 12, LastModified = DateTime.Now }, DateTime.Now, "http://www.codeproject.com/KB/architecture/362986/IteratorTestApp.zip", System.Reflection.Assembly.GetEntryAssembly().Location);
-            downloadManager.Add("TEST FILE3", new RemoteFileInfo() { FileSize = 12, LastModified = DateTime.Now }, DateTime.Now, "http://www.codeproject.com/KB/architecture/362986/IteratorTestApp.zip", System.Reflection.Assembly.GetEntryAssembly().Location);
-
-            downloads = downloadManager.Downloads.ToList();
         }
     }
 }

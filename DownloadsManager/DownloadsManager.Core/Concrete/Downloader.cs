@@ -16,32 +16,64 @@ namespace DownloadsManager.Core.Concrete
     /// </summary>
     public class Downloader : IDownloader
     {
+        /// <summary>
+        /// loacalFile
+        /// </summary>
         private string localFile;
+
+        /// <summary>
+        /// createdDateTime
+        /// </summary>
         private DateTime createdDateTime;
-        //used to show information about file
+        
+        /// <summary>
+        /// to show info about file
+        /// </summary>
         private RemoteFileInfo remoteFileInfo;
+        
+        /// <summary>
+        /// status of downloading
+        /// </summary>
         private string statusMessage;
 
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="localFile">local file</param>
+        /// <param name="remoteInfo">remote info</param>
+        /// <param name="createdDateTime">created date time</param>
         public Downloader(string localFile, RemoteFileInfo remoteInfo, DateTime createdDateTime)
         {
             this.localFile = localFile;
             this.remoteFileInfo = remoteInfo;
             this.createdDateTime = createdDateTime;
         }
+
         #region Properties
 
+        /// <summary>
+        /// Gets file size
+        /// </summary>
         public long FileSize
         {
             get
             {
+
                 if (remoteFileInfo == null)
                 {
+
                     return 0;
+
                 }
+
                 return remoteFileInfo.FileSize;
+
             }
         }
 
+        /// <summary>
+        /// Gets date time of created
+        /// </summary>
         public DateTime CreatedDateTime
         {
             get
@@ -50,6 +82,9 @@ namespace DownloadsManager.Core.Concrete
             }
         }
 
+        /// <summary>
+        /// Gets loal file
+        /// </summary>
         public string LocalFile
         {
             get
@@ -58,15 +93,21 @@ namespace DownloadsManager.Core.Concrete
             }
         }
 
+        /// <summary>
+        /// Gets progress status
+        /// </summary>
         public double Progress
         {
             get
             {
-               //TODO
+                //TODO
                 return 0;
             }
         }
 
+        /// <summary>
+        /// Gets rate of download
+        /// </summary>
         public double Rate
         {
             get
@@ -78,6 +119,9 @@ namespace DownloadsManager.Core.Concrete
             }
         }
 
+        /// <summary>
+        /// Gets time left
+        /// </summary>
         public TimeSpan TimeLeft
         {
             get
@@ -87,24 +131,39 @@ namespace DownloadsManager.Core.Concrete
             }
         }
 
+        /// <summary>
+        /// Gets or sets status message
+        /// </summary>
         public string StatusMessage
         {
+
             get { return statusMessage; }
             set { statusMessage = value; }
-        }
 
+        }
 
         #endregion
 
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="uri">uri</param>
+        /// <param name="path">path</param>
         public void Download(string uri, string path)
         {
             WebClient client = new WebClient();
-            // Hookup DownloadFileCompleted Event
+
+            //// Hookup DownloadFileCompleted Event
             client.DownloadFileCompleted += new AsyncCompletedEventHandler(DownloadFileCompleted);
 
             client.DownloadFileAsync(new Uri(uri), path);
         }
 
+        /// <summary>
+        /// complete method
+        /// </summary>
+        /// <param name="sender">sender download</param>
+        /// <param name="e">args</param>
         private void DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
             Debug.WriteLine("Download completed");

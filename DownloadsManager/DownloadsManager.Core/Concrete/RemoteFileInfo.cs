@@ -11,15 +11,28 @@ namespace DownloadsManager.Core.Concrete
     /// </summary>
     public class RemoteFileInfo
     {
+        /// <summary>
+        /// filesize
+        /// </summary>
         private long fileSize;
+
+        /// <summary>
+        /// lastModif
+        /// </summary>
         private DateTime lastModified = DateTime.MinValue;
 
+        /// <summary>
+        /// Gets or sets file size
+        /// </summary>
         public long FileSize
         {
             get { return fileSize; }
             set { fileSize = value; }
         }
 
+        /// <summary>
+        /// Gets or sets last modif
+        /// </summary>
         public DateTime LastModified
         {
             get { return lastModified; }
