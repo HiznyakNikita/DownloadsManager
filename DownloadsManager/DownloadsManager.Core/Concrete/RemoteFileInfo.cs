@@ -36,7 +36,7 @@ namespace DownloadsManager.Core.Concrete
         }
 
         /// <summary>
-        /// Gets or sets representing ability to download part of file
+        /// Gets or sets a value indicating whether representing ability to download part of file
         /// </summary>
         public bool AcceptRanges
         {

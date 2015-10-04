@@ -54,6 +54,7 @@ namespace DownloadsManager.Core.Concrete
         /// </summary>
         /// <param name="localFile">local file</param>
         /// <param name="remoteInfo">remote info</param>
+        /// <param name="ri">resource info</param>
         /// <param name="createdDateTime">created date time</param>
         public Downloader(string localFile, RemoteFileInfo remoteInfo, ResourceInfo ri, DateTime createdDateTime)
         {
