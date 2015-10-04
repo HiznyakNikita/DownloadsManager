@@ -22,12 +22,26 @@ namespace DownloadsManager.Core.Concrete
         private DateTime lastModified = DateTime.MinValue;
 
         /// <summary>
+        /// representing ability to download part of file
+        /// </summary>
+        private bool acceptRanges;
+
+        /// <summary>
         /// Gets or sets file size
         /// </summary>
         public long FileSize
         {
             get { return fileSize; }
             set { fileSize = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets representing ability to download part of file
+        /// </summary>
+        public bool AcceptRanges
+        {
+            get { return acceptRanges; }
+            set { acceptRanges = value; }
         }
 
         /// <summary>

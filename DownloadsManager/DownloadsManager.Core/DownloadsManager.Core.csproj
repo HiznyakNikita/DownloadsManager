@@ -48,6 +48,9 @@
     <Compile Include="Abstract\IDownloader.cs" />
     <Compile Include="Concrete\Downloader.cs" />
     <Compile Include="Concrete\DownloaderManager.cs" />
+    <Compile Include="Concrete\Enums\DownloadState.cs" />
+    <Compile Include="Concrete\Enums\FileSegmentState.cs" />
+    <Compile Include="Concrete\FileSegment.cs" />
     <Compile Include="Protocol\HttpProtocolProvider.cs" />
     <Compile Include="Abstract\IProtocolProvider.cs" />
     <Compile Include="Concrete\RemoteFileInfo.cs" />
