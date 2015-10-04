@@ -1,4 +1,5 @@
-﻿using DownloadsManager.ViewModels;
+﻿using DownloadsManager.Core.Concrete;
+using DownloadsManager.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,12 @@ namespace DownloadsManager
         private void BtnCloseWindow_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void BtnTest_Click(object sender, RoutedEventArgs e)
+        {
+            Downloader d = new Downloader("a.txt", new RemoteFileInfo() { FileSize = 20 }, new ResourceInfo() { URL = "https://pp.vk.me/c627430/v627430201/162b1/1sI5qa1_xnw.jpg" }, DateTime.Now);
+            d.Download("https://pp.vk.me/c627430/v627430201/162b1/1sI5qa1_xnw.jpg","D:\\Developer");
         }
     }
 }

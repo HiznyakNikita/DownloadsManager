@@ -3,9 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DownloadsManager.Core.Concrete
@@ -16,6 +18,12 @@ namespace DownloadsManager.Core.Concrete
     /// </summary>
     public class Downloader : IDownloader
     {
+
+        /// <summary>
+        /// provider for this downloader
+        /// </summary>
+        private IProtocolProvider defaultDownloadProvider;
+
         /// <summary>
         /// loacalFile
         /// </summary>
@@ -30,6 +38,11 @@ namespace DownloadsManager.Core.Concrete
         /// to show info about file
         /// </summary>
         private RemoteFileInfo remoteFileInfo;
+
+        /// <summary>
+        /// info about remote resource
+        /// </summary>
+        private ResourceInfo resourceInfo;
         
         /// <summary>
         /// status of downloading
@@ -42,11 +55,13 @@ namespace DownloadsManager.Core.Concrete
         /// <param name="localFile">local file</param>
         /// <param name="remoteInfo">remote info</param>
         /// <param name="createdDateTime">created date time</param>
-        public Downloader(string localFile, RemoteFileInfo remoteInfo, DateTime createdDateTime)
+        public Downloader(string localFile, RemoteFileInfo remoteInfo, ResourceInfo ri, DateTime createdDateTime)
         {
             this.localFile = localFile;
             this.remoteFileInfo = remoteInfo;
             this.createdDateTime = createdDateTime;
+            this.resourceInfo = ri;
+            defaultDownloadProvider = ri.BindProtocolProviderInstance();
         }
 
         #region Properties
@@ -151,12 +166,26 @@ namespace DownloadsManager.Core.Concrete
         /// <param name="path">path</param>
         public void Download(string uri, string path)
         {
-            WebClient client = new WebClient();
+            int currentTry = 0;
 
-            //// Hookup DownloadFileCompleted Event
-            client.DownloadFileCompleted += new AsyncCompletedEventHandler(DownloadFileCompleted);
-
-            client.DownloadFileAsync(new Uri(uri), path);
+            do
+            {
+                currentTry++;
+                try
+                {
+                    remoteFileInfo = defaultDownloadProvider.GetFileInfo(this.resourceInfo);
+                    break;
+                }
+                catch (ThreadAbortException)
+                {
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    Thread.Sleep(TimeSpan.FromSeconds(10));
+                }
+            }
+            while (true);
         }
 
         /// <summary>

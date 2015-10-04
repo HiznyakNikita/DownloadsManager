@@ -30,23 +30,5 @@ namespace DownloadsManager.Core.Concrete
             }
         }
         #endregion
-
-        /// <summary>
-        /// add meyhod
-        /// </summary>
-        /// <param name="localFile">local file</param>
-        /// <param name="remoteInfo">remote info</param>
-        /// <param name="createdDateTime">reated dateime</param>
-        /// <param name="uri">uri</param>
-        /// <param name="path">path</param>
-        /// <returns>Dowload</returns>
-        public Downloader Add(string localFile, RemoteFileInfo remoteInfo, DateTime createdDateTime, string uri, string path)
-        {
-            Downloader d = new Downloader(localFile, remoteInfo, createdDateTime);
-            downloads.Add(d);
-            ////TODO Status changes
-            d.Download(uri, path);
-            return d;
-        }
     }
 }

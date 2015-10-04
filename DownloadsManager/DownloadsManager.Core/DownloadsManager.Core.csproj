@@ -48,7 +48,10 @@
     <Compile Include="Abstract\IDownloader.cs" />
     <Compile Include="Concrete\Downloader.cs" />
     <Compile Include="Concrete\DownloaderManager.cs" />
+    <Compile Include="Protocol\HttpProtocolProvider.cs" />
+    <Compile Include="Abstract\IProtocolProvider.cs" />
     <Compile Include="Concrete\RemoteFileInfo.cs" />
+    <Compile Include="Concrete\ResourceInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

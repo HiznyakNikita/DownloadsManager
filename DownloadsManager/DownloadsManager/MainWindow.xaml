@@ -21,7 +21,9 @@
             <TabItem Header="VIDEO">
                 <DataGrid ItemsSource="{Binding Downloads}" AutoGenerateColumns="True"/>
             </TabItem>
-            <TabItem Header="PICTURES"></TabItem>
+            <TabItem Header="PICTURES">
+                <Button x:Name="BtnTest" Height="50" Width="50" Click="BtnTest_Click"></Button>
+            </TabItem>
             <TabItem Header="DOCUMENTS"></TabItem>
             <TabItem Header="APPLICATIONS"></TabItem>
             <TabItem Header="STATISTIC"></TabItem>
