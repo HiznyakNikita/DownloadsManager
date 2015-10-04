@@ -51,6 +51,15 @@
     <Compile Include="Abstract\IFileSegmentCalculator.cs" />
     <Compile Include="Concrete\Downloader.cs" />
     <Compile Include="Concrete\DownloaderManager.cs" />
+    <Compile Include="Concrete\DownloadStates\DownloadEndedState.cs" />
+    <Compile Include="Concrete\DownloadStates\DownloadEndedWithErrorState.cs" />
+    <Compile Include="Concrete\DownloadStates\DownloadNeedToPrepareState.cs" />
+    <Compile Include="Concrete\DownloadStates\DownloadPausedState.cs" />
+    <Compile Include="Concrete\DownloadStates\DownloadPausingState.cs" />
+    <Compile Include="Concrete\DownloadStates\DownloadPreparedState.cs" />
+    <Compile Include="Concrete\DownloadStates\DownloadPreparingState.cs" />
+    <Compile Include="Concrete\DownloadStates\DownloadWaitingForReconnectState.cs" />
+    <Compile Include="Concrete\DownloadStates\DownloadWorkingState.cs" />
     <Compile Include="Concrete\Enums\DownloadState.cs" />
     <Compile Include="Concrete\Enums\FileSegmentState.cs" />
     <Compile Include="Concrete\FileSegment.cs" />

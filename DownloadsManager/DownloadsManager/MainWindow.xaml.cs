@@ -40,8 +40,8 @@ namespace DownloadsManager
 
         private void BtnTest_Click(object sender, RoutedEventArgs e)
         {
-            Downloader d = new Downloader("a.txt", new RemoteFileInfo() { FileSize = 20 }, new ResourceInfo() { URL = "https://pp.vk.me/c627430/v627430201/162b1/1sI5qa1_xnw.jpg" }, DateTime.Now);
-            d.Download("https://pp.vk.me/c627430/v627430201/162b1/1sI5qa1_xnw.jpg","D:\\Developer");
+            //Downloader d = new Downloader("a.txt", new RemoteFileInfo() { FileSize = 20 }, new ResourceInfo() { URL = "https://pp.vk.me/c627430/v627430201/162b1/1sI5qa1_xnw.jpg" }, DateTime.Now);
+            //d.Download("https://pp.vk.me/c627430/v627430201/162b1/1sI5qa1_xnw.jpg","D:\\Developer");
         }
     }
 }
