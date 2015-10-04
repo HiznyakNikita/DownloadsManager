@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstract\IDownloaderState.cs" />
     <Compile Include="Concrete\CalculatedFileSegment.cs" />
     <Compile Include="Abstract\IDownloader.cs" />
     <Compile Include="Abstract\IFileSegmentCalculator.cs" />

@@ -1,4 +1,5 @@
 ﻿using DownloadsManager.Core.Abstract;
+using DownloadsManager.Core.Concrete.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,77 +19,134 @@ namespace DownloadsManager.Core.Concrete
     /// </summary>
     public class Downloader : IDownloader
     {
-
-        /// <summary>
-        /// provider for this downloader
-        /// </summary>
-        private IProtocolProvider defaultDownloadProvider;
-
-        /// <summary>
-        /// loacalFile
-        /// </summary>
         private string localFile;
-
-        /// <summary>
-        /// createdDateTime
-        /// </summary>
-        private DateTime createdDateTime;
-        
-        /// <summary>
-        /// to show info about file
-        /// </summary>
-        private RemoteFileInfo remoteFileInfo;
-
-        /// <summary>
-        /// info about remote resource
-        /// </summary>
+        private int requestedFileSegmentCount;
         private ResourceInfo resourceInfo;
-        
-        /// <summary>
-        /// status of downloading
-        /// </summary>
-        private string statusMessage;
+        private Thread mainThread;
+        private RemoteFileInfo remoteFileInfo;
+        private IDownloaderState state;
+        private DateTime createdDateTime;
+        private Exception lastDownloadingError;
+
+        private List<ResourceInfo> mirrors;
+        private List<FileSegment> segments;
+        private List<Thread> threads;
+
+        private IProtocolProvider currentDownloadProvider;
+        private IFileSegmentCalculator fileSegmentCalculator;
+
+        //private string statusMessage;
 
         /// <summary>
-        /// ctor
+        /// default ctor (super)
         /// </summary>
-        /// <param name="localFile">local file</param>
-        /// <param name="remoteInfo">remote info</param>
         /// <param name="ri">resource info</param>
-        /// <param name="createdDateTime">created date time</param>
-        public Downloader(string localFile, RemoteFileInfo remoteInfo, ResourceInfo ri, DateTime createdDateTime)
+        /// <param name="mirrors">resource info mirrors</param>
+        /// <param name="localFile">local file for this downloader</param>
+        private Downloader( ResourceInfo ri, ResourceInfo[] mirrors, string localFile)
         {
-            this.localFile = localFile;
-            this.remoteFileInfo = remoteInfo;
-            this.createdDateTime = createdDateTime;
+            this.threads = new List<Thread>();
             this.resourceInfo = ri;
-            defaultDownloadProvider = ri.BindProtocolProviderInstance();
+            if (mirrors == null)
+            {
+                this.mirrors = new List<ResourceInfo>();
+            }
+            else
+            {
+                this.mirrors = new List<ResourceInfo>(mirrors);
+            }
+            this.localFile = localFile;
+
+            currentDownloadProvider = ri.BindProtocolProviderInstance();
+
+            fileSegmentCalculator = new FileSegmentSizeCalculatorHelper();
+        }
+
+        /// <summary>
+        /// ctor for segment downloading need for change downloader statuses
+        /// </summary>
+        /// <param name="ri">resource info</param>
+        /// <param name="mirrors">mirrors for downloading</param>
+        /// <param name="localFile">local file for downloader</param>
+        /// <param name="segmentCount">count of segments</param>
+        public Downloader( ResourceInfo ri, ResourceInfo[] mirrors, string localFile, int segmentCount) : this(ri, mirrors, localFile)
+        {
+            //SetState(DownloaderState.NeedToPrepare);
+
+            this.createdDateTime = DateTime.Now;
+            this.requestedFileSegmentCount = segmentCount;
+            this.segments = new List<FileSegment>();
+        }
+
+        /// <summary>
+        /// more complicated ctor need for change downloader statuses
+        /// </summary>
+        /// <param name="ri">resource info</param>
+        /// <param name="mirrors">mirrors for downloading</param>
+        /// <param name="localFile">local file info for downloading</param>
+        /// <param name="segments">segments for downloading</param>
+        /// <param name="remoteInfo">remote file info (place here after getting file info from server)</param>
+        /// <param name="requestedSegmentCount">segment ount for request</param>
+        /// <param name="createdDateTime">date time of creating dowloader</param>
+        public Downloader( ResourceInfo ri, ResourceInfo[] mirrors, string localFile, List<FileSegment> segments, RemoteFileInfo remoteInfo, 
+            int requestedSegmentCount, DateTime createdDateTime) : this(ri, mirrors, localFile)
+        {
+            if (segments.Count > 0)
+            {
+                //SetState(DownloaderState.Prepared);
+            }
+            else
+            {
+                //SetState(DownloaderState.NeedToPrepare);
+            }
+
+            this.createdDateTime = createdDateTime;
+            this.remoteFileInfo = remoteInfo;
+            this.requestedFileSegmentCount = requestedSegmentCount;
+            this.segments = segments;
         }
 
         #region Properties
 
         /// <summary>
-        /// Gets file size
+        /// Gets ResourceInfo for downloader
+        /// </summary>
+        public ResourceInfo ResourceInfo
+        {
+            get
+            {
+                return this.resourceInfo;
+            }
+        }
+
+        /// <summary>
+        /// Gets mirrors of downloader
+        /// </summary>
+        public List<ResourceInfo> Mirrors
+        {
+            get
+            {
+                return this.mirrors;
+            }
+        }
+
+        /// <summary>
+        /// Gets downloading file size
         /// </summary>
         public long FileSize
         {
             get
             {
-
                 if (remoteFileInfo == null)
                 {
-
                     return 0;
-
                 }
-
                 return remoteFileInfo.FileSize;
-
             }
         }
 
         /// <summary>
-        /// Gets date time of created
+        /// Gets date time of downloader creating
         /// </summary>
         public DateTime CreatedDateTime
         {
@@ -99,7 +157,18 @@ namespace DownloadsManager.Core.Concrete
         }
 
         /// <summary>
-        /// Gets loal file
+        /// Gets segments of request
+        /// </summary>
+        public int RequestedSegments
+        {
+            get
+            {
+                return requestedFileSegmentCount;
+            }
+        }
+
+        /// <summary>
+        /// Gets local file info
         /// </summary>
         public string LocalFile
         {
@@ -110,52 +179,141 @@ namespace DownloadsManager.Core.Concrete
         }
 
         /// <summary>
-        /// Gets progress status
+        /// Gets progress of downloading
         /// </summary>
         public double Progress
         {
             get
             {
-                //TODO
-                return 0;
+                int count = segments.Count;
+
+                if (count > 0)
+                {
+                    double progress = 0;
+
+                    for (int i = 0; i < count; i++)
+                    {
+                        ////add progress of all segments
+                        progress += segments[i].Progress;
+                    }
+
+                    ////percent of progress
+                    return progress / count;
+                }
+                else
+                {
+                    return 0;
+                }
             }
         }
 
         /// <summary>
-        /// Gets rate of download
+        /// Gets rate of downloadng
         /// </summary>
         public double Rate
         {
             get
             {
-                //TODO
                 double rate = 0;
+
+                for (int i = 0; i < segments.Count; i++)
+                {
+                    ////sum rates of all file segments
+                    rate += segments[i].Rate;
+                }
 
                 return rate;
             }
         }
 
         /// <summary>
-        /// Gets time left
+        /// Gets calculating value of transfered bytes
         /// </summary>
-        public TimeSpan TimeLeft
+        public long Transfered
         {
             get
             {
-                //TODO
-                return new TimeSpan();
+                long transfered = 0;
+
+                for (int i = 0; i < segments.Count; i++)
+                {
+                    ////sum transfered bytes of all segments
+                    transfered += segments[i].Transfered;
+                }
+
+                return transfered;
             }
         }
 
         /// <summary>
-        /// Gets or sets status message
+        /// Gets calculated value of left downloading time
         /// </summary>
-        public string StatusMessage
+        public TimeSpan Left
         {
+            get
+            {
+                if (this.Rate == 0)
+                {
+                    return TimeSpan.MaxValue;
+                }
 
-            get { return statusMessage; }
-            set { statusMessage = value; }
+                double missingTransfer = 0;
 
+                for (int i = 0; i < segments.Count; i++)
+                {
+                    missingTransfer += segments[i].MissingTransfer;
+                }
+
+                return TimeSpan.FromSeconds(missingTransfer / this.Rate);
+            }
+        }
+
+        public List<FileSegment> FileSegments
+        {
+            get
+            {
+                return segments;
+            }
+        }
+
+        public Exception LastError
+        {
+            get { return lastDownloadingError; }
+            set { lastDownloadingError = value; }
+        }
+
+        public IDownloaderState State
+        {
+            get { return state; }
+        }
+
+        //TODO Uncomment this after implementing downloading states
+        //public bool IsWorking()
+        //{
+        //    DownloaderState state = this.State;
+        //    return (state == DownloaderState.Preparing ||
+        //        state == DownloaderState.WaitingForReconnect ||
+        //        state == DownloaderState.Working);
+        //}
+
+        /// <summary>
+        /// Gets remote file info
+        /// </summary>
+        public RemoteFileInfo RemoteFileInfo
+        {
+            get { return remoteFileInfo; }
+        }
+
+        /// <summary>
+        /// Gets or sets segments calculator for downloader
+        /// </summary>
+        public IFileSegmentCalculator SegmentCalculator
+        {
+            get { return fileSegmentCalculator; }
+            set
+            {
+                fileSegmentCalculator = value;
+            }
         }
 
         #endregion
@@ -174,7 +332,7 @@ namespace DownloadsManager.Core.Concrete
                 currentTry++;
                 try
                 {
-                    remoteFileInfo = defaultDownloadProvider.GetFileInfo(this.resourceInfo);
+                    remoteFileInfo = currentDownloadProvider.GetFileInfo(this.resourceInfo);
                     break;
                 }
                 catch (ThreadAbortException)
