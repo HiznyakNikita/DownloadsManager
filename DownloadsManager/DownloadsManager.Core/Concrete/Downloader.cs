@@ -540,7 +540,7 @@ namespace DownloadsManager.Core.Concrete
 
         private void RunSegments()
         {
-            state.SetState(new DownloadWorkingState(this));
+            state.SetState(new DownloadDownloadingState(this));
 
             using (FileStream fs = new FileStream(this.LocalFile, FileMode.Open, FileAccess.Write))
             {

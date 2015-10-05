@@ -15,7 +15,7 @@ namespace DownloadsManager.Core.Concrete.DownloadFilters
     {
         public bool IsSuitable(Downloader download)
         {
-            return download.State.GetType() == typeof(DownloadWorkingState);
+            return download.State.GetType() == typeof(DownloadDownloadingState);
         }
     }
 }

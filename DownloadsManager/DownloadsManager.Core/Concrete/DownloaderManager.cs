@@ -60,7 +60,7 @@ namespace DownloadsManager.Core.Concrete
                 {
                     for (int i = 0; i < this.Downloads.Count; i++)
                     {
-                        if (this.Downloads[i].State.GetType() == typeof(DownloadWorkingState))
+                        if (this.Downloads[i].State.GetType() == typeof(DownloadDownloadingState))
                         {
                             total += this.Downloads[i].Rate;
                         }

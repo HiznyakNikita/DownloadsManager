@@ -107,5 +107,10 @@ namespace DownloadsManager.Core.Concrete.DownloadStates
         {
             downloader.SetState(state);
         }
+
+        public override string ToString()
+        {
+            return "Ended";
+        }
     }
 }

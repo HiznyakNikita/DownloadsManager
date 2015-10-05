@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="DownloadsManager.UserControls.DownloadViewer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:DownloadsManager.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="150" d:DesignWidth="500" Background="#858585" Opacity="0.3" BorderBrush="WhiteSmoke">
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type vm:DownloadViewerVM}"/>
+    </UserControl.Resources>
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
+                <Label x:Name="lblDownloadFileName" HorizontalAlignment="Left" FontFamily="Segoe" FontSize="18" Foreground="WhiteSmoke" Height="35" Width="215"/>
+                <Label x:Name="lblStateInfo" HorizontalAlignment="Left" FontFamily="Segoe" FontSize="18" Foreground="WhiteSmoke" Content="{Binding State}" Height="35" Width="160"/>
+            </StackPanel>
+            <Label x:Name="lblSizeInfo" HorizontalAlignment="Left" FontFamily="Segoe" FontSize="12" Foreground="WhiteSmoke" Content="{Binding SizeInfo}" Height="25" Width="120"></Label>
+            <Label x:Name="lblAddedInfo" HorizontalAlignment="Left" FontFamily="Segoe" FontSize="12" Foreground="WhiteSmoke" Content="{Binding Added}" Height="25" Width="120"></Label>
+            <StackPanel Orientation="Horizontal">
+                <Label x:Name="lblRateInfo" HorizontalAlignment="Left" FontFamily="Segoe" FontSize="12" Foreground="WhiteSmoke" Content="{Binding Rate}" Height="25" Width="120"></Label>
+                <Label x:Name="lblProgressInfo" HorizontalAlignment="Left" FontFamily="Segoe" FontSize="12" Foreground="WhiteSmoke" Content="{Binding Progress}" Height="25" Width="120"></Label>
+            </StackPanel>
+            <Label x:Name="lblUrlInfo" HorizontalAlignment="Left" FontFamily="Segoe" FontSize="12" Foreground="WhiteSmoke" Content="{Binding UrlInfo}" Height="25" Width="120"></Label>
+        </StackPanel>   
+    </Grid>
+</UserControl>

@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.Core.Concrete.DownloadStates
 {
-    public class DownloadWorkingState : IDownloaderState
+    public class DownloadDownloadingState : IDownloaderState
     {
 
          private Downloader downloader;
 
-         public DownloadWorkingState(Downloader downloader)
+         public DownloadDownloadingState(Downloader downloader)
         {
             this.downloader = downloader;
         }
@@ -113,6 +113,11 @@ namespace DownloadsManager.Core.Concrete.DownloadStates
         public void SetState(IDownloaderState state)
         {
             downloader.SetState(state);
+        }
+
+        public override string ToString()
+        {
+            return "Downloading";
         }
     }
 }
