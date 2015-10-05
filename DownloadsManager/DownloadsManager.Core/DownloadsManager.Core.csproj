@@ -46,11 +46,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\IDownloaderState.cs" />
+    <Compile Include="Abstract\IDownloadsIterator.cs" />
+    <Compile Include="Abstract\IFilter.cs" />
     <Compile Include="Concrete\CalculatedFileSegment.cs" />
     <Compile Include="Abstract\IDownloader.cs" />
     <Compile Include="Abstract\IFileSegmentCalculator.cs" />
     <Compile Include="Concrete\Downloader.cs" />
     <Compile Include="Concrete\DownloaderManager.cs" />
+    <Compile Include="Concrete\DownloadsList.cs" />
     <Compile Include="Concrete\DownloadStates\DownloadEndedState.cs" />
     <Compile Include="Concrete\DownloadStates\DownloadEndedWithErrorState.cs" />
     <Compile Include="Concrete\DownloadStates\DownloadNeedToPrepareState.cs" />

@@ -721,64 +721,7 @@ namespace DownloadsManager.Core.Concrete
                     segment.CurrentURL = this.resourceInfo.URL;
                 }
 
-                using (segment.InputStream)
-                {
-                    //// change the segment state
-                    segment.State = FileSegmentState.Downloading;
-                    segment.CurrentTry = 0;
-                    long readSize;
-                    do
-                    {
-                        //// reads the buffer from input stream
-                        readSize = segment.InputStream.Read(buffer, 0, buffSize);
-                        //// check if the segment has reached the end
-                        if (segment.EndPosition > 0 &&
-                            segment.StartPosition + readSize > segment.EndPosition)
-                        {
-                            //// adjust the 'readSize' to write only necessary bytes
-                            readSize = segment.EndPosition - segment.StartPosition;
-                            if (readSize <= 0)
-                            {
-                                segment.StartPosition = segment.EndPosition;
-                                break;
-                            }
-                        }
-
-                        //// locks the stream to avoid that other threads changes
-                        //// the position of stream while this thread is writing into the stream
-                        lock (segment.OutputStream)
-                        {
-                            segment.OutputStream.Position = segment.StartPosition;
-                            segment.OutputStream.Write(buffer, 0, (int)readSize);
-                        }
-
-                        //// increse the start position of the segment and also calculates the rate
-                        segment.IncreaseStartPosition(readSize);
-                        //// check if the stream has reached its end
-                        if (segment.EndPosition > 0 && segment.StartPosition >= segment.EndPosition)
-                        {
-                            segment.StartPosition = segment.EndPosition;
-                            break;
-                        }
-
-                        //// check if the user have requested to pause the download
-                        if (state.GetType() == typeof(DownloadPausingState))
-                        {
-                            segment.State = FileSegmentState.Paused;
-                            break;
-                        }
-
-                    }
-                    while (readSize > 0);
-                    if (segment.State == FileSegmentState.Downloading)
-                    {
-                        segment.State = FileSegmentState.Finished;
-
-                        //// try to create other segment, 
-                        //// spliting the missing bytes from one existing segment
-                        AddNewSegmentIfNeeded();
-                    }
-                }
+                ReadSegment(segment, buffSize, buffer);
                 
             }
             catch (Exception ex)
@@ -793,6 +736,104 @@ namespace DownloadsManager.Core.Concrete
             {
                 //// clean up the segment
                 segment.InputStream = null;
+            }
+        }
+
+        public void Start()
+        {
+            try
+            {
+                state.Start();
+            }
+            catch (Exception) 
+            {
+                throw new Exception();
+            }
+        }
+
+        public void Pause()
+        {
+            try
+            {
+                state.Pause();
+            }
+            catch (Exception)
+            {
+                throw new Exception();
+            }
+        }
+
+        public void StartDownloadThread(object objSegmentCount)
+        {
+            try
+            {
+                state.StartDownloadThread(objSegmentCount);
+            }
+            catch (Exception)
+            {
+                throw new Exception();
+            }
+        }
+
+        private void ReadSegment(FileSegment segment, int buffSize, byte[] buffer)
+        {
+            using (segment.InputStream)
+            {
+                //// change the segment state
+                segment.State = FileSegmentState.Downloading;
+                segment.CurrentTry = 0;
+                long readSize;
+                do
+                {
+                    //// reads the buffer from input stream
+                    readSize = segment.InputStream.Read(buffer, 0, buffSize);
+                    //// check if the segment has reached the end
+                    if (segment.EndPosition > 0 &&
+                        segment.StartPosition + readSize > segment.EndPosition)
+                    {
+                        //// adjust the 'readSize' to write only necessary bytes
+                        readSize = segment.EndPosition - segment.StartPosition;
+                        if (readSize <= 0)
+                        {
+                            segment.StartPosition = segment.EndPosition;
+                            break;
+                        }
+                    }
+
+                    //// locks the stream to avoid that other threads changes
+                    //// the position of stream while this thread is writing into the stream
+                    lock (segment.OutputStream)
+                    {
+                        segment.OutputStream.Position = segment.StartPosition;
+                        segment.OutputStream.Write(buffer, 0, (int)readSize);
+                    }
+
+                    //// increse the start position of the segment and also calculates the rate
+                    segment.IncreaseStartPosition(readSize);
+                    //// check if the stream has reached its end
+                    if (segment.EndPosition > 0 && segment.StartPosition >= segment.EndPosition)
+                    {
+                        segment.StartPosition = segment.EndPosition;
+                        break;
+                    }
+
+                    //// check if the user have requested to pause the download
+                    if (state.GetType() == typeof(DownloadPausingState))
+                    {
+                        segment.State = FileSegmentState.Paused;
+                        break;
+                    }
+
+                }
+                while (readSize > 0);
+                if (segment.State == FileSegmentState.Downloading)
+                {
+                    segment.State = FileSegmentState.Finished;
+
+                    //// try to create other segment, 
+                    //// spliting the missing bytes from one existing segment
+                    AddNewSegmentIfNeeded();
+                }
             }
         }
 
