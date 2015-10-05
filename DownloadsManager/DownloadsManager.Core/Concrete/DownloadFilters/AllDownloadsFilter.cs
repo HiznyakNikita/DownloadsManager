@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.Core.Concrete.DownloadFilters
 {
-    public class AllDownloadsFilter: IFilter<Downloader>
+    /// <summary>
+    /// Filter which match all downloads
+    /// </summary>
+    public class AllDownloadsFilter : IFilter<Downloader>
     {
         public bool IsSuitable(Downloader download)
         {

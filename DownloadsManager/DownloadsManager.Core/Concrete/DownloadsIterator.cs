@@ -22,6 +22,8 @@ namespace DownloadsManager.Core.Concrete
             this.filter = filter;
         }
 
+        object IEnumerator.Current { get { return Current; } }
+
         public Downloader Current
         {
             get
@@ -34,20 +36,22 @@ namespace DownloadsManager.Core.Concrete
                     throw new IndexOutOfRangeException();
             }
         }
+
         public void Dispose() { }
+
         public bool MoveNext() 
         { 
-            for(int i = currentPosition+1; i < instance.Count; i++)
+            for (int i = currentPosition + 1; i < instance.Count; i++)
             {
                 if (filter.IsSuitable(instance[i])) { return true; }
             }
+
             return false;
         }
+
         public void Reset() 
         {
             currentPosition = 0;
         }
-
-        object IEnumerator.Current { get { return Current; } }
     }
 }

@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.Core.Concrete.DownloadFilters
 {
+    /// <summary>
+    /// Filter which match working downloads
+    /// </summary>
     public class WorkingDownloadsFilter : IFilter<Downloader>
     {
         public bool IsSuitable(Downloader download)

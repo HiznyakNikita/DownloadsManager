@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.Core.Concrete.DownloadFilters
 {
+    /// <summary>
+    /// Filter which match ended downloads
+    /// </summary>
     public class EndedDownloadsFilter : IFilter<Downloader>
     {
         public bool IsSuitable(Downloader download)

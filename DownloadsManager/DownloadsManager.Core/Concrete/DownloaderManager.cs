@@ -16,6 +16,7 @@ namespace DownloadsManager.Core.Concrete
     {
         private static DownloaderManager instance = new DownloaderManager();
         private static object lockObj;
+        private DownloadsList downloads = new DownloadsList();
 
         private DownloaderManager() { }
 
@@ -34,11 +35,10 @@ namespace DownloadsManager.Core.Concrete
                         }
                     }
                 }
+
                 return instance;
             }
         }
-
-        private DownloadsList downloads = new DownloadsList();
 
         #region Properties
 
@@ -56,7 +56,7 @@ namespace DownloadsManager.Core.Concrete
             {
                 double total = 0;
 
-                lock(lockObj)
+                lock (lockObj)
                 {
                     for (int i = 0; i < this.Downloads.Count; i++)
                     {
@@ -89,7 +89,7 @@ namespace DownloadsManager.Core.Concrete
                 downloader.Pause();
             }
 
-            lock(lockObj)
+            lock (lockObj)
             {
                 downloads.Remove(downloader);
             }
@@ -97,7 +97,7 @@ namespace DownloadsManager.Core.Concrete
 
         public void ClearEnded()
         {
-            lock(lockObj)
+            lock (lockObj)
             {
                 for (int i = downloads.Count - 1; i >= 0; i--)
                 {
@@ -112,7 +112,7 @@ namespace DownloadsManager.Core.Concrete
 
         public void PauseAll()
         {
-            lock(lockObj)
+            lock (lockObj)
             {
                 for (int i = 0; i < this.Downloads.Count; i++)
                 {
@@ -129,7 +129,15 @@ namespace DownloadsManager.Core.Concrete
             return d;
         }
 
-        public Downloader Add(ResourceInfo ri, ResourceInfo[] mirrors, string localFile, List<FileSegment> segments, RemoteFileInfo remoteInfo, int requestedSegmentCount, bool autoStart, DateTime createdDateTime)
+        public Downloader Add(
+            ResourceInfo ri, 
+            ResourceInfo[] mirrors, 
+            string localFile, 
+            List<FileSegment> segments, 
+            RemoteFileInfo remoteInfo, 
+            int requestedSegmentCount, 
+            bool autoStart, 
+            DateTime createdDateTime)
         {
             Downloader d = new Downloader(ri, mirrors, localFile, segments, remoteInfo, requestedSegmentCount, createdDateTime);
             Add(d, autoStart);
@@ -139,7 +147,7 @@ namespace DownloadsManager.Core.Concrete
 
         public void Add(Downloader downloader, bool autoStart)
         {
-            lock(lockObj)
+            lock (lockObj)
             {
                 downloads.Add(downloader);
             }

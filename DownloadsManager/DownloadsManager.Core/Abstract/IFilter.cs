@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.Core.Abstract
 {
+    /// <summary>
+    /// Interface for implementing filter operations in downloads list
+    /// </summary>
+    /// <typeparam name="T">filtered type</typeparam>
     public interface IFilter<T>
     {
         /// <summary>

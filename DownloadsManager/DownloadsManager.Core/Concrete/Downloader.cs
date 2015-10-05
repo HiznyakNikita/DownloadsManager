@@ -502,6 +502,42 @@ namespace DownloadsManager.Core.Concrete
             return allFinished;
         }
 
+        public void Start()
+        {
+            try
+            {
+                state.Start();
+            }
+            catch (Exception)
+            {
+                throw new Exception();
+            }
+        }
+
+        public void Pause()
+        {
+            try
+            {
+                state.Pause();
+            }
+            catch (Exception)
+            {
+                throw new Exception();
+            }
+        }
+
+        public void StartDownloadThread(object objSegmentCount)
+        {
+            try
+            {
+                state.StartDownloadThread(objSegmentCount);
+            }
+            catch (Exception)
+            {
+                throw new Exception();
+            }
+        }
+
         private void RunSegments()
         {
             state.SetState(new DownloadWorkingState(this));
@@ -672,7 +708,7 @@ namespace DownloadsManager.Core.Concrete
                 byte[] buffer = new byte[buffSize];
                 segment.State = FileSegmentState.Connecting;
                 if (segment.InputStream == null)
-                {                    
+                {
                     //// get the next URL (It can the the main url or some mirror)
                     ResourceInfo resourceInfo = GetNextResourceInfo();
                     //// get the protocol provider for that mirror
@@ -722,7 +758,7 @@ namespace DownloadsManager.Core.Concrete
                 }
 
                 ReadSegment(segment, buffSize, buffer);
-                
+
             }
             catch (Exception ex)
             {
@@ -736,42 +772,6 @@ namespace DownloadsManager.Core.Concrete
             {
                 //// clean up the segment
                 segment.InputStream = null;
-            }
-        }
-
-        public void Start()
-        {
-            try
-            {
-                state.Start();
-            }
-            catch (Exception) 
-            {
-                throw new Exception();
-            }
-        }
-
-        public void Pause()
-        {
-            try
-            {
-                state.Pause();
-            }
-            catch (Exception)
-            {
-                throw new Exception();
-            }
-        }
-
-        public void StartDownloadThread(object objSegmentCount)
-        {
-            try
-            {
-                state.StartDownloadThread(objSegmentCount);
-            }
-            catch (Exception)
-            {
-                throw new Exception();
             }
         }
 

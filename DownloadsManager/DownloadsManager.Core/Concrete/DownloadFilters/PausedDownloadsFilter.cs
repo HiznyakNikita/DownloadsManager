@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.Core.Concrete.DownloadFilters
 {
+    /// <summary>
+    /// Filter which match paused downloads
+    /// </summary>
     public class PausedDownloadsFilter : IFilter<Downloader>
     {
         public bool IsSuitable(Downloader download)
