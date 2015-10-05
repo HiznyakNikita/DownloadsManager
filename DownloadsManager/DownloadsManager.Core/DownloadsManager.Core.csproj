@@ -46,13 +46,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\IDownloaderState.cs" />
-    <Compile Include="Abstract\IDownloadsIterator.cs" />
     <Compile Include="Abstract\IFilter.cs" />
     <Compile Include="Concrete\CalculatedFileSegment.cs" />
     <Compile Include="Abstract\IDownloader.cs" />
     <Compile Include="Abstract\IFileSegmentCalculator.cs" />
     <Compile Include="Concrete\Downloader.cs" />
     <Compile Include="Concrete\DownloaderManager.cs" />
+    <Compile Include="Concrete\DownloadFilters\AllDownloadsFilter.cs" />
+    <Compile Include="Concrete\DownloadFilters\EndedDownloadsFilter.cs" />
+    <Compile Include="Concrete\DownloadFilters\FailedDownloadsFilter.cs" />
+    <Compile Include="Concrete\DownloadFilters\PausedDownloadsFilter.cs" />
+    <Compile Include="Concrete\DownloadFilters\WorkingDownloadsFilter.cs" />
+    <Compile Include="Concrete\DownloadsIterator.cs" />
     <Compile Include="Concrete\DownloadsList.cs" />
     <Compile Include="Concrete\DownloadStates\DownloadEndedState.cs" />
     <Compile Include="Concrete\DownloadStates\DownloadEndedWithErrorState.cs" />
@@ -86,6 +91,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

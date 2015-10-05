@@ -38,7 +38,7 @@ namespace DownloadsManager.Core.Concrete
             }
         }
 
-        private List<Downloader> downloads = new List<Downloader>();
+        private DownloadsList downloads = new DownloadsList();
 
         #region Properties
 
