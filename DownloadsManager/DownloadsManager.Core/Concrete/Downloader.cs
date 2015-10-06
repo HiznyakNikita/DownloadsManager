@@ -30,6 +30,8 @@ namespace DownloadsManager.Core.Concrete
         private IDownloaderState state;
         private DateTime createdDateTime;
         private Exception lastDownloadingError;
+
+        private object syncObject = new object();
         
         /// <summary>
         ///  Need for getting next mirror in GetNextResource method 
@@ -57,6 +59,7 @@ namespace DownloadsManager.Core.Concrete
             this.createdDateTime = DateTime.Now;
             this.requestedFileSegmentCount = segmentCount;
             this.segments = new List<FileSegment>();
+            this.state = new DownloadNeedToPrepareState(this);
         }
 
         /// <summary>
@@ -92,6 +95,8 @@ namespace DownloadsManager.Core.Concrete
             this.remoteFileInfo = remoteInfo;
             this.requestedFileSegmentCount = requestedSegmentCount;
             this.segments = segments;
+            this.state = new DownloadNeedToPrepareState(this);
+
         }
 
         /// <summary>
@@ -802,7 +807,7 @@ namespace DownloadsManager.Core.Concrete
 
                     //// locks the stream to avoid that other threads changes
                     //// the position of stream while this thread is writing into the stream
-                    lock (segment.OutputStream)
+                    lock (syncObject)
                     {
                         segment.OutputStream.Position = segment.StartPosition;
                         segment.OutputStream.Write(buffer, 0, (int)readSize);

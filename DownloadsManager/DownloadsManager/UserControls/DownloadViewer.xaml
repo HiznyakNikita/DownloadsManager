@@ -21,7 +21,7 @@
                 <Label x:Name="lblRateInfo" HorizontalAlignment="Left" FontFamily="Segoe" FontSize="12" Foreground="WhiteSmoke" Content="{Binding Rate}" Height="25" Width="120"></Label>
                 <Label x:Name="lblProgressInfo" HorizontalAlignment="Left" FontFamily="Segoe" FontSize="12" Foreground="WhiteSmoke" Content="{Binding Progress}" Height="25" Width="120"></Label>
             </StackPanel>
-            <Label x:Name="lblUrlInfo" HorizontalAlignment="Left" FontFamily="Segoe" FontSize="12" Foreground="WhiteSmoke" Content="{Binding UrlInfo}" Height="25" Width="120"></Label>
+            <Label x:Name="lblUrlInfo" HorizontalAlignment="Left" FontFamily="Segoe" FontSize="12" Foreground="WhiteSmoke" Content="{Binding LinkInfo}" Height="25" Width="120"></Label>
         </StackPanel>   
     </Grid>
 </UserControl>

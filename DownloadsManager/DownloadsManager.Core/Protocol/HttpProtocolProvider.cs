@@ -44,15 +44,8 @@ namespace DownloadsManager.Core.Concrete
             RemoteFileInfo result = new RemoteFileInfo();
             result.LastModified = response.LastModified;
             result.FileSize = response.ContentLength;
-            ////result.AcceptRanges = String.Compare(response.Headers["Accept-Ranges"], "bytes", true) == 0;
-            int[] buf;
-            using (FileStream fs = new FileStream(Environment.CurrentDirectory + "\\", FileMode.Open, FileAccess.Write))
-            {
-                MemoryStream ms = new MemoryStream();
-                response.GetResponseStream().CopyTo(ms);
-                fs.Write(ms.ToArray(), 0, (int)response.ContentLength);
-            }
-
+            result.AcceptRanges = string.Compare(response.Headers["Accept-Ranges"], "bytes", true) == 0;
+           
             stream = response.GetResponseStream();
 
             return result;

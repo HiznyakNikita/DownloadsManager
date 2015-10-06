@@ -14,7 +14,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DownloadsManager.ViewModels;
 
-
 namespace DownloadsManager.UserControls
 {
     /// <summary>

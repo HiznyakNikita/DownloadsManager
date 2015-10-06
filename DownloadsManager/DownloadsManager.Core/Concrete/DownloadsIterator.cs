@@ -33,11 +33,11 @@ namespace DownloadsManager.Core.Concrete
                     return instance[currentPosition];
                 }
                 else
-                    throw new IndexOutOfRangeException();
+                    return null;
             }
         }
 
-        public void Dispose() { }
+        void IDisposable.Dispose() { }
 
         public bool MoveNext() 
         { 

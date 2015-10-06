@@ -15,7 +15,7 @@ namespace DownloadsManager.Core.Concrete
     public class DownloaderManager
     {
         private static DownloaderManager instance = new DownloaderManager();
-        private static object lockObj;
+        private static object lockObj = new object();
         private DownloadsList downloads = new DownloadsList();
 
         private DownloaderManager() { }

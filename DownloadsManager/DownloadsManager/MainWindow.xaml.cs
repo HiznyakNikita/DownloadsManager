@@ -1,4 +1,5 @@
 ﻿using DownloadsManager.Core.Concrete;
+using DownloadsManager.UserControls;
 using DownloadsManager.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,8 @@ namespace DownloadsManager
         {
             InitializeComponent();
             this.DataContext = new MainWindowVM();
+            DownloadViewer viewer = new DownloadViewer();
+            AddDownloadsStackPanel.Children.Add(viewer); 
         }
 
         private void BtnCloseWindow_Click(object sender, RoutedEventArgs e)
@@ -38,10 +41,8 @@ namespace DownloadsManager
             this.Close();
         }
 
-        private void BtnTest_Click(object sender, RoutedEventArgs e)
+        private void MenuItemAddDownload_Click(object sender, RoutedEventArgs e)
         {
-            //Downloader d = new Downloader("a.txt", new RemoteFileInfo() { FileSize = 20 }, new ResourceInfo() { URL = "https://pp.vk.me/c627430/v627430201/162b1/1sI5qa1_xnw.jpg" }, DateTime.Now);
-            //d.Download("https://pp.vk.me/c627430/v627430201/162b1/1sI5qa1_xnw.jpg","D:\\Developer");
         }
     }
 }

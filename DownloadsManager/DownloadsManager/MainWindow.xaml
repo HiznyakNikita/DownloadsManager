@@ -13,16 +13,20 @@
                 <Style TargetType="TabItem" BasedOn="{StaticResource TabItemsStyle}"/>
             </TabControl.Resources>
             <TabItem Header="ALL">
-                <DataGrid ItemsSource="{Binding Downloads}" AutoGenerateColumns="True"/>
+                <StackPanel x:Name="AddDownloadsStackPanel" Margin="5,5,5,5">
+                    <StackPanel.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem x:Name="menuItemAddDownload" Command="{Binding AddDownloadCmd}" CommandParameter="{Binding ElementName=AddDownloadsStackPanel}" Header="Add download" Click="MenuItemAddDownload_Click"></MenuItem>
+                        </ContextMenu>
+                    </StackPanel.ContextMenu>
+                </StackPanel>
             </TabItem>
             <TabItem Header="MUSIC">
                 <DataGrid ItemsSource="{Binding Downloads}" AutoGenerateColumns="True"/>
             </TabItem>
             <TabItem Header="VIDEO">
-                <DataGrid ItemsSource="{Binding Downloads}" AutoGenerateColumns="True"/>
             </TabItem>
             <TabItem Header="PICTURES">
-                <Button x:Name="BtnTest" Height="50" Width="50" Click="BtnTest_Click"></Button>
             </TabItem>
             <TabItem Header="DOCUMENTS"></TabItem>
             <TabItem Header="APPLICATIONS"></TabItem>
