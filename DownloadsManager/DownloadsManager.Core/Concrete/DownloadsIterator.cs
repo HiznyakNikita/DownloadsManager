@@ -17,8 +17,9 @@ namespace DownloadsManager.Core.Concrete
         private int currentPosition;
         private IFilter<Downloader> filter;
 
-        public DownloadsIterator(IFilter<Downloader> filter)
+        public DownloadsIterator(DownloadsList list, IFilter<Downloader> filter)
         {
+            this.instance = list;
             this.filter = filter;
         }
 

@@ -8,15 +8,25 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.ViewModels
 {
+    /// <summary>
+    /// View model for DownloadViewer
+    /// </summary>
     public class DownloadViewerVM
     {
         private Downloader download;
 
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="download"> downoad to v</param>
         public DownloadViewerVM(Downloader download)
         {
             this.download = download;
         }
 
+        /// <summary>
+        /// Size info of download
+        /// </summary>
         public string SizeInfo 
         { 
             get
@@ -25,6 +35,9 @@ namespace DownloadsManager.ViewModels
             }
         }
 
+        /// <summary>
+        /// State of download
+        /// </summary>
         public string State 
         { 
             get
@@ -33,6 +46,9 @@ namespace DownloadsManager.ViewModels
             }
         }
 
+        /// <summary>
+        /// Added time for download
+        /// </summary>
         public string Added 
         { 
             get
@@ -41,6 +57,9 @@ namespace DownloadsManager.ViewModels
             }
         }
 
+        /// <summary>
+        /// Rate of download
+        /// </summary>
         public string Rate 
         { 
             get
@@ -49,6 +68,9 @@ namespace DownloadsManager.ViewModels
             }
         }
 
+        /// <summary>
+        /// Link info about download
+        /// </summary>
         public string LinkInfo 
         { 
             get
@@ -57,6 +79,9 @@ namespace DownloadsManager.ViewModels
             }
         }
 
+        /// <summary>
+        /// Progress of download
+        /// </summary>
         public string Progress 
         { 
             get

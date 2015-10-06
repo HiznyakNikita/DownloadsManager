@@ -14,7 +14,6 @@ namespace DownloadsManager.Core.Concrete
         private bool authenticate;
         private string login;
         private string password;
-        private Type protocolProviderType;
         private IProtocolProvider provider;
 
         #endregion

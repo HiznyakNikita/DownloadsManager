@@ -21,6 +21,9 @@ namespace DownloadsManager.UserControls
     /// </summary>
     public partial class DownloadViewer : UserControl
     {
+        /// <summary>
+        /// ctor
+        /// </summary>
         public DownloadViewer()
         {
             InitializeComponent();

@@ -33,16 +33,10 @@ namespace DownloadsManager.Core.Concrete.DownloadStates
             downloader.SetState(new DownloadPreparingState(downloader));
 
             int segmentCount = Math.Min((int)objSegmentCount, Settings.Default.MaxSegmentCount);
-            Stream inputStream = null;
-            int currentTry = 0;
 
-            do
-            {
-                downloader.LastError = null;
-                downloader.SetState(new DownloadNeedToPrepareState(downloader));
-                return;
-            }
-            while (true);
+            downloader.LastError = null;
+            downloader.SetState(new DownloadNeedToPrepareState(downloader));
+            return;
         }
 
         /// <summary>

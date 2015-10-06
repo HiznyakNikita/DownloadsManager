@@ -11,7 +11,7 @@ namespace DownloadsManager.Core.Concrete
     {
         public DownloadsIterator GetIterator(IFilter<Downloader> filter)
         {
-            return new DownloadsIterator(filter);
+            return new DownloadsIterator(this,filter);
         }
     }
 }

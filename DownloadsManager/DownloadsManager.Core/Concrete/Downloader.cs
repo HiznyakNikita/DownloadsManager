@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.Core.Concrete
 {
+    [CLSCompliant(true)]
     /// <summary>
     /// Class which represent every download
     /// TODO State,Download providers, segments (for pause and speed manipulations)
@@ -393,7 +394,7 @@ namespace DownloadsManager.Core.Concrete
                 {
                     return;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     Thread.Sleep(TimeSpan.FromSeconds(10));
                 }
@@ -437,7 +438,6 @@ namespace DownloadsManager.Core.Concrete
             ////Pre-downloading locate file on local disk
             LocateLocalFile();
 
-            long segmentSize;
 
             List<CalculatedFileSegment> calculatedSegments;
 
@@ -646,7 +646,7 @@ namespace DownloadsManager.Core.Concrete
                         reloadedFileInfo = currentDownloadProvider.GetFileInfo(this.ResourceInfo, out downloadStream);
                         break;
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         if (restartTriesCounter < Settings.Default.MaxTries)
                         {
@@ -690,7 +690,7 @@ namespace DownloadsManager.Core.Concrete
             {
                 throw;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 state.SetState(new DownloadEndedWithErrorState(this));
             }

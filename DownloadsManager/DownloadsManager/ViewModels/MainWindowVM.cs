@@ -28,7 +28,10 @@ namespace DownloadsManager.ViewModels
             this.AddDownloadCmd = new Command(this.AddDownload);
         }
 
-        public int GetCurrentDownloadIndex
+        /// <summary>
+        /// Current download index
+        /// </summary>
+        public int CurrentDownloadIndex
         {
             get
             {
