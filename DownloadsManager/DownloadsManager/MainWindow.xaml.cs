@@ -44,5 +44,10 @@ namespace DownloadsManager
         private void MenuItemAddDownload_Click(object sender, RoutedEventArgs e)
         {
         }
+
+        private void BtnHideWindow_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+        }
     }
 }
