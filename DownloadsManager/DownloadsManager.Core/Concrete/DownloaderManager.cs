@@ -16,7 +16,7 @@ namespace DownloadsManager.Core.Concrete
     {
         private static DownloaderManager instance = new DownloaderManager();
         private static object lockObj = new object();
-        private DownloadsList downloads = new DownloadsList();
+        private List<Downloader> downloads = new List<Downloader>();
 
         private DownloaderManager() { }
 
@@ -121,9 +121,9 @@ namespace DownloadsManager.Core.Concrete
             }
         }
 
-        public Downloader Add(ResourceInfo ri, ResourceInfo[] mirrors, string localFile, int segments, bool autoStart)
+        public Downloader Add(ResourceInfo ri, ResourceInfo[] mirrors, string localFile, int segments, bool autoStart, string fileName)
         {
-            Downloader d = new Downloader(ri, mirrors, localFile, segments);
+            Downloader d = new Downloader(ri, mirrors, localFile, segments,fileName);
             Add(d, autoStart);
 
             return d;
@@ -137,9 +137,10 @@ namespace DownloadsManager.Core.Concrete
             RemoteFileInfo remoteInfo, 
             int requestedSegmentCount, 
             bool autoStart, 
-            DateTime createdDateTime)
+            DateTime createdDateTime,
+            string fileName)
         {
-            Downloader d = new Downloader(ri, mirrors, localFile, segments, remoteInfo, requestedSegmentCount, createdDateTime);
+            Downloader d = new Downloader(ri, mirrors, localFile, segments, remoteInfo, requestedSegmentCount, createdDateTime,fileName);
             Add(d, autoStart);
 
             return d;

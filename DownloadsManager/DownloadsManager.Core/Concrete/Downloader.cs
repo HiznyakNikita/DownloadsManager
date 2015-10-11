@@ -31,6 +31,7 @@ namespace DownloadsManager.Core.Concrete
         private IDownloaderState state;
         private DateTime createdDateTime;
         private Exception lastDownloadingError;
+        private string fileName;
 
         private object syncObject = new object();
         
@@ -53,7 +54,7 @@ namespace DownloadsManager.Core.Concrete
         /// <param name="mirrors">mirrors for downloading</param>
         /// <param name="localFile">local file for downloader</param>
         /// <param name="segmentCount">count of segments</param>
-        public Downloader(ResourceInfo ri, ResourceInfo[] mirrors, string localFile, int segmentCount) : this(ri, mirrors, localFile)
+        public Downloader(ResourceInfo ri, ResourceInfo[] mirrors, string localFile, int segmentCount, string fileName) : this(ri, mirrors, localFile,fileName)
         {
             ////SetState(DownloaderState.NeedToPrepare);
 
@@ -61,6 +62,7 @@ namespace DownloadsManager.Core.Concrete
             this.requestedFileSegmentCount = segmentCount;
             this.segments = new List<FileSegment>();
             this.state = new DownloadNeedToPrepareState(this);
+            this.fileName = fileName;
         }
 
         /// <summary>
@@ -80,16 +82,17 @@ namespace DownloadsManager.Core.Concrete
             List<FileSegment> segments,
             RemoteFileInfo remoteInfo,
             int requestedSegmentCount,
-            DateTime createdDateTime)
-            : this(ri, mirrors, localFile)
+            DateTime createdDateTime,
+            string fileName)
+            : this(ri, mirrors, localFile, fileName)
         {
             if (segments.Count > 0)
             {
-                //SetState(DownloaderState.Prepared);
+                state.SetState(new DownloadPreparedState(this));
             }
             else
             {
-                //SetState(DownloaderState.NeedToPrepare);
+                state.SetState(new DownloadNeedToPrepareState(this));
             }
 
             this.createdDateTime = createdDateTime;
@@ -97,6 +100,7 @@ namespace DownloadsManager.Core.Concrete
             this.requestedFileSegmentCount = requestedSegmentCount;
             this.segments = segments;
             this.state = new DownloadNeedToPrepareState(this);
+            this.fileName = fileName;
 
         }
 
@@ -106,7 +110,7 @@ namespace DownloadsManager.Core.Concrete
         /// <param name="ri">resource info</param>
         /// <param name="mirrors">resource info mirrors</param>
         /// <param name="localFile">local file for this downloader</param>
-        private Downloader(ResourceInfo ri, ResourceInfo[] mirrors, string localFile)
+        private Downloader(ResourceInfo ri, ResourceInfo[] mirrors, string localFile, string fileName)
         {
             this.threads = new List<Thread>();
             this.resourceInfo = ri;
@@ -124,6 +128,7 @@ namespace DownloadsManager.Core.Concrete
             currentDownloadProvider = ri.BindProtocolProviderInstance();
 
             fileSegmentCalculator = new FileSegmentSizeCalculatorHelper();
+            this.fileName = fileName;
         }
 
         #region Properties
@@ -547,7 +552,7 @@ namespace DownloadsManager.Core.Concrete
         {
             state.SetState(new DownloadDownloadingState(this));
 
-            using (FileStream fs = new FileStream(this.LocalFile, FileMode.Open, FileAccess.Write))
+            using (FileStream fs = new FileStream(this.LocalFile + "\\" + fileName, FileMode.Open, FileAccess.Write))
             {
                 for (int i = 0; i < this.FileSegments.Count; i++)
                 {
@@ -900,7 +905,7 @@ namespace DownloadsManager.Core.Concrete
                 this.localFile = newFileName;
             }
 
-            using (FileStream fs = new FileStream(this.LocalFile, FileMode.Create, FileAccess.Write))
+            using (FileStream fs = new FileStream(this.LocalFile + "\\" + fileName, FileMode.Create, FileAccess.Write))
             {
                 fs.SetLength(Math.Max(this.FileSize, 0));
             }

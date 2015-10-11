@@ -27,20 +27,28 @@ namespace DownloadsManager.Core.Concrete.Helpers
                 segmentsCount--;
                 calculatedSegmentSize = ri.FileSize / (long)segmentsCount;
             }
-
+            ////check for residue after dividing
+            long residueBytes = ri.FileSize - calculatedSegmentSize * segmentsCount;
             long startSegmentPosition = 0;
             for (int i = 0; i < segmentsCount; i++)
             {
-                if (segmentsCount == 1)
+                if (i != segmentsCount - 1)
                 {
-                    calculatedSegments.Add(new CalculatedFileSegment(startSegmentPosition, ri.FileSize));
+                    if (segmentsCount == 1)
+                    {
+                        calculatedSegments.Add(new CalculatedFileSegment(startSegmentPosition, ri.FileSize));
+                    }
+                    else
+                    {
+                        calculatedSegments.Add(new CalculatedFileSegment(startSegmentPosition, startSegmentPosition + calculatedSegmentSize));
+                    }
                 }
-                else
+                if(i==segmentsCount-1)
                 {
-                    calculatedSegments.Add(new CalculatedFileSegment(startSegmentPosition, calculatedSegmentSize));
+                    calculatedSegments.Add(new CalculatedFileSegment(startSegmentPosition, startSegmentPosition + calculatedSegmentSize + residueBytes));
                 }
 
-                startSegmentPosition = calculatedSegments[i].SegmentEndPosition;
+                startSegmentPosition = calculatedSegments[calculatedSegments.Count - 1].SegmentEndPosition;
             }
 
             return calculatedSegments;

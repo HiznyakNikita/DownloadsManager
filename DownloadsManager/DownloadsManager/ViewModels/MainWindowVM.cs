@@ -61,7 +61,7 @@ namespace DownloadsManager.ViewModels
 
             string fileName = uri.Segments[uri.Segments.Length - 1];
             fileName = HttpUtility.UrlDecode(fileName).Replace("/", "\\");
-            DownloaderManager.Instance.Add(ri, null, @"D:\", 100, true);
+            DownloaderManager.Instance.Add(ri, null, @"D:\test", 100, true,fileName);
 
             //DownloadViewer viewer = new DownloadViewer();
             //(param as StackPanel).Children.Add(viewer);

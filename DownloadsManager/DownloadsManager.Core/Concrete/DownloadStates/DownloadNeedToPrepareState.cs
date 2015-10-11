@@ -29,10 +29,6 @@ namespace DownloadsManager.Core.Concrete.DownloadStates
             downloader.SetState(new DownloadPreparingState(downloader));
 
             downloader.StartToPrepare();
-            
-            downloader.SetState(new DownloadPreparingState(downloader));
-
-            downloader.StartPrepared();
         }
 
         public void StartDownloadThread(object objSegmentCount)
