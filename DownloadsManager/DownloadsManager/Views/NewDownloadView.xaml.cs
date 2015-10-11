@@ -45,5 +45,30 @@ namespace DownloadsManager.Views
             urlToDownload = tbUrlToDownload.Text;
             this.Close();
         }
+
+        private void BtnRemove_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BtnAdd_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BtnCloseWindow_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void BtnChooseFolderSaveTo_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BtnCancel_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
