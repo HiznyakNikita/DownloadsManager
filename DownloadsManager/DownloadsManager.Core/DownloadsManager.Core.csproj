@@ -57,8 +57,6 @@
     <Compile Include="Concrete\DownloadFilters\FailedDownloadsFilter.cs" />
     <Compile Include="Concrete\DownloadFilters\PausedDownloadsFilter.cs" />
     <Compile Include="Concrete\DownloadFilters\WorkingDownloadsFilter.cs" />
-    <Compile Include="Concrete\DownloadsIterator.cs" />
-    <Compile Include="Concrete\DownloadsList.cs" />
     <Compile Include="Concrete\DownloadStates\DownloadEndedState.cs" />
     <Compile Include="Concrete\DownloadStates\DownloadEndedWithErrorState.cs" />
     <Compile Include="Concrete\DownloadStates\DownloadNeedToPrepareState.cs" />
@@ -72,6 +70,7 @@
     <Compile Include="Concrete\Enums\FileSegmentState.cs" />
     <Compile Include="Concrete\FileSegment.cs" />
     <Compile Include="Concrete\Helpers\FileSegmentSizeCalculatorHelper.cs" />
+    <Compile Include="Concrete\SegmentsIterator.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

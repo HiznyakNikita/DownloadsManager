@@ -20,10 +20,10 @@
         <Button  Click="BtnChooseFolderSaveTo_Click" Margin="257,89,10,0" VerticalAlignment="Top" Width="25" Height="23" x:Name="BtnChooseFolderSaveTo" Style="{StaticResource chooseFolderButtonStyle}"/>
         <Label Content="Segments:" HorizontalAlignment="Left" Margin="10,112,0,0" VerticalAlignment="Top" Foreground="WhiteSmoke" FontFamily="Segoe"/>
         <TextBox x:Name="tbSegmentsCount" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Left" Height="23" Margin="10,136,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="65"/>
-        <CheckBox Content="Use alternative URL's:" Foreground="WhiteSmoke" FontFamily="Segoe" HorizontalAlignment="Left" Margin="7,177,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="checkBoxAlternative" Content="Use alternative URL's:" Foreground="WhiteSmoke" FontFamily="Segoe" HorizontalAlignment="Left" Margin="7,177,0,0" VerticalAlignment="Top" Checked="checkBoxAlternative_Checked"/>
         <Button x:Name="btnAddUrl" Content="Add" HorizontalAlignment="Left" Margin="7,197,0,0" VerticalAlignment="Top" Width="75" Click="BtnAdd_Click" IsEnabled="False" Style="{StaticResource buttonWithTextStyle}" Height="20"/>
         <Button x:Name="btnRemoveUrl" IsEnabled="False" Content="Remove" HorizontalAlignment="Left" Margin="102,197,0,0" VerticalAlignment="Top" Width="75" Click="BtnRemove_Click" Style="{StaticResource buttonWithTextStyle}" Height="20"/>
-        <ListBox x:Name="lstBoxAlternativeUrl" HorizontalAlignment="Left" ScrollViewer.VerticalScrollBarVisibility="Disabled" BorderBrush="#FF74B71B" Foreground="#FF74B71B" Background="#FF575757"  Height="154" Margin="10,276,0,0" VerticalAlignment="Top" Width="272" IsEnabled="False" Style="{StaticResource ListBoxStyle}"/>
+                <ListBox x:Name="lstBoxAlternativeUrl" HorizontalAlignment="Left" ItemsSource="{Binding Mirrors, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.VerticalScrollBarVisibility="Disabled" BorderBrush="#FF74B71B" Foreground="#FF74B71B" Background="#FF575757"  Height="154" Margin="10,276,0,0" VerticalAlignment="Top" Width="272" IsEnabled="False" Style="{StaticResource ListBoxStyle}"/>
         <TextBox IsEnabled ="False" x:Name="tbUrlToDownloadAlternative" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Left" Height="23" Margin="10,248,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="272"/>
         <Label Content="URL:" IsEnabled="False" HorizontalAlignment="Left" Margin="10,18,0,0" VerticalAlignment="Top" Foreground="WhiteSmoke" FontFamily="Segoe"/>
             </Grid>

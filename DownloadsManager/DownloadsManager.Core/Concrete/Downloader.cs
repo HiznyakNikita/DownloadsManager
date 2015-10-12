@@ -21,7 +21,7 @@ namespace DownloadsManager.Core.Concrete
     /// Class which represent every download
     /// TODO State,Download providers, segments (for pause and speed manipulations)
     /// </summary>
-    public class Downloader : IDownloader
+    public class Downloader : IDownloader, INotifyPropertyChanged
     {
         private string localFile;
         private int requestedFileSegmentCount;
@@ -141,6 +141,17 @@ namespace DownloadsManager.Core.Concrete
             get
             {
                 return this.resourceInfo;
+            }
+        }
+
+        /// <summary>
+        /// Gets name of download
+        /// </summary>
+        public string FileName 
+        { 
+            get
+            {
+                return fileName;
             }
         }
 
@@ -416,6 +427,7 @@ namespace DownloadsManager.Core.Concrete
             if (state != null)
             {
                 this.state = state;
+                NotifyPropertyChanged("State");
             }
         }
 
@@ -443,7 +455,7 @@ namespace DownloadsManager.Core.Concrete
             ////Pre-downloading locate file on local disk
             LocateLocalFile();
 
-
+            NotifyPropertyChanged("LocalFile");
             List<CalculatedFileSegment> calculatedSegments;
 
             if (!remoteFileInfo.AcceptRanges)
@@ -480,6 +492,7 @@ namespace DownloadsManager.Core.Concrete
 
                 segments.Add(segment);
             }
+            NotifyPropertyChanged("Segment");
 
             RunSegments();
         }
@@ -508,6 +521,7 @@ namespace DownloadsManager.Core.Concrete
                     }
                 }
             }
+            NotifyPropertyChanged("Threads");
 
             return allFinished;
         }
@@ -541,6 +555,7 @@ namespace DownloadsManager.Core.Concrete
             try
             {
                 state.StartDownloadThread(objSegmentCount);
+                NotifyPropertyChanged("State");
             }
             catch (Exception)
             {
@@ -551,7 +566,7 @@ namespace DownloadsManager.Core.Concrete
         private void RunSegments()
         {
             state.SetState(new DownloadDownloadingState(this));
-
+            NotifyPropertyChanged("State");
             using (FileStream fs = new FileStream(this.LocalFile + "\\" + fileName, FileMode.Open, FileAccess.Write))
             {
                 for (int i = 0; i < this.FileSegments.Count; i++)
@@ -577,6 +592,7 @@ namespace DownloadsManager.Core.Concrete
             }
 
             state.SetState(new DownloadEndedState(this));
+            NotifyPropertyChanged("State");
         }
 
         private bool RestartFailedSegments()
@@ -605,6 +621,7 @@ namespace DownloadsManager.Core.Concrete
                     }
                 }
             }
+            NotifyPropertyChanged("Segment");
 
             Thread.Sleep((int)delay);
 
@@ -615,6 +632,7 @@ namespace DownloadsManager.Core.Concrete
         {
             Thread segmentThread = new Thread(new ParameterizedThreadStart(FileSegmentThreadProc));
             segmentThread.Start(newSegment);
+            NotifyPropertyChanged("Threads");
 
             lock (threads)
             {
@@ -649,6 +667,7 @@ namespace DownloadsManager.Core.Concrete
                     try
                     {
                         reloadedFileInfo = currentDownloadProvider.GetFileInfo(this.ResourceInfo, out downloadStream);
+                        NotifyPropertyChanged("FileInfo");
                         break;
                     }
                     catch (Exception)
@@ -656,6 +675,7 @@ namespace DownloadsManager.Core.Concrete
                         if (restartTriesCounter < Settings.Default.MaxTries)
                         {
                             state.SetState(new DownloadWaitingForReconnectState(this));
+                            NotifyPropertyChanged("State");
                             Thread.Sleep(TimeSpan.FromSeconds(Settings.Default.RetrySleepInterval));
                         }
                         else
@@ -669,6 +689,7 @@ namespace DownloadsManager.Core.Concrete
             finally
             {
                 state.SetState(new DownloadPreparedState(this));
+                NotifyPropertyChanged("State");
             }
 
             try
@@ -679,6 +700,7 @@ namespace DownloadsManager.Core.Concrete
                     reloadedFileInfo.FileSize != RemoteFileInfo.FileSize)
                 {
                     this.remoteFileInfo = reloadedFileInfo;
+                    NotifyPropertyChanged("RemoteFileInfo");
                     StartSegments(this.RequestedSegments, downloadStream);
                 }
                 else
@@ -760,11 +782,13 @@ namespace DownloadsManager.Core.Concrete
 
                     //// change the segment URL to the mirror URL
                     segment.CurrentURL = resourceInfo.URL;
+                    NotifyPropertyChanged("Segment");
                 }
                 else
                 {
                     ////  change the segment URL to the main URL
                     segment.CurrentURL = this.resourceInfo.URL;
+                    NotifyPropertyChanged("Segment");
                 }
 
                 ReadSegment(segment, buffSize, buffer);
@@ -775,7 +799,7 @@ namespace DownloadsManager.Core.Concrete
                 //// store the error information
                 segment.State = FileSegmentState.Error;
                 segment.LastError = ex;
-
+                NotifyPropertyChanged("Segment");
                 Debug.WriteLine(ex.ToString());
             }
             finally
@@ -803,9 +827,11 @@ namespace DownloadsManager.Core.Concrete
                     {
                         //// adjust the 'readSize' to write only necessary bytes
                         readSize = segment.EndPosition - segment.StartPosition;
+                        NotifyPropertyChanged("Segment");
                         if (readSize <= 0)
                         {
                             segment.StartPosition = segment.EndPosition;
+                            NotifyPropertyChanged("Segment");
                             break;
                         }
                     }
@@ -816,6 +842,7 @@ namespace DownloadsManager.Core.Concrete
                     {
                         segment.OutputStream.Position = segment.StartPosition;
                         segment.OutputStream.Write(buffer, 0, (int)readSize);
+                        NotifyPropertyChanged("Segment");
                     }
 
                     //// increse the start position of the segment and also calculates the rate
@@ -824,6 +851,7 @@ namespace DownloadsManager.Core.Concrete
                     if (segment.EndPosition > 0 && segment.StartPosition >= segment.EndPosition)
                     {
                         segment.StartPosition = segment.EndPosition;
+                        NotifyPropertyChanged("Segment");
                         break;
                     }
 
@@ -831,6 +859,7 @@ namespace DownloadsManager.Core.Concrete
                     if (state.GetType() == typeof(DownloadPausingState))
                     {
                         segment.State = FileSegmentState.Paused;
+                        NotifyPropertyChanged("Segment");
                         break;
                     }
 
@@ -839,6 +868,7 @@ namespace DownloadsManager.Core.Concrete
                 if (segment.State == FileSegmentState.Downloading)
                 {
                     segment.State = FileSegmentState.Finished;
+                    NotifyPropertyChanged("State");
 
                     //// try to create other segment, 
                     //// spliting the missing bytes from one existing segment
@@ -874,6 +904,7 @@ namespace DownloadsManager.Core.Concrete
 
                         //// add the new segment to the list
                         segments.Add(newSegment);
+                        NotifyPropertyChanged("Segments");
 
                         StartSegment(newSegment);
 
@@ -903,6 +934,7 @@ namespace DownloadsManager.Core.Concrete
                 while (new FileInfo(newFileName).Exists);
 
                 this.localFile = newFileName;
+                NotifyPropertyChanged("LocalFile");
             }
 
             using (FileStream fs = new FileStream(this.LocalFile + "\\" + fileName, FileMode.Create, FileAccess.Write))
@@ -932,6 +964,19 @@ namespace DownloadsManager.Core.Concrete
                 }
 
                 return Mirrors[mirrorCounter++];
+            }
+        }
+
+        #endregion
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string property)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
             }
         }
 

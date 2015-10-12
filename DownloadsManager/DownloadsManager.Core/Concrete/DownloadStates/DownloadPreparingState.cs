@@ -84,6 +84,10 @@ namespace DownloadsManager.Core.Concrete.DownloadStates
             {
                 throw;
             }
+            catch (InvalidOperationException ex)
+            {
+                downloader.SetState(new DownloadEndedState(downloader));
+            }
             catch (Exception ex)
             {
                 downloader.LastError = ex;

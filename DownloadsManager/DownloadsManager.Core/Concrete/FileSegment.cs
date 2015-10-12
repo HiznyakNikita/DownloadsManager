@@ -1,6 +1,7 @@
 ﻿using DownloadsManager.Core.Concrete.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace DownloadsManager.Core.Concrete
     /// Class for implementing chunked download
     /// Represent segment of file for downloading
     /// </summary>
-    public class FileSegment
+    public class FileSegment : INotifyPropertyChanged
     {
         private long startPosition;
         private long endPosition;
@@ -293,6 +294,8 @@ namespace DownloadsManager.Core.Concrete
             start = startPosition;
             lastSegmentReceptionTime = DateTime.Now;
             isStarted = true;
+
+            NotifyPropertyChanged("Start");
         }
 
         /// <summary>
@@ -333,7 +336,22 @@ namespace DownloadsManager.Core.Concrete
                     lastSegmentReceptionTime = now;
                     isStarted = true;
                 }
+
+                NotifyPropertyChanged("Start");
             }
         }
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string property)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+            }
+        }
+
+        #endregion
     }
 }

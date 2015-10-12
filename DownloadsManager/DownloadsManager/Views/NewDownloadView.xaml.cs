@@ -1,5 +1,8 @@
-﻿using System;
+﻿using DownloadsManager.ViewModels;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,43 +20,63 @@ namespace DownloadsManager.Views
     /// <summary>
     /// Interaction logic for NewDownloadView.xaml
     /// </summary>
-    public partial class NewDownloadView : Window
+    public partial class NewDownloadView : Window, INotifyPropertyChanged
     {
-        private string urlToDownload;
+        private NewDownloadVM model;
 
         /// <summary>
-        /// ctor
+        /// Gets or sets VM of view
         /// </summary>
+        public NewDownloadVM Model 
+        { 
+            get
+            {
+                return model;
+            }
+
+            set
+            {
+                model = value;
+                NotifyPropertyChanged("Model");
+            }
+        }
+
         public NewDownloadView()
         {
             InitializeComponent();
-        }
-
-        /// <summary>
-        /// Uri for download
-        /// </summary>
-        public Uri UrlToDownload
-        {
-            get
-            {
-                return new Uri(urlToDownload);
-            }
+            this.DataContext = model = new NewDownloadVM();
         }
 
         private void BtnOk_Click(object sender, RoutedEventArgs e)
         {
-            urlToDownload = tbUrlToDownload.Text;
-            this.Close();
+            try
+            {
+                if (!string.IsNullOrEmpty(tbUrlToDownload.Text.ToString()))
+                {
+                    if (!string.IsNullOrEmpty(tbUrlToDownload.Text.ToString()) )
+                        model.AddMirror(tbUrlToDownload.Text);
+                    model.SavePath = string.IsNullOrEmpty(tbSaveToPath.Text) ? "" : tbSaveToPath.Text;
+                    if (!string.IsNullOrEmpty(tbSegmentsCount.Text))
+                        model.SegmentsCount = Convert.ToInt32(tbSegmentsCount.Text, NumberFormatInfo.InvariantInfo);
+                    this.Close();
+                }
+            }
+            catch(InvalidOperationException)
+            {
+                MessageBox.Show("Error!");
+            }
         }
 
         private void BtnRemove_Click(object sender, RoutedEventArgs e)
         {
-
+            if (lstBoxAlternativeUrl.SelectedItem != null)
+                model.RemoveMirrorFromList(lstBoxAlternativeUrl.SelectedValue.ToString());
         }
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-
+            if (!string.IsNullOrEmpty(tbUrlToDownloadAlternative.Text))
+                model.AddMirrorToList(tbUrlToDownloadAlternative.Text);
         }
 
         private void BtnCloseWindow_Click(object sender, RoutedEventArgs e)
@@ -63,12 +86,50 @@ namespace DownloadsManager.Views
 
         private void BtnChooseFolderSaveTo_Click(object sender, RoutedEventArgs e)
         {
-
+            using (System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog())
+            {
+                System.Windows.Forms.DialogResult result = folderBrowserDialog1.ShowDialog();
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    tbSaveToPath.Text = folderBrowserDialog1.SelectedPath;
+                }
+            }
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
+            this.Close();
+        }
 
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string property)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+            }
+        }
+
+        #endregion
+
+        private void checkBoxAlternative_Checked(object sender, RoutedEventArgs e)
+        {
+            if(checkBoxAlternative.IsChecked == true)
+            {
+                btnAddUrl.IsEnabled = true;
+                btnRemoveUrl.IsEnabled = true;
+                tbUrlToDownloadAlternative.IsEnabled = true;
+                lstBoxAlternativeUrl.IsEnabled = true;
+            }
+            else
+            {
+                btnAddUrl.IsEnabled = false;
+                btnRemoveUrl.IsEnabled = false;
+                tbUrlToDownloadAlternative.IsEnabled = false;
+                lstBoxAlternativeUrl.IsEnabled = false;
+            }
         }
     }
 }

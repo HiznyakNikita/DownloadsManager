@@ -3,7 +3,9 @@ using DownloadsManager.UserControls;
 using DownloadsManager.ViewModels.Infrastructure;
 using DownloadsManager.Views;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,9 +18,9 @@ namespace DownloadsManager.ViewModels
     /// <summary>
     /// Main Window View Model
     /// </summary>
-    public class MainWindowVM
+    public class MainWindowVM : INotifyPropertyChanged
     {
-        private int currentDownloadIndex;
+        private Hashtable itemsToDownloaders = new Hashtable();
 
         /// <summary>
         /// ctor
@@ -28,17 +30,14 @@ namespace DownloadsManager.ViewModels
             this.AddDownloadCmd = new Command(this.AddDownload);
         }
 
-        /// <summary>
-        /// Current download index
-        /// </summary>
-        public int CurrentDownloadIndex
-        {
+        public Hashtable ItemsToDownloaders
+        { 
             get
             {
-                return currentDownloadIndex;
+                return itemsToDownloaders;
             }
         }
-            
+
         #region Commands
 
         /// <summary>
@@ -52,20 +51,44 @@ namespace DownloadsManager.ViewModels
         /// <param name="param">Download param</param>
         private void AddDownload(object param)
         {
-            currentDownloadIndex++;
             NewDownloadView newDownloadView = new NewDownloadView();
             newDownloadView.ShowDialog();
-            ResourceInfo ri = new ResourceInfo();
-            ri.URL = newDownloadView.UrlToDownload.ToString();
-            Uri uri = new Uri(ri.URL);
+            string fileName = "";
+            if(newDownloadView.Model.Mirror != null)
+            {
+                Uri uri = new Uri(newDownloadView.Model.Mirror.URL);
+                fileName = uri.Segments[uri.Segments.Length - 1];
+                fileName = HttpUtility.UrlDecode(fileName).Replace("/", "\\");
+            }
+            else if (newDownloadView.Model.Mirrors.Count != 0)
+            {
+                Uri uri = new Uri(newDownloadView.Model.Mirrors[0].URL);
+                fileName = uri.Segments[uri.Segments.Length - 1];
+                fileName = HttpUtility.UrlDecode(fileName).Replace("/", "\\");
+            }
 
-            string fileName = uri.Segments[uri.Segments.Length - 1];
-            fileName = HttpUtility.UrlDecode(fileName).Replace("/", "\\");
-            DownloaderManager.Instance.Add(ri, null, @"D:\test", 100, true,fileName);
+            Downloader d = new Downloader(newDownloadView.Model.Mirror, newDownloadView.Model.Mirrors.ToArray(), newDownloadView.Model.SavePath, newDownloadView.Model.SegmentsCount, fileName);
+            DownloaderManager.Instance.Add(d,true);
+                    
+            DownloadViewer viewer = new DownloadViewer();
+            
+            viewer.DataContext = new DownloadViewerVM(d);
 
-            //DownloadViewer viewer = new DownloadViewer();
-            //(param as StackPanel).Children.Add(viewer);
-            //viewer.DataContext = new DownloadViewerVM(DownloaderManager.Instance.Downloads[currentDownloadIndex]);
+            itemsToDownloaders.Add(d, viewer);
+            NotifyPropertyChanged("ItemsToDownloaders");
+        }
+
+        #endregion
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string property)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+            }
         }
 
         #endregion

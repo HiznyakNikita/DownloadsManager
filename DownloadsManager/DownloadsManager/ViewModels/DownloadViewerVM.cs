@@ -1,6 +1,7 @@
 ﻿using DownloadsManager.Core.Concrete;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -11,17 +12,31 @@ namespace DownloadsManager.ViewModels
     /// <summary>
     /// View model for DownloadViewer
     /// </summary>
-    public class DownloadViewerVM
+    public class DownloadViewerVM : INotifyPropertyChanged
     {
         private Downloader download;
 
         /// <summary>
-        /// ctor
+        /// ctor    
         /// </summary>
-        /// <param name="download"> downoad to v</param>
-        public DownloadViewerVM(Downloader download)
+        /// <param name="downloader">download for view</param>
+        public DownloadViewerVM(Downloader downloader)
         {
-            this.download = download;
+            if(downloader!=null)
+                this.download = downloader;
+            //// Attach EventHandler
+            this.download.PropertyChanged += Downloader_PropertyChanged;
+        }
+
+        /// <summary>
+        /// Gets download name
+        /// </summary>
+        public string FileName 
+        { 
+            get
+            {
+                return download.FileName;
+            }
         }
 
         /// <summary>
@@ -31,7 +46,7 @@ namespace DownloadsManager.ViewModels
         { 
             get
             {
-                return download.Transfered + "from" + download.FileSize;
+                return download.Transfered + " bytes from " + download.FileSize + " bytes";
             }
         }
 
@@ -86,8 +101,31 @@ namespace DownloadsManager.ViewModels
         { 
             get
             {
-                return download.Progress.ToString(CultureInfo.InvariantCulture);
+                return download.Progress.ToString(CultureInfo.InvariantCulture).Length > 4 ? download.Progress.ToString(CultureInfo.InvariantCulture).Substring(0,4) + " %" : "0.0 %";
             }
         }
+
+        private void Downloader_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            NotifyPropertyChanged("Progress");
+            NotifyPropertyChanged("LinkInfo");
+            NotifyPropertyChanged("Rate");
+            NotifyPropertyChanged("State");
+            NotifyPropertyChanged("Info");
+            NotifyPropertyChanged("SizeInfo");
+        }
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string property)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+            }
+        }
+
+        #endregion
     }
 }

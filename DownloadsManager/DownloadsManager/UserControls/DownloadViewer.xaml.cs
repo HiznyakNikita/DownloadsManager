@@ -28,5 +28,10 @@ namespace DownloadsManager.UserControls
         {
             InitializeComponent();
         }
+
+        private void btnAdditionalInfo_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

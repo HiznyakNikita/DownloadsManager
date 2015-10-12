@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 [assembly: CLSCompliant(true)]
 
@@ -25,15 +26,25 @@ namespace DownloadsManager
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        private DispatcherTimer timer = new DispatcherTimer();
+        private MainWindowVM model;
         /// <summary>
         /// MainWindow ctor
         /// </summary>
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = new MainWindowVM();
-            DownloadViewer viewer = new DownloadViewer();
-            AddDownloadsStackPanel.Children.Add(viewer); 
+            this.DataContext = model = new MainWindowVM();
+            timer.Interval = TimeSpan.FromSeconds(0.5);
+            timer.Tick += timer_Tick;
+            timer.Start();
+        }
+
+        void timer_Tick(object sender, EventArgs e)
+        {
+            this.itemsControlDownloads.ItemsSource = null;
+            this.itemsControlDownloads.ItemsSource = model.ItemsToDownloaders.Values;
         }
 
         private void BtnCloseWindow_Click(object sender, RoutedEventArgs e)
@@ -43,6 +54,7 @@ namespace DownloadsManager
 
         private void MenuItemAddDownload_Click(object sender, RoutedEventArgs e)
         {
+            
         }
 
         private void BtnHideWindow_Click(object sender, RoutedEventArgs e)
