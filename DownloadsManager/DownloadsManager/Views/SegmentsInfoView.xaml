@@ -1,0 +1,27 @@
+﻿<Window x:Class="DownloadsManager.Views.SegmentsInfoView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:DownloadsManager.ViewModels"
+        Title="SegmentsInfoView" Height="189.54" Width="532.218" Background="#FF575757" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vm:SegmentsInfoVM}"/>
+    </Window.Resources>
+    <Border BorderBrush="WhiteSmoke" BorderThickness="2">
+        <Grid>
+            <Button HorizontalAlignment="Right" Click="BtnCloseWindow_Click" Margin="0,2,0,0" VerticalAlignment="Top" Width="20" Height="20" x:Name="BtnCloseWindow" Style="{StaticResource closeWindowButtonStyle}"/>
+            <Label Content="Start position:" Foreground="WhiteSmoke" FontFamily="Segoe" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="112"/>
+            <Label Content="End position:" Foreground="WhiteSmoke" FontFamily="Segoe" HorizontalAlignment="Left" Margin="10,34,0,0" VerticalAlignment="Top" Width="112"/>
+            <Label Content="State:" Foreground="WhiteSmoke" FontFamily="Segoe" HorizontalAlignment="Left" Margin="10,58,0,0" VerticalAlignment="Top" Width="112"/>
+            <Label Content="Rate:" Foreground="WhiteSmoke" FontFamily="Segoe" HorizontalAlignment="Left" Margin="10,82,0,0" VerticalAlignment="Top" Width="112"/>
+            <Label Content="Time left:" Foreground="WhiteSmoke" FontFamily="Segoe" HorizontalAlignment="Left" Margin="10,106,0,0" VerticalAlignment="Top" Width="112"/>
+            <Label Content="Current try:" Foreground="WhiteSmoke" FontFamily="Segoe" HorizontalAlignment="Left" Margin="10,130,0,0" VerticalAlignment="Top" Width="112"/>
+            <Label Content="{Binding Segment.StartPosition, UpdateSourceTrigger=PropertyChanged}" Foreground="WhiteSmoke" FontFamily="Segoe" HorizontalAlignment="Left" Margin="154,5,0,0" VerticalAlignment="Top" Width="329" Height="24"/>
+            <Label Content="{Binding Segment.EndPosition, UpdateSourceTrigger=PropertyChanged}" Foreground="WhiteSmoke" FontFamily="Segoe" HorizontalAlignment="Left" Margin="154,32,0,0" VerticalAlignment="Top" Width="329" Height="26"/>
+            <Label Content="{Binding Segment.State, UpdateSourceTrigger=PropertyChanged}" Foreground="WhiteSmoke" FontFamily="Segoe" HorizontalAlignment="Left" Margin="154,58,0,0" VerticalAlignment="Top" Width="329" Height="27"/>
+            <Label Content="{Binding Segment.Rate, UpdateSourceTrigger=PropertyChanged}" Foreground="WhiteSmoke" FontFamily="Segoe" HorizontalAlignment="Left" Margin="154,85,0,0" VerticalAlignment="Top" Width="329" Height="26"/>
+            <Label Content="{Binding Segment.TimeLeft, UpdateSourceTrigger=PropertyChanged}" Foreground="WhiteSmoke" FontFamily="Segoe" HorizontalAlignment="Left" Margin="154,111,0,0" VerticalAlignment="Top" Width="329" Height="27"/>
+            <Label Content="{Binding Segment.CurrentTry, UpdateSourceTrigger=PropertyChanged}" Foreground="WhiteSmoke" FontFamily="Segoe" HorizontalAlignment="Left" Margin="154,138,0,0" VerticalAlignment="Top" Width="329" Height="27"/>
+            <Button x:Name="btnNextSegment" Content="Next" Command="{Binding NextSegmentCmd}" Style="{StaticResource buttonWithTextStyle}" Margin="10,154,402,7"/>
+        </Grid>
+    </Border>
+</Window>
