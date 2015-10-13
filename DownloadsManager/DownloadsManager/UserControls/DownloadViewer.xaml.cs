@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DownloadsManager.ViewModels;
+using DownloadsManager.Views;
 
 namespace DownloadsManager.UserControls
 {
@@ -31,7 +32,8 @@ namespace DownloadsManager.UserControls
 
         private void btnAdditionalInfo_Click(object sender, RoutedEventArgs e)
         {
-
+            SegmentsInfoView segmentsInfoView = new SegmentsInfoView(((DownloadViewerVM)this.DataContext).Download);
+            segmentsInfoView.ShowDialog();
         }
     }
 }

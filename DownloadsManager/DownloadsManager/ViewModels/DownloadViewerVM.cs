@@ -29,6 +29,17 @@ namespace DownloadsManager.ViewModels
         }
 
         /// <summary>
+        /// Gets download
+        /// </summary>
+        public Downloader Download 
+        { 
+            get
+            {
+                return download;
+            }
+        }
+
+        /// <summary>
         /// Gets download name
         /// </summary>
         public string FileName 

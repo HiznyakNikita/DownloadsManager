@@ -112,8 +112,12 @@
     <Compile Include="ViewModels\Infrastruture\Command.cs" />
     <Compile Include="ViewModels\MainWindowVM.cs" />
     <Compile Include="ViewModels\NewDownloadVM.cs" />
+    <Compile Include="ViewModels\SegmentsInfoVM.cs" />
     <Compile Include="Views\NewDownloadView.xaml.cs">
       <DependentUpon>NewDownloadView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SegmentsInfoView.xaml.cs">
+      <DependentUpon>SegmentsInfoView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -137,6 +141,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\NewDownloadView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SegmentsInfoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

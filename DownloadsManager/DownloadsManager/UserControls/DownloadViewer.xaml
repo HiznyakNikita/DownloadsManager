@@ -14,7 +14,7 @@
             <StackPanel Orientation="Horizontal">
                 <Label x:Name="lblDownloadFileName" HorizontalAlignment="Left" Content ="{Binding FileName}" FontFamily="Segoe" FontSize="18" Foreground="WhiteSmoke" Height="35" Width="215"/>
                 <Label x:Name="lblStateInfo" HorizontalAlignment="Left" FontFamily="Segoe" FontSize="18" Foreground="WhiteSmoke" Content="{Binding State, UpdateSourceTrigger=PropertyChanged}" Height="35" Width="160"/>
-                <Button x:Name="btnAdditionalInfo" Content="Info" Style="{Binding buttonWithTextStyle}" Click="btnAdditionalInfo_Click" Width="48"></Button>
+                <Button x:Name="btnAdditionalInfo" Content="Info" Style="{StaticResource buttonWithTextStyle}" Click="btnAdditionalInfo_Click" Width="48"></Button>
             </StackPanel>
             <Label x:Name="lblSizeInfo" HorizontalAlignment="Left" FontFamily="Segoe" FontSize="12" Foreground="WhiteSmoke" Content="{Binding SizeInfo, UpdateSourceTrigger=PropertyChanged}" Height="25" Width="272"></Label>
             <Label x:Name="lblAddedInfo" HorizontalAlignment="Left" FontFamily="Segoe" FontSize="12" Foreground="WhiteSmoke" Content="{Binding Added}" Height="25" Width="120"></Label>

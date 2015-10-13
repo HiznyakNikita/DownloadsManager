@@ -501,11 +501,11 @@ namespace DownloadsManager.Core.Concrete
         {
             bool allFinished = true;
 
-            List<Thread> workThreads;
+            List<Thread> workThreads = new List<Thread>();
 
             lock (threads)
             {
-                workThreads = threads;
+                workThreads.AddRange(threads);
             }
 
             foreach (Thread t in workThreads)
@@ -965,6 +965,15 @@ namespace DownloadsManager.Core.Concrete
 
                 return Mirrors[mirrorCounter++];
             }
+        }
+
+        /// <summary>
+        /// Gets iterator for segments collection
+        /// </summary>
+        /// <returns>Segment iterator</returns>
+        public SegmentsIterator GetSegmentsIterator()
+        {
+            return new SegmentsIterator(this);
         }
 
         #endregion
