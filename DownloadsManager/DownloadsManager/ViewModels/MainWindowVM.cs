@@ -1,4 +1,5 @@
 ﻿using DownloadsManager.Core.Concrete;
+using DownloadsManager.Helpers;
 using DownloadsManager.UserControls;
 using DownloadsManager.ViewModels.Infrastructure;
 using DownloadsManager.Views;
@@ -6,6 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +22,7 @@ namespace DownloadsManager.ViewModels
     /// </summary>
     public class MainWindowVM : INotifyPropertyChanged
     {
-        private Hashtable itemsToDownloaders = new Hashtable();
+        private Hashtable _itemsToDownloaders = new Hashtable();
 
         /// <summary>
         /// ctor
@@ -28,7 +30,32 @@ namespace DownloadsManager.ViewModels
         public MainWindowVM()
         {
             this.AddDownloadCmd = new Command(this.AddDownload);
+            this.CloseCmd = new Command(this.Close);
+            AddSavedDownloads();
+
         }
+
+        private void AddSavedDownloads()
+        {
+            try
+            {
+                List<Downloader> downloads = DownloadsSerializer.Deserialize();
+                foreach (var fileToDownload in downloads)
+                {
+                    DownloaderManager.Instance.Add(fileToDownload, true);
+                    DownloadViewer viewer = new DownloadViewer();
+                    viewer.DataContext = new DownloadViewerVM(fileToDownload);
+                    _itemsToDownloaders.Add(fileToDownload, viewer);
+                }
+
+                NotifyPropertyChanged("ItemsToDownloaders");
+            }
+            catch (FileNotFoundException)
+            {
+
+            }
+        }
+            
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -36,7 +63,7 @@ namespace DownloadsManager.ViewModels
         { 
             get
             {
-                return itemsToDownloaders;
+                return _itemsToDownloaders;
             }
         }
 
@@ -46,6 +73,19 @@ namespace DownloadsManager.ViewModels
         /// Gets or sets Command for adding download
         /// </summary>
         public Command AddDownloadCmd { get; set; }
+
+        public Command CloseCmd { get; set; }
+
+        private void Close(object param)
+        {
+            List<Downloader> downloadsToSave = new List<Downloader>();
+            foreach(var download in _itemsToDownloaders.Keys.OfType<Downloader>().ToList())
+            {
+                download.State.Pause();
+                downloadsToSave.Add(download);
+            }
+            DownloadsSerializer.Serialize(downloadsToSave);
+        }
 
         /// <summary>
         /// Method for adding download
@@ -81,7 +121,7 @@ namespace DownloadsManager.ViewModels
             
             viewer.DataContext = new DownloadViewerVM(fileToDownload);
 
-            itemsToDownloaders.Add(fileToDownload, viewer);
+            _itemsToDownloaders.Add(fileToDownload, viewer);
             NotifyPropertyChanged("ItemsToDownloaders");
         }
 

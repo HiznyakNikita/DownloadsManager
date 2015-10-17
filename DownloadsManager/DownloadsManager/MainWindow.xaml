@@ -42,7 +42,7 @@
             <TabItem Header="APPLICATIONS"></TabItem>
             <TabItem Header="STATISTIC"></TabItem>
         </TabControl>
-        <Button HorizontalAlignment="Right" Click="BtnCloseWindow_Click" Margin="556,3,0,0" VerticalAlignment="Top" Width="20" Height="20" x:Name="BtnCloseWindow" Style="{StaticResource closeWindowButtonStyle}"/>
+        <Button HorizontalAlignment="Right" Click="BtnCloseWindow_Click" Margin="556,3,0,0" Command="{Binding CloseCmd}" VerticalAlignment="Top" Width="20" Height="20" x:Name="BtnCloseWindow" Style="{StaticResource closeWindowButtonStyle}"/>
         <Button HorizontalAlignment="Right" Click="BtnHideWindow_Click" Margin="0,3,23,0" VerticalAlignment="Top" Width="20" Height="20" x:Name="BtnHideWindow" Style="{StaticResource hideWindowButtonStyle}"/>
     </Grid>
     <Window.ContextMenu>

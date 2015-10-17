@@ -6,6 +6,7 @@ using System.Text;
 
 namespace DownloadsManager.Core.Concrete
 {
+    [Serializable]
     public class ResourceInfo
     {
         #region Fields

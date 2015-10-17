@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.Core.Concrete.DownloadStates
 {
+    [Serializable]
     public class DownloadEndedWithErrorState : IDownloaderState
     {
         private Downloader downloader;

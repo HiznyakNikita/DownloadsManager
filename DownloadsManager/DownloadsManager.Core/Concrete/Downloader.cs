@@ -15,20 +15,24 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Globalization;
+using System.Xml.Serialization;
 
 namespace DownloadsManager.Core.Concrete
 {
     [CLSCompliant(true)]
-
+    [Serializable]
     /// <summary>
     /// Class which represent every download
     /// TODO State,Download providers, segments (for pause and speed manipulations)
     /// </summary>
     public class Downloader : IDownloader, INotifyPropertyChanged
     {
+        [NonSerialized]
         private Thread mainThread;
         private RemoteFileInfo remoteFileInfo;
+        [NonSerialized]
         private AggregateException downloadingErrors;
+        private IDownloaderState state;
 
         private object syncObject = new object();
         
@@ -37,11 +41,15 @@ namespace DownloadsManager.Core.Concrete
         /// </summary>
         private int mirrorCounter;
 
-        private readonly List<ResourceInfo> mirrors;
-        private readonly List<FileSegment> segments;
-        private readonly List<Thread> threads;
+        private List<ResourceInfo> mirrors;
+        private List<FileSegment> segments;
+        [NonSerialized]
+        private List<Thread> threads = new List<Thread>();
 
+        [NonSerialized]
         private IFileSegmentCalculator fileSegmentCalculator;
+
+        public Downloader() { }
 
         /// <summary>
         /// ctor
@@ -131,6 +139,7 @@ namespace DownloadsManager.Core.Concrete
             FileName = fileName;
         }
 
+        [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
         #region Properties
@@ -156,11 +165,11 @@ namespace DownloadsManager.Core.Concrete
         /// <summary>
         /// Gets mirrors of downloader
         /// </summary>
-        public ReadOnlyCollection<ResourceInfo> Mirrors
+        public List<ResourceInfo> Mirrors
         {
             get
             {
-                return mirrors.AsReadOnly();
+                return mirrors;
             }
         }
 
@@ -236,6 +245,7 @@ namespace DownloadsManager.Core.Concrete
             }
         }
 
+        [XmlIgnore]
         /// <summary>
         /// Gets work download threads
         /// </summary>
@@ -316,6 +326,7 @@ namespace DownloadsManager.Core.Concrete
             }
         }
 
+        [XmlIgnore]
         public AggregateException DownloadingErrors
         {
             get { return downloadingErrors; }
@@ -324,8 +335,14 @@ namespace DownloadsManager.Core.Concrete
 
         public IDownloaderState State
         {
-            get;
-            private set;
+            get
+            {
+                return state;
+            }
+            set
+            {
+                state = value;
+            }
         }
 
         /// <summary>
@@ -355,6 +372,7 @@ namespace DownloadsManager.Core.Concrete
             set { fileSegmentCalculator = value; }
         }
 
+        [XmlIgnore]
         /// <summary>
         /// Gets or sets main thread
         /// </summary>
@@ -406,12 +424,12 @@ namespace DownloadsManager.Core.Concrete
         /// <summary>
         /// Sets state of downloader
         /// </summary>
-        /// <param name="state">State of downloader</param>
-        public void SetState(IDownloaderState state)
+        /// <param name="stateToSet">State of downloader</param>
+        public void SetState(IDownloaderState stateToSet)
         {
-            if (state != null)
+            if (stateToSet != null)
             {
-                State = state;
+                State = stateToSet;
                 NotifyPropertyChanged("State");
             }
         }
@@ -451,12 +469,13 @@ namespace DownloadsManager.Core.Concrete
             {
                 calculatedSegments = this.SegmentCalculator.GetSegments(segmentCount, remoteFileInfo);
             }
-
-            lock (threads)
+            if (threads != null)
             {
-                threads.Clear();
+                lock (threads)
+                {
+                    threads.Clear();
+                }
             }
-
             lock (segments)
             {
                 segments.Clear();
@@ -488,18 +507,19 @@ namespace DownloadsManager.Core.Concrete
             bool allFinished = true;
 
             List<Thread> workThreads = new List<Thread>();
-
-            lock (threads)
+            if (threads != null)
             {
-                workThreads.AddRange(threads);
+                lock (threads)
+                {
+                    workThreads.AddRange(threads);
+                }
             }
-
             foreach (Thread t in workThreads)
             {
                 bool finished = t.Join(timeout);
                 allFinished = allFinished & finished;
 
-                if (finished)
+                if (finished && threads != null)
                 {
                     lock (threads)
                     {
@@ -621,7 +641,8 @@ namespace DownloadsManager.Core.Concrete
             Thread segmentThread = new Thread(new ParameterizedThreadStart(FileSegmentThreadProc));
             segmentThread.Start(newSegment);
             NotifyPropertyChanged("Threads");
-
+            if (threads == null)
+                threads = new List<Thread>();
             lock (threads)
             {
                 threads.Add(segmentThread);

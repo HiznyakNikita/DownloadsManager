@@ -22,7 +22,7 @@ namespace DownloadsManager.ViewModels.Infrastructure
         }
 
         /// <summary>
-        /// event for canExecite prop changed
+        /// event for canExecute prop changed
         /// </summary>
         public event EventHandler CanExecuteChanged
         {

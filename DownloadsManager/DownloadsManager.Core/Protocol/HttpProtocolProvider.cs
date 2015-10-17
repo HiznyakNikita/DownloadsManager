@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.Core.Concrete
 {
+    [Serializable]
     public class HttpProtocolProvider : IProtocolProvider
     {
         public Stream CreateResponseStream(ResourceInfo resourceInfo, int startRangePosition, int endRangePosition)

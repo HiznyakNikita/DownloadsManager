@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.ViewModels
 {
+    
     /// <summary>
     /// View model for DownloadViewer
     /// </summary>

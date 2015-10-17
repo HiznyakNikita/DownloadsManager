@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.Core.Concrete.DownloadStates
 {
+    [Serializable]
     public class DownloadPausingState : IDownloaderState
     {
         private Downloader downloader;

@@ -6,9 +6,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace DownloadsManager.Core.Concrete
 {
+    [Serializable]
     /// <summary>
     /// Class for implementing chunked download
     /// Represent segment of file for downloading
@@ -20,7 +22,9 @@ namespace DownloadsManager.Core.Concrete
         private int index;
         private string currentLink;
         private long initialStartPosition;
+        [NonSerialized]
         private Stream outputStream;
+        [NonSerialized]
         private Stream inputStream;
         private Exception lastError;
         private DateTime lastErrorTime = DateTime.MinValue;
@@ -102,6 +106,7 @@ namespace DownloadsManager.Core.Concrete
             }
         }
 
+        [XmlIgnore]
         /// <summary>
         /// Gets or sets last error while downloading
         /// </summary>
