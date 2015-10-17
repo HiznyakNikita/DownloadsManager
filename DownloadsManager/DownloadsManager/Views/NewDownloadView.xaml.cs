@@ -24,6 +24,14 @@ namespace DownloadsManager.Views
     {
         private NewDownloadVM model;
 
+        public NewDownloadView()
+        {
+            InitializeComponent();
+            this.DataContext = model = new NewDownloadVM();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         /// <summary>
         /// Gets or sets VM of view
         /// </summary>
@@ -41,27 +49,27 @@ namespace DownloadsManager.Views
             }
         }
 
-        public NewDownloadView()
-        {
-            InitializeComponent();
-            this.DataContext = model = new NewDownloadVM();
-        }
-
         private void BtnOk_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 if (!string.IsNullOrEmpty(tbUrlToDownload.Text.ToString()))
                 {
-                    if (!string.IsNullOrEmpty(tbUrlToDownload.Text.ToString()) )
+                    if (!string.IsNullOrEmpty(tbUrlToDownload.Text.ToString()))
+                    {
                         model.AddMirror(tbUrlToDownload.Text);
-                    model.SavePath = string.IsNullOrEmpty(tbSaveToPath.Text) ? "" : tbSaveToPath.Text;
+                    }
+
+                    model.SavePath = string.IsNullOrEmpty(tbSaveToPath.Text) ? string.Empty : tbSaveToPath.Text;
                     if (!string.IsNullOrEmpty(tbSegmentsCount.Text))
+                    {
                         model.SegmentsCount = Convert.ToInt32(tbSegmentsCount.Text, NumberFormatInfo.InvariantInfo);
+                    }
+
                     this.Close();
                 }
             }
-            catch(InvalidOperationException)
+            catch (InvalidOperationException)
             {
                 MessageBox.Show("Error!");
             }
@@ -70,13 +78,17 @@ namespace DownloadsManager.Views
         private void BtnRemove_Click(object sender, RoutedEventArgs e)
         {
             if (lstBoxAlternativeUrl.SelectedItem != null)
+            {
                 model.RemoveMirrorFromList(lstBoxAlternativeUrl.SelectedValue.ToString());
+            }
         }
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(tbUrlToDownloadAlternative.Text))
+            {
                 model.AddMirrorToList(tbUrlToDownloadAlternative.Text);
+            }
         }
 
         private void BtnCloseWindow_Click(object sender, RoutedEventArgs e)
@@ -103,7 +115,6 @@ namespace DownloadsManager.Views
 
         #region INotifyPropertyChanged
 
-        public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string property)
         {
             if (PropertyChanged != null)
@@ -114,9 +125,9 @@ namespace DownloadsManager.Views
 
         #endregion
 
-        private void checkBoxAlternative_Checked(object sender, RoutedEventArgs e)
+        private void CheckBoxAlternative_Checked(object sender, RoutedEventArgs e)
         {
-            if(checkBoxAlternative.IsChecked == true)
+            if (checkBoxAlternative.IsChecked == true)
             {
                 btnAddUrl.IsEnabled = true;
                 btnRemoveUrl.IsEnabled = true;

@@ -1,6 +1,7 @@
 ﻿using DownloadsManager.Core.Abstract;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -13,42 +14,55 @@ namespace DownloadsManager.Core.Concrete
 {
     public class HttpProtocolProvider : IProtocolProvider
     {
-        public Stream CreateResponseStream(ResourceInfo ri, int startRangePosition, int endRangePosition)
+        public Stream CreateResponseStream(ResourceInfo resourceInfo, int startRangePosition, int endRangePosition)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ri.URL);
-            request.Timeout = 30000;
-
-            if (startRangePosition != 0)
+            if (resourceInfo != null)
             {
-                if (endRangePosition == 0)
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(resourceInfo.Url);
+                request.Timeout = 30000;
+
+                if (startRangePosition != 0)
                 {
-                    request.AddRange(startRangePosition);
+                    if (endRangePosition == 0)
+                    {
+                        request.AddRange(startRangePosition);
+                    }
+                    else
+                    {
+                        request.AddRange(startRangePosition, endRangePosition);
+                    }
                 }
-                else
-                {
-                    request.AddRange(startRangePosition, endRangePosition);
-                }
+
+                WebResponse response = request.GetResponse();
+
+                return response.GetResponseStream();
             }
-
-            WebResponse response = request.GetResponse();
-
-            return response.GetResponseStream();
+            else
+                return null;
         }
 
-        public RemoteFileInfo GetFileInfo(ResourceInfo rl, out Stream stream)
+        public RemoteFileInfo GetFileInfo(ResourceInfo resourceInfo, out Stream stream)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(rl.URL);
-            request.Timeout = 30000;
+            if (resourceInfo != null)
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(resourceInfo.Url);
+                request.Timeout = 30000;
 
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            RemoteFileInfo result = new RemoteFileInfo();
-            result.LastModified = response.LastModified;
-            result.FileSize = response.ContentLength;
-            result.AcceptRanges = string.Compare(response.Headers["Accept-Ranges"], "bytes", true) == 0;
-           
-            stream = response.GetResponseStream();
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                RemoteFileInfo result = new RemoteFileInfo();
+                result.LastModified = response.LastModified;
+                result.FileSize = response.ContentLength;
+                result.AcceptRanges = string.Compare(response.Headers["Accept-Ranges"], "bytes", true, CultureInfo.CurrentCulture) == 0;
 
-            return result;
+                stream = response.GetResponseStream();
+
+                return result;
+            }
+            else
+            {
+                stream = null;
+                return null;
+            }
         }
     }
 }

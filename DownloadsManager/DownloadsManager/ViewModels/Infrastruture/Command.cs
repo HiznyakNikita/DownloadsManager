@@ -31,12 +31,12 @@ namespace DownloadsManager.ViewModels.Infrastructure
         }
 
         /// <summary>
-        /// Name of command
+        /// Gets or sets name of command
         /// </summary>
         public string Name { get; set; }
                
         /// <summary>
-        /// Exeute to delegate
+        /// Gets or sets execute to delegate
         /// </summary>
         public Action<object> ExecuteDelegate { get; set; }
 

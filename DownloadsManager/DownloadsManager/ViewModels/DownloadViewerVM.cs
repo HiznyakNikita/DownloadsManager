@@ -22,11 +22,14 @@ namespace DownloadsManager.ViewModels
         /// <param name="downloader">download for view</param>
         public DownloadViewerVM(Downloader downloader)
         {
-            if(downloader!=null)
+            if (downloader != null)
                 this.download = downloader;
+
             //// Attach EventHandler
             this.download.PropertyChanged += Downloader_PropertyChanged;
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Gets download
@@ -51,13 +54,13 @@ namespace DownloadsManager.ViewModels
         }
 
         /// <summary>
-        /// Size info of download
+        /// Gets size info of download
         /// </summary>
         public string SizeInfo 
         { 
             get
             {
-                return download.Transfered + " bytes from " + download.FileSize + " bytes";
+                return download.TransferBytes + " bytes from " + download.FileSize + " bytes";
             }
         }
 
@@ -101,7 +104,7 @@ namespace DownloadsManager.ViewModels
         { 
             get
             {
-                return download.ResourceInfo.URL.ToString();
+                return download.ResourceInfo.Url.ToString();
             }
         }
 
@@ -112,7 +115,8 @@ namespace DownloadsManager.ViewModels
         { 
             get
             {
-                return download.Progress.ToString(CultureInfo.InvariantCulture).Length > 4 ? download.Progress.ToString(CultureInfo.InvariantCulture).Substring(0,4) + " %" : "0.0 %";
+                return download.Progress.ToString(CultureInfo.InvariantCulture).Length > 4 ? 
+                    download.Progress.ToString(CultureInfo.InvariantCulture).Substring(0, 4) + " %" : "0.0 %";
             }
         }
 
@@ -128,7 +132,6 @@ namespace DownloadsManager.ViewModels
 
         #region INotifyPropertyChanged
 
-        public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string property)
         {
             if (PropertyChanged != null)

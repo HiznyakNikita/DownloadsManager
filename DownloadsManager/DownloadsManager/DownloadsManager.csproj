@@ -105,6 +105,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserControls\DownloadViewer.xaml.cs">
       <DependentUpon>DownloadViewer.xaml</DependentUpon>
     </Compile>
@@ -112,12 +113,8 @@
     <Compile Include="ViewModels\Infrastruture\Command.cs" />
     <Compile Include="ViewModels\MainWindowVM.cs" />
     <Compile Include="ViewModels\NewDownloadVM.cs" />
-    <Compile Include="ViewModels\SegmentsInfoVM.cs" />
     <Compile Include="Views\NewDownloadView.xaml.cs">
       <DependentUpon>NewDownloadView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SegmentsInfoView.xaml.cs">
-      <DependentUpon>SegmentsInfoView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -127,7 +124,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -141,10 +137,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\NewDownloadView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\SegmentsInfoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -193,9 +185,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="choose_folder_selected.png" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\DownloadsManager.Core\DownloadsManager.Core.csproj">
       <Project>{1cd6e6b9-7743-4540-9edc-b6c5daac6897}</Project>
       <Name>DownloadsManager.Core</Name>
@@ -208,15 +197,6 @@
     <Resource Include="Resources\icons\left_unselected.png" />
     <Resource Include="Resources\icons\right_selected.png" />
     <Resource Include="Resources\icons\right_unselected.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="choose_folder_unselected.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="choose_folder_selected1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="choose_folder_unselected1.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\icons\choose_folder_selected.png" />

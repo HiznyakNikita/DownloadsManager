@@ -27,8 +27,8 @@ namespace DownloadsManager.Core.Abstract
         /// <summary>
         /// Method for starting download thread
         /// </summary>
-        /// <param name="startDownloadThreadParam">param to start</param>
-        void StartDownloadThread(object startDownloadThreadParam);
+        /// <param name="startDownloadThreadParameter">param to start</param>
+        void StartDownloadThread(object startDownloadThreadParameter);
 
         /// <summary>
         /// Method for paused download

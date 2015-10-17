@@ -10,10 +10,12 @@ namespace DownloadsManager.ViewModels
 {
     public class NewDownloadVM : INotifyPropertyChanged
     {
-        private List<ResourceInfo> mirrors = new List<ResourceInfo>();
+        private readonly List<ResourceInfo> mirrors = new List<ResourceInfo>();
         private ResourceInfo mirror;
         private string savePath;
         private int segmentsCount;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Gets or sets count of download segments
@@ -24,6 +26,7 @@ namespace DownloadsManager.ViewModels
             {
                 return segmentsCount;
             }
+
             set
             {
                 segmentsCount = value;
@@ -61,6 +64,7 @@ namespace DownloadsManager.ViewModels
             {
                 return savePath;
             }
+
             set
             {
                 savePath = value;
@@ -68,17 +72,25 @@ namespace DownloadsManager.ViewModels
             }
         }
 
+        /// <summary>
+        /// Adding mirror to mirror list of VM
+        /// </summary>
+        /// <param name="mirrorToAdd">mirror to add</param>
         public void AddMirrorToList(string mirrorToAdd)
         {
             ResourceInfo ri = new ResourceInfo();
-            ri.URL = mirrorToAdd;
+            ri.Url = mirrorToAdd;
             mirrors.Add(ri);
             NotifyPropertyChanged("Mirrors");
         }
 
-        public void RemoveMirrorFromList(string mirrorToAdd)
+        /// <summary>
+        /// Removing mirror from list
+        /// </summary>
+        /// <param name="mirrorToRemove">mirror to remove</param>
+        public void RemoveMirrorFromList(string mirrorToRemove)
         {
-            ResourceInfo mirrorToDelete = mirrors.Where(m => m.URL == mirrorToAdd).FirstOrDefault();
+            ResourceInfo mirrorToDelete = mirrors.Where(m => m.Url == mirrorToRemove).FirstOrDefault();
             if (mirrorToDelete != null)
             {
                 mirrors.Remove(mirrorToDelete);
@@ -86,17 +98,20 @@ namespace DownloadsManager.ViewModels
             }
         }
 
+        /// <summary>
+        /// Add one mirror to VM
+        /// </summary>
+        /// <param name="mirrorToAdd">miror to add</param>
         public void AddMirror(string mirrorToAdd)
         {
             ResourceInfo ri = new ResourceInfo();
-            ri.URL = mirrorToAdd;
+            ri.Url = mirrorToAdd;
             this.mirror = ri;
             NotifyPropertyChanged("Mirror");
         }
 
         #region INotifyPropertyChanged
 
-        public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string property)
         {
             if (PropertyChanged != null)

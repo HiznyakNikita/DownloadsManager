@@ -20,6 +20,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>..\DownloadsManager\new.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -46,17 +48,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\IDownloaderState.cs" />
-    <Compile Include="Abstract\IFilter.cs" />
     <Compile Include="Concrete\CalculatedFileSegment.cs" />
     <Compile Include="Abstract\IDownloader.cs" />
     <Compile Include="Abstract\IFileSegmentCalculator.cs" />
     <Compile Include="Concrete\Downloader.cs" />
     <Compile Include="Concrete\DownloaderManager.cs" />
-    <Compile Include="Concrete\DownloadFilters\AllDownloadsFilter.cs" />
-    <Compile Include="Concrete\DownloadFilters\EndedDownloadsFilter.cs" />
-    <Compile Include="Concrete\DownloadFilters\FailedDownloadsFilter.cs" />
-    <Compile Include="Concrete\DownloadFilters\PausedDownloadsFilter.cs" />
-    <Compile Include="Concrete\DownloadFilters\WorkingDownloadsFilter.cs" />
     <Compile Include="Concrete\DownloadStates\DownloadEndedState.cs" />
     <Compile Include="Concrete\DownloadStates\DownloadEndedWithErrorState.cs" />
     <Compile Include="Concrete\DownloadStates\DownloadNeedToPrepareState.cs" />
@@ -70,7 +66,6 @@
     <Compile Include="Concrete\Enums\FileSegmentState.cs" />
     <Compile Include="Concrete\FileSegment.cs" />
     <Compile Include="Concrete\Helpers\FileSegmentSizeCalculatorHelper.cs" />
-    <Compile Include="Concrete\SegmentsIterator.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

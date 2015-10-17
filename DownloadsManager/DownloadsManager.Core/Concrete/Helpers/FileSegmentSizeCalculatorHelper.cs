@@ -6,49 +6,57 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DownloadsManager.Core.Concrete.Helpers
+namespace DownloadsManager.Core.Concrete
 {
     public class FileSegmentSizeCalculatorHelper : IFileSegmentCalculator
     {
         /// <summary>
         /// Method for calculating minimum size for file segment to download
         /// </summary>
-        /// <param name="segmentsCount">count of segments</param>
-        /// <param name="ri">remote file information</param>
+        /// <param name="segmentCount">count of segments</param>
+        /// <param name="remoteFileInfo">remote file information</param>
         /// <returns>List of calulated file segments</returns>
-        public List<CalculatedFileSegment> GetSegments(int segmentsCount, RemoteFileInfo ri)
+        public List<CalculatedFileSegment> GetSegments(int segmentCount, RemoteFileInfo remoteFileInfo)
         {
             List<CalculatedFileSegment> calculatedSegments = new List<CalculatedFileSegment>();
-            long minSegmentSize = Settings.Default.MinSegmentSize;
-            long calculatedSegmentSize = ri.FileSize / (long)segmentsCount;
-            ////optimize segment size if possible
-            while (calculatedSegmentSize < minSegmentSize && segmentsCount > 1)
+            if (remoteFileInfo != null)
             {
-                segmentsCount--;
-                calculatedSegmentSize = ri.FileSize / (long)segmentsCount;
-            }
-            ////check for residue after dividing
-            long residueBytes = ri.FileSize - calculatedSegmentSize * segmentsCount;
-            long startSegmentPosition = 0;
-            for (int i = 0; i < segmentsCount; i++)
-            {
-                if (i != segmentsCount - 1)
+                long minSegmentSize = Settings.Default.MinSegmentSize;
+                long calculatedSegmentSize = remoteFileInfo.FileSize / (long)segmentCount;
+                ////optimize segment size if possible
+                while (calculatedSegmentSize < minSegmentSize && segmentCount > 1)
                 {
-                    if (segmentsCount == 1)
-                    {
-                        calculatedSegments.Add(new CalculatedFileSegment(startSegmentPosition, ri.FileSize));
-                    }
-                    else
-                    {
-                        calculatedSegments.Add(new CalculatedFileSegment(startSegmentPosition, startSegmentPosition + calculatedSegmentSize));
-                    }
+                    segmentCount--;
+                    calculatedSegmentSize = remoteFileInfo.FileSize / (long)segmentCount;
                 }
-                if(i==segmentsCount-1)
+                ////check for residue after dividing
+                long residueBytes = remoteFileInfo.FileSize - (calculatedSegmentSize * segmentCount);
+                long startSegmentPosition = 0;
+                for (int i = 0; i < segmentCount; i++)
                 {
-                    calculatedSegments.Add(new CalculatedFileSegment(startSegmentPosition, startSegmentPosition + calculatedSegmentSize + residueBytes));
-                }
+                    if (i != segmentCount - 1)
+                    {
+                        if (segmentCount == 1)
+                        {
+                            calculatedSegments.Add(new CalculatedFileSegment(startSegmentPosition, remoteFileInfo.FileSize));
+                        }
+                        else
+                        {
+                            calculatedSegments.Add(new CalculatedFileSegment(
+                                startSegmentPosition,
+                                startSegmentPosition + calculatedSegmentSize));
+                        }
+                    }
 
-                startSegmentPosition = calculatedSegments[calculatedSegments.Count - 1].SegmentEndPosition;
+                    if (i == segmentCount - 1)
+                    {
+                        calculatedSegments.Add(new CalculatedFileSegment(
+                            startSegmentPosition,
+                            startSegmentPosition + calculatedSegmentSize + residueBytes));
+                    }
+
+                    startSegmentPosition = calculatedSegments[calculatedSegments.Count - 1].SegmentEndPosition;
+                }
             }
 
             return calculatedSegments;

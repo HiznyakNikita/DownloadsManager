@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DownloadsManager.Core.Concrete.Enums
+namespace DownloadsManager.Core.Concrete
 {
     public enum FileSegmentState
     {

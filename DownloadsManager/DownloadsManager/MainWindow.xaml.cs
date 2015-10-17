@@ -29,6 +29,7 @@ namespace DownloadsManager
 
         private DispatcherTimer timer = new DispatcherTimer();
         private MainWindowVM model;
+
         /// <summary>
         /// MainWindow ctor
         /// </summary>
@@ -37,11 +38,11 @@ namespace DownloadsManager
             InitializeComponent();
             this.DataContext = model = new MainWindowVM();
             timer.Interval = TimeSpan.FromSeconds(0.5);
-            timer.Tick += timer_Tick;
+            timer.Tick += Timer_Tick;
             timer.Start();
         }
 
-        void timer_Tick(object sender, EventArgs e)
+        private void Timer_Tick(object sender, EventArgs e)
         {
             this.itemsControlDownloads.ItemsSource = null;
             this.itemsControlDownloads.ItemsSource = model.ItemsToDownloaders.Values;

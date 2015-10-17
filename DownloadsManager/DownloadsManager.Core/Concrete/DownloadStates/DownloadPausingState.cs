@@ -28,13 +28,11 @@ namespace DownloadsManager.Core.Concrete.DownloadStates
             throw new InvalidOperationException();
         }
 
-        public void StartDownloadThread(object objSegmentCount)
+        public void StartDownloadThread(object startDownloadThreadParameter)
         {
             downloader.SetState(new DownloadPreparingState(downloader));
 
-            int segmentCount = Math.Min((int)objSegmentCount, Settings.Default.MaxSegmentCount);
-
-            downloader.LastError = null;
+            downloader.DownloadingErrors= null;
             downloader.SetState(new DownloadNeedToPrepareState(downloader));
             return;
         }

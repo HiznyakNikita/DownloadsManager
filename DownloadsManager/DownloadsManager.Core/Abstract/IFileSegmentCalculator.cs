@@ -12,6 +12,6 @@ namespace DownloadsManager.Core.Abstract
     /// </summary>
     public interface IFileSegmentCalculator
     {
-        List<CalculatedFileSegment> GetSegments(int segmentCount, RemoteFileInfo ri);
+        List<CalculatedFileSegment> GetSegments(int segmentCount, RemoteFileInfo remoteFileInfo);
     }
 }

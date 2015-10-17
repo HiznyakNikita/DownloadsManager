@@ -15,7 +15,7 @@ namespace DownloadsManager.Core.Concrete.DownloadStates
 
          private Downloader downloader;
 
-         public DownloadDownloadingState(Downloader downloader)
+        public DownloadDownloadingState(Downloader downloader)
         {
             this.downloader = downloader;
         }
@@ -48,17 +48,17 @@ namespace DownloadsManager.Core.Concrete.DownloadStates
             throw new InvalidOperationException();
         }
 
-        public void StartDownloadThread(object objSegmentCount)
+        public void StartDownloadThread(object startDownloadThreadParameter)
         {
             downloader.SetState(new DownloadPreparingState(downloader));
 
-            int segmentCount = Math.Min((int)objSegmentCount, Settings.Default.MaxSegmentCount);
+            int segmentCount = Math.Min((int)startDownloadThreadParameter, Settings.Default.MaxSegmentCount);
             Stream inputStream = null;
             int currentTry = 0;
 
             do
             {
-                downloader.LastError = null;
+                downloader.DownloadingErrors = null;
 
                 downloader.SetState(new DownloadPreparingState(downloader));
 
@@ -75,7 +75,7 @@ namespace DownloadsManager.Core.Concrete.DownloadStates
                 }
                 catch (Exception ex)
                 {
-                    downloader.LastError = ex;
+                    downloader.DownloadingErrors = new AggregateException(ex);
                     if (currentTry < Settings.Default.MaxTries)
                     {
                         downloader.SetState(new DownloadWaitingForReconnectState(downloader));
@@ -92,7 +92,7 @@ namespace DownloadsManager.Core.Concrete.DownloadStates
 
             try
             {
-                downloader.LastError = null;
+                downloader.DownloadingErrors = null;
                 downloader.StartSegments(segmentCount, inputStream);
             }
             catch (ThreadAbortException)
@@ -101,7 +101,7 @@ namespace DownloadsManager.Core.Concrete.DownloadStates
             }
             catch (Exception ex)
             {
-                downloader.LastError = ex;
+                downloader.DownloadingErrors = new AggregateException(ex);
                 downloader.SetState(new DownloadEndedWithErrorState(downloader));
             }
         }

@@ -12,7 +12,7 @@ namespace DownloadsManager.Core.Concrete
         
         private string url;
         private bool authenticate;
-        private string login;
+        private string logOn;
         private string password;
         private IProtocolProvider provider;
 
@@ -26,7 +26,7 @@ namespace DownloadsManager.Core.Concrete
 
         #region Properties
 
-        public string URL
+        public string Url
         {
             get { return url; }
             set { url = value; }
@@ -38,10 +38,10 @@ namespace DownloadsManager.Core.Concrete
             set { authenticate = value; }
         }
 
-        public string Login
+        public string LogOn
         {
-            get { return login; }
-            set { login = value; }
+            get { return logOn; }
+            set { logOn = value; }
         }
 
         public string Password
@@ -54,36 +54,36 @@ namespace DownloadsManager.Core.Concrete
 
         #region Methods
 
-        public static ResourceInfo FromURL(string url)
+        public static ResourceInfo FromUrl(string url)
         {
             ResourceInfo ri = new ResourceInfo();
-            ri.URL = url;
+            ri.Url = url;
             return ri;
         }
 
-        public static ResourceInfo[] FromURLArray(string[] urls)
+        public static ResourceInfo[] FromUrlArray(string[] urls)
         {
             List<ResourceInfo> result = new List<ResourceInfo>();
-
+            if(urls != null)
             for (int i = 0; i < urls.Length; i++)
             {
                 ////TODO check is it url by regex
-                result.Add(ResourceInfo.FromURL(urls[i]));
+                result.Add(ResourceInfo.FromUrl(urls[i]));
             }
 
             return result.ToArray();
         }
 
-        public static ResourceInfo FromURL(
+        public static ResourceInfo FromUrl(
             string url,
             bool authenticate,
-            string login,
+            string logOn,
             string password)
         {
             ResourceInfo ri = new ResourceInfo();
-            ri.URL = url;
+            ri.Url = url;
             ri.Authenticate = authenticate;
-            ri.Login = login;
+            ri.LogOn = logOn;
             ri.Password = password;
             return ri;
         } 
@@ -92,9 +92,12 @@ namespace DownloadsManager.Core.Concrete
         /// Gets protocol provider for resource
         /// </summary>
         /// <returns>IProtocolProvider object for resource</returns>
-        public IProtocolProvider GetProtocolProvider()
+        public IProtocolProvider ProtocolProvider
         {
-            return BindProtocolProviderInstance();
+            get
+            {
+                return BindProtocolProviderInstance();
+            }
         }
 
         /// <summary>
@@ -117,7 +120,7 @@ namespace DownloadsManager.Core.Concrete
         /// <returns>URL of resource</returns>
         public override string ToString()
         {
-            return this.URL;
+            return this.Url;
         }
 
         #endregion

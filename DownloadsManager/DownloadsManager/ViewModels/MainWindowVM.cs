@@ -30,6 +30,8 @@ namespace DownloadsManager.ViewModels
             this.AddDownloadCmd = new Command(this.AddDownload);
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public Hashtable ItemsToDownloaders
         { 
             get
@@ -53,28 +55,33 @@ namespace DownloadsManager.ViewModels
         {
             NewDownloadView newDownloadView = new NewDownloadView();
             newDownloadView.ShowDialog();
-            string fileName = "";
-            if(newDownloadView.Model.Mirror != null)
+            string fileName = string.Empty;
+            if (newDownloadView.Model.Mirror != null)
             {
-                Uri uri = new Uri(newDownloadView.Model.Mirror.URL);
+                Uri uri = new Uri(newDownloadView.Model.Mirror.Url);
                 fileName = uri.Segments[uri.Segments.Length - 1];
                 fileName = HttpUtility.UrlDecode(fileName).Replace("/", "\\");
             }
             else if (newDownloadView.Model.Mirrors.Count != 0)
             {
-                Uri uri = new Uri(newDownloadView.Model.Mirrors[0].URL);
+                Uri uri = new Uri(newDownloadView.Model.Mirrors[0].Url);
                 fileName = uri.Segments[uri.Segments.Length - 1];
                 fileName = HttpUtility.UrlDecode(fileName).Replace("/", "\\");
             }
 
-            Downloader d = new Downloader(newDownloadView.Model.Mirror, newDownloadView.Model.Mirrors.ToArray(), newDownloadView.Model.SavePath, newDownloadView.Model.SegmentsCount, fileName);
-            DownloaderManager.Instance.Add(d,true);
+            Downloader fileToDownload = new Downloader(
+                newDownloadView.Model.Mirror, 
+                newDownloadView.Model.Mirrors.ToArray(),
+                newDownloadView.Model.SavePath, 
+                newDownloadView.Model.SegmentsCount, 
+                fileName);
+            DownloaderManager.Instance.Add(fileToDownload, true);
                     
             DownloadViewer viewer = new DownloadViewer();
             
-            viewer.DataContext = new DownloadViewerVM(d);
+            viewer.DataContext = new DownloadViewerVM(fileToDownload);
 
-            itemsToDownloaders.Add(d, viewer);
+            itemsToDownloaders.Add(fileToDownload, viewer);
             NotifyPropertyChanged("ItemsToDownloaders");
         }
 
@@ -82,7 +89,6 @@ namespace DownloadsManager.ViewModels
 
         #region INotifyPropertyChanged
 
-        public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string property)
         {
             if (PropertyChanged != null)
@@ -92,8 +98,5 @@ namespace DownloadsManager.ViewModels
         }
 
         #endregion
-
-    #region Methods
-    #endregion
     }
 }

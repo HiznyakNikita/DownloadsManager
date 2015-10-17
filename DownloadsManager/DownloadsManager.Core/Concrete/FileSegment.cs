@@ -1,4 +1,4 @@
-﻿using DownloadsManager.Core.Concrete.Enums;
+﻿using DownloadsManager.Core.Concrete;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,7 +18,7 @@ namespace DownloadsManager.Core.Concrete
         private long startPosition;
         private long endPosition;
         private int index;
-        private string currentURL;
+        private string currentLink;
         private long initialStartPosition;
         private Stream outputStream;
         private Stream inputStream;
@@ -31,6 +31,8 @@ namespace DownloadsManager.Core.Concrete
         private long start;
         private TimeSpan timeLeft = TimeSpan.Zero;
         private int currentTry;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Gets or sets count of tries to restart downloads if downloading failed
@@ -151,7 +153,7 @@ namespace DownloadsManager.Core.Concrete
         /// <summary>
         /// Gets countof transfered bytes
         /// </summary>
-        public long Transfered
+        public long TransferBytes
         {
             get
             {
@@ -188,7 +190,7 @@ namespace DownloadsManager.Core.Concrete
         {
             get
             {
-                return this.EndPosition <= 0 ? 0 : ((double)Transfered / (double)TotalToTransfer * 100.0f);
+                return this.EndPosition <= 0 ? 0 : ((double)TransferBytes / (double)TotalToTransfer * 100.0f);
             }
         }
 
@@ -243,16 +245,16 @@ namespace DownloadsManager.Core.Concrete
         /// <summary>
         /// Gets or sets current file segment URL
         /// </summary>
-        public string CurrentURL
+        public string CurrentLink
         {
             get
             {
-                return currentURL;
+                return currentLink;
             }
 
             set
             {
-                currentURL = value;
+                currentLink = value;
             }
         }
 
@@ -343,7 +345,6 @@ namespace DownloadsManager.Core.Concrete
 
         #region INotifyPropertyChanged
 
-        public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string property)
         {
             if (PropertyChanged != null)

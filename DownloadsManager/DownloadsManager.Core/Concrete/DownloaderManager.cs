@@ -16,7 +16,7 @@ namespace DownloadsManager.Core.Concrete
     {
         private static DownloaderManager instance = new DownloaderManager();
         private static object lockObj = new object();
-        private List<Downloader> downloads = new List<Downloader>();
+        private readonly List<Downloader> downloads = new List<Downloader>();
 
         private DownloaderManager() { }
 
@@ -82,16 +82,19 @@ namespace DownloadsManager.Core.Concrete
 
         public void RemoveDownload(Downloader downloader)
         {
-            if (downloader.State.GetType() != typeof(DownloadNeedToPrepareState) ||
-                downloader.State.GetType() != typeof(DownloadEndedState) ||
-                downloader.State.GetType() != typeof(DownloadPausedState))
+            if (downloader != null)
             {
-                downloader.Pause();
-            }
+                if (downloader.State.GetType() != typeof(DownloadNeedToPrepareState) ||
+                    downloader.State.GetType() != typeof(DownloadEndedState) ||
+                    downloader.State.GetType() != typeof(DownloadPausedState))
+                {
+                    downloader.Pause();
+                }
 
-            lock (lockObj)
-            {
-                downloads.Remove(downloader);
+                lock (lockObj)
+                {
+                    downloads.Remove(downloader);
+                }
             }
         }
 
@@ -103,7 +106,6 @@ namespace DownloadsManager.Core.Concrete
                 {
                     if (downloads[i].State.GetType() == typeof(DownloadEndedState))
                     {
-                        Downloader d = downloads[i];
                         downloads.RemoveAt(i);
                     }
                 }
@@ -121,16 +123,16 @@ namespace DownloadsManager.Core.Concrete
             }
         }
 
-        public Downloader Add(ResourceInfo ri, ResourceInfo[] mirrors, string localFile, int segments, bool autoStart, string fileName)
+        public Downloader Add(ResourceInfo resourceInfo, ResourceInfo[] mirrors, string localFile, int segments, bool autoStart, string fileName)
         {
-            Downloader d = new Downloader(ri, mirrors, localFile, segments,fileName);
+            Downloader d = new Downloader(resourceInfo, mirrors, localFile, segments, fileName);
             Add(d, autoStart);
 
             return d;
         }
 
         public Downloader Add(
-            ResourceInfo ri, 
+            ResourceInfo resourceInfo, 
             ResourceInfo[] mirrors, 
             string localFile, 
             List<FileSegment> segments, 
@@ -140,7 +142,7 @@ namespace DownloadsManager.Core.Concrete
             DateTime createdDateTime,
             string fileName)
         {
-            Downloader d = new Downloader(ri, mirrors, localFile, segments, remoteInfo, requestedSegmentCount, createdDateTime,fileName);
+            Downloader d = new Downloader(resourceInfo, mirrors, localFile, segments, remoteInfo, requestedSegmentCount, createdDateTime, fileName);
             Add(d, autoStart);
 
             return d;
@@ -148,22 +150,25 @@ namespace DownloadsManager.Core.Concrete
 
         public void Add(Downloader downloader, bool autoStart)
         {
-            lock (lockObj)
+            if (downloader != null)
             {
-                downloads.Add(downloader);
-            }
+                lock (lockObj)
+                {
+                    downloads.Add(downloader);
+                }
 
-            if (autoStart)
-            {
-                downloader.Start();
+                if (autoStart)
+                {
+                    downloader.Start();
+                }
             }
         }
 
-        public void SwapDownloads(int idx)
+        public void SwapDownloads(int index)
         {
             lock (lockObj)
             {
-                InternalSwap(idx);
+                InternalSwap(index);
             }
         }
 

@@ -5,6 +5,9 @@ using System.Text;
 
 namespace DownloadsManager.Core.Concrete
 {
+    /// <summary>
+    /// Wrap class for representing calculated file segment
+    /// </summary>
     public class CalculatedFileSegment
     {
         private long segmentStartPosition;

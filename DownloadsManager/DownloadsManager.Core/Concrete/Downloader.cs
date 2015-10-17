@@ -1,10 +1,11 @@
 ﻿using DownloadsManager.Core.Abstract;
 using DownloadsManager.Core.Concrete.DownloadStates;
-using DownloadsManager.Core.Concrete.Enums;
-using DownloadsManager.Core.Concrete.Helpers;
+using DownloadsManager.Core.Concrete;
+using DownloadsManager.Core.Concrete;
 using DownloadsManager.Core.Properties;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -13,25 +14,21 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace DownloadsManager.Core.Concrete
 {
     [CLSCompliant(true)]
+
     /// <summary>
     /// Class which represent every download
     /// TODO State,Download providers, segments (for pause and speed manipulations)
     /// </summary>
     public class Downloader : IDownloader, INotifyPropertyChanged
     {
-        private string localFile;
-        private int requestedFileSegmentCount;
-        private ResourceInfo resourceInfo;
         private Thread mainThread;
         private RemoteFileInfo remoteFileInfo;
-        private IDownloaderState state;
-        private DateTime createdDateTime;
-        private Exception lastDownloadingError;
-        private string fileName;
+        private AggregateException downloadingErrors;
 
         private object syncObject = new object();
         
@@ -40,43 +37,50 @@ namespace DownloadsManager.Core.Concrete
         /// </summary>
         private int mirrorCounter;
 
-        private List<ResourceInfo> mirrors;
-        private List<FileSegment> segments;
-        private List<Thread> threads;
+        private readonly List<ResourceInfo> mirrors;
+        private readonly List<FileSegment> segments;
+        private readonly List<Thread> threads;
 
-        private IProtocolProvider currentDownloadProvider;
         private IFileSegmentCalculator fileSegmentCalculator;
 
         /// <summary>
-        /// ctor for segment downloading need for change downloader statuses
+        /// ctor
         /// </summary>
-        /// <param name="ri">resource info</param>
-        /// <param name="mirrors">mirrors for downloading</param>
-        /// <param name="localFile">local file for downloader</param>
-        /// <param name="segmentCount">count of segments</param>
-        public Downloader(ResourceInfo ri, ResourceInfo[] mirrors, string localFile, int segmentCount, string fileName) : this(ri, mirrors, localFile,fileName)
+        /// <param name="resourceInfo">resource info</param>
+        /// <param name="mirrors">mirrors for download</param>
+        /// <param name="localFile">local file info</param>
+        /// <param name="segmentCount">segment count</param>
+        /// <param name="fileName">name of file</param>
+        public Downloader(
+            ResourceInfo resourceInfo, 
+            ResourceInfo[] mirrors, 
+            string localFile, 
+            int segmentCount, 
+            string fileName) 
+            : this(resourceInfo, mirrors, localFile, fileName)
         {
             ////SetState(DownloaderState.NeedToPrepare);
 
-            this.createdDateTime = DateTime.Now;
-            this.requestedFileSegmentCount = segmentCount;
+            CreatedDateTime = DateTime.Now;
+            RequestedSegments = segmentCount;
             this.segments = new List<FileSegment>();
-            this.state = new DownloadNeedToPrepareState(this);
-            this.fileName = fileName;
+            State = new DownloadNeedToPrepareState(this);
+            FileName = fileName;
         }
 
         /// <summary>
         /// more complicated ctor need for change downloader statuses
         /// </summary>
-        /// <param name="ri">resource info</param>
+        /// <param name="resourceInfo">resource info</param>
         /// <param name="mirrors">mirrors for downloading</param>
         /// <param name="localFile">local file info for downloading</param>
         /// <param name="segments">segments for downloading</param>
         /// <param name="remoteInfo">remote file info (place here after getting file info from server)</param>
         /// <param name="requestedSegmentCount">segment ount for request</param>
         /// <param name="createdDateTime">date time of creating dowloader</param>
+        /// <param name="fileName">name of file</param>
         public Downloader(
-            ResourceInfo ri,
+            ResourceInfo resourceInfo,
             ResourceInfo[] mirrors,
             string localFile,
             List<FileSegment> segments,
@@ -84,23 +88,23 @@ namespace DownloadsManager.Core.Concrete
             int requestedSegmentCount,
             DateTime createdDateTime,
             string fileName)
-            : this(ri, mirrors, localFile, fileName)
+            : this(resourceInfo, mirrors, localFile, fileName)
         {
-            if (segments.Count > 0)
+            if (segments != null && segments.Count > 0)
             {
-                state.SetState(new DownloadPreparedState(this));
+                State.SetState(new DownloadPreparedState(this));
             }
             else
             {
-                state.SetState(new DownloadNeedToPrepareState(this));
+                State.SetState(new DownloadNeedToPrepareState(this));
             }
 
-            this.createdDateTime = createdDateTime;
+            CreatedDateTime = createdDateTime;
             this.remoteFileInfo = remoteInfo;
-            this.requestedFileSegmentCount = requestedSegmentCount;
+            RequestedSegments = requestedSegmentCount;
             this.segments = segments;
-            this.state = new DownloadNeedToPrepareState(this);
-            this.fileName = fileName;
+            State = new DownloadNeedToPrepareState(this);
+            FileName = fileName;
 
         }
 
@@ -110,26 +114,24 @@ namespace DownloadsManager.Core.Concrete
         /// <param name="ri">resource info</param>
         /// <param name="mirrors">resource info mirrors</param>
         /// <param name="localFile">local file for this downloader</param>
+        /// <param name="fileName">name of file</param>
         private Downloader(ResourceInfo ri, ResourceInfo[] mirrors, string localFile, string fileName)
         {
             this.threads = new List<Thread>();
-            this.resourceInfo = ri;
-            if (mirrors == null)
-            {
-                this.mirrors = new List<ResourceInfo>();
-            }
-            else
-            {
-                this.mirrors = new List<ResourceInfo>(mirrors);
-            }
+            ResourceInfo = ri;
+            this.mirrors = mirrors == null 
+                ? new List<ResourceInfo>()
+                : new List<ResourceInfo>(mirrors);
 
-            this.localFile = localFile;
+            LocalFile = localFile;
 
-            currentDownloadProvider = ri.BindProtocolProviderInstance();
+            ProtocolProvider = ri.BindProtocolProviderInstance();
 
             fileSegmentCalculator = new FileSegmentSizeCalculatorHelper();
-            this.fileName = fileName;
+            FileName = fileName;
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         #region Properties
 
@@ -138,31 +140,27 @@ namespace DownloadsManager.Core.Concrete
         /// </summary>
         public ResourceInfo ResourceInfo
         {
-            get
-            {
-                return this.resourceInfo;
-            }
+            get;
+            private set;
         }
 
         /// <summary>
         /// Gets name of download
         /// </summary>
-        public string FileName 
-        { 
-            get
-            {
-                return fileName;
-            }
+        public string FileName
+        {
+            get;
+            private set;
         }
 
         /// <summary>
         /// Gets mirrors of downloader
         /// </summary>
-        public List<ResourceInfo> Mirrors
+        public ReadOnlyCollection<ResourceInfo> Mirrors
         {
             get
             {
-                return this.mirrors;
+                return mirrors.AsReadOnly();
             }
         }
 
@@ -187,10 +185,8 @@ namespace DownloadsManager.Core.Concrete
         /// </summary>
         public DateTime CreatedDateTime
         {
-            get
-            {
-                return createdDateTime;
-            }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -198,10 +194,8 @@ namespace DownloadsManager.Core.Concrete
         /// </summary>
         public int RequestedSegments
         {
-            get
-            {
-                return requestedFileSegmentCount;
-            }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -209,10 +203,8 @@ namespace DownloadsManager.Core.Concrete
         /// </summary>
         public string LocalFile
         {
-            get
-            {
-                return this.localFile;
-            }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -277,7 +269,7 @@ namespace DownloadsManager.Core.Concrete
         /// <summary>
         /// Gets calculating value of transfered bytes
         /// </summary>
-        public long Transfered
+        public long TransferBytes
         {
             get
             {
@@ -286,7 +278,7 @@ namespace DownloadsManager.Core.Concrete
                 for (int i = 0; i < segments.Count; i++)
                 {
                     ////sum transfered bytes of all segments
-                    transfered += segments[i].Transfered;
+                    transfered += segments[i].TransferBytes;
                 }
 
                 return transfered;
@@ -324,25 +316,17 @@ namespace DownloadsManager.Core.Concrete
             }
         }
 
-        public Exception LastError
+        public AggregateException DownloadingErrors
         {
-            get { return lastDownloadingError; }
-            set { lastDownloadingError = value; }
+            get { return downloadingErrors; }
+            set { downloadingErrors = value; }
         }
 
         public IDownloaderState State
         {
-            get { return state; }
+            get;
+            private set;
         }
-
-        //TODO Uncomment this after implementing downloading states
-        //public bool IsWorking()
-        //{
-        //    DownloaderState state = this.State;
-        //    return (state == DownloaderState.Preparing ||
-        //        state == DownloaderState.WaitingForReconnect ||
-        //        state == DownloaderState.Working);
-        //}
 
         /// <summary>
         /// Gets or sets remote file info
@@ -358,7 +342,8 @@ namespace DownloadsManager.Core.Concrete
         /// </summary>
         public IProtocolProvider ProtocolProvider
         {
-            get { return currentDownloadProvider; }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -403,7 +388,7 @@ namespace DownloadsManager.Core.Concrete
                 currentTry++;
                 try
                 {
-                    remoteFileInfo = currentDownloadProvider.GetFileInfo(this.resourceInfo, out downloadStream);
+                    remoteFileInfo = ProtocolProvider.GetFileInfo(ResourceInfo, out downloadStream);
                     break;
                 }
                 catch (ThreadAbortException)
@@ -426,7 +411,7 @@ namespace DownloadsManager.Core.Concrete
         {
             if (state != null)
             {
-                this.state = state;
+                State = state;
                 NotifyPropertyChanged("State");
             }
         }
@@ -437,8 +422,8 @@ namespace DownloadsManager.Core.Concrete
         /// </summary>
         public void StartToPrepare()
         {
-            mainThread = new Thread(new ParameterizedThreadStart(state.StartDownloadThread));
-            mainThread.Start(requestedFileSegmentCount);
+            mainThread = new Thread(new ParameterizedThreadStart(State.StartDownloadThread));
+            mainThread.Start(RequestedSegments);
         }
 
         /// <summary>
@@ -492,12 +477,13 @@ namespace DownloadsManager.Core.Concrete
 
                 segments.Add(segment);
             }
+
             NotifyPropertyChanged("Segment");
 
             RunSegments();
         }
 
-        public bool AllWorkersStopped(int timeOut)
+        public bool AllWorkersStopped(int timeout)
         {
             bool allFinished = true;
 
@@ -510,7 +496,7 @@ namespace DownloadsManager.Core.Concrete
 
             foreach (Thread t in workThreads)
             {
-                bool finished = t.Join(timeOut);
+                bool finished = t.Join(timeout);
                 allFinished = allFinished & finished;
 
                 if (finished)
@@ -521,6 +507,7 @@ namespace DownloadsManager.Core.Concrete
                     }
                 }
             }
+
             NotifyPropertyChanged("Threads");
 
             return allFinished;
@@ -530,7 +517,7 @@ namespace DownloadsManager.Core.Concrete
         {
             try
             {
-                state.Start();
+                State.Start();
             }
             catch (Exception)
             {
@@ -542,7 +529,7 @@ namespace DownloadsManager.Core.Concrete
         {
             try
             {
-                state.Pause();
+                State.Pause();
             }
             catch (Exception)
             {
@@ -550,11 +537,11 @@ namespace DownloadsManager.Core.Concrete
             }
         }
 
-        public void StartDownloadThread(object objSegmentCount)
+        public void StartDownloadThread(object valueSegmentCount)
         {
             try
             {
-                state.StartDownloadThread(objSegmentCount);
+                State.StartDownloadThread(valueSegmentCount);
                 NotifyPropertyChanged("State");
             }
             catch (Exception)
@@ -565,9 +552,9 @@ namespace DownloadsManager.Core.Concrete
 
         private void RunSegments()
         {
-            state.SetState(new DownloadDownloadingState(this));
+            State.SetState(new DownloadDownloadingState(this));
             NotifyPropertyChanged("State");
-            using (FileStream fs = new FileStream(this.LocalFile + "\\" + fileName, FileMode.Open, FileAccess.Write))
+            using (FileStream fs = new FileStream(this.LocalFile + "\\" + FileName, FileMode.Open, FileAccess.Write))
             {
                 for (int i = 0; i < this.FileSegments.Count; i++)
                 {
@@ -586,12 +573,12 @@ namespace DownloadsManager.Core.Concrete
             {
                 if (FileSegments[i].State == FileSegmentState.Error)
                 {
-                    state.SetState(new DownloadEndedWithErrorState(this));
+                    State.SetState(new DownloadEndedWithErrorState(this));
                     return;
                 }
             }
 
-            state.SetState(new DownloadEndedState(this));
+            State.SetState(new DownloadEndedState(this));
             NotifyPropertyChanged("State");
         }
 
@@ -621,6 +608,7 @@ namespace DownloadsManager.Core.Concrete
                     }
                 }
             }
+
             NotifyPropertyChanged("Segment");
 
             Thread.Sleep((int)delay);
@@ -640,16 +628,6 @@ namespace DownloadsManager.Core.Concrete
             }
         }
 
-        /// <summary>
-        /// complete method
-        /// </summary>
-        /// <param name="sender">sender download</param>
-        /// <param name="e">args</param>
-        private void DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
-        {
-            Debug.WriteLine("Download completed");
-        }
-
         private void RestartDownload()
         {
             Stream downloadStream;
@@ -661,12 +639,12 @@ namespace DownloadsManager.Core.Concrete
             {
                 do
                 {
-                    state.SetState(new DownloadPreparingState(this));
+                    State.SetState(new DownloadPreparingState(this));
 
                     restartTriesCounter++;
                     try
                     {
-                        reloadedFileInfo = currentDownloadProvider.GetFileInfo(this.ResourceInfo, out downloadStream);
+                        reloadedFileInfo = ProtocolProvider.GetFileInfo(this.ResourceInfo, out downloadStream);
                         NotifyPropertyChanged("FileInfo");
                         break;
                     }
@@ -674,7 +652,7 @@ namespace DownloadsManager.Core.Concrete
                     {
                         if (restartTriesCounter < Settings.Default.MaxTries)
                         {
-                            state.SetState(new DownloadWaitingForReconnectState(this));
+                            State.SetState(new DownloadWaitingForReconnectState(this));
                             NotifyPropertyChanged("State");
                             Thread.Sleep(TimeSpan.FromSeconds(Settings.Default.RetrySleepInterval));
                         }
@@ -688,7 +666,7 @@ namespace DownloadsManager.Core.Concrete
             }
             finally
             {
-                state.SetState(new DownloadPreparedState(this));
+                State.SetState(new DownloadPreparedState(this));
                 NotifyPropertyChanged("State");
             }
 
@@ -719,7 +697,7 @@ namespace DownloadsManager.Core.Concrete
             }
             catch (Exception)
             {
-                state.SetState(new DownloadEndedWithErrorState(this));
+                State.SetState(new DownloadEndedWithErrorState(this));
             }
         }
 
@@ -781,13 +759,13 @@ namespace DownloadsManager.Core.Concrete
                     segment.InputStream = provider.CreateResponseStream(resourceInfo, (int)segment.StartPosition, (int)segment.EndPosition);
 
                     //// change the segment URL to the mirror URL
-                    segment.CurrentURL = resourceInfo.URL;
+                    segment.CurrentLink = resourceInfo.Url;
                     NotifyPropertyChanged("Segment");
                 }
                 else
                 {
                     ////  change the segment URL to the main URL
-                    segment.CurrentURL = this.resourceInfo.URL;
+                    segment.CurrentLink = ResourceInfo.Url;
                     NotifyPropertyChanged("Segment");
                 }
 
@@ -856,7 +834,7 @@ namespace DownloadsManager.Core.Concrete
                     }
 
                     //// check if the user have requested to pause the download
-                    if (state.GetType() == typeof(DownloadPausingState))
+                    if (State.GetType() == typeof(DownloadPausingState))
                     {
                         segment.State = FileSegmentState.Paused;
                         NotifyPropertyChanged("Segment");
@@ -929,15 +907,15 @@ namespace DownloadsManager.Core.Concrete
                 string newFileName = this.LocalFile;
                 do
                 {
-                    newFileName = this.LocalFile + currentVersion.ToString();
+                    newFileName = this.LocalFile + currentVersion.ToString(CultureInfo.CurrentCulture);
                 }
                 while (new FileInfo(newFileName).Exists);
 
-                this.localFile = newFileName;
+                LocalFile = newFileName;
                 NotifyPropertyChanged("LocalFile");
             }
 
-            using (FileStream fs = new FileStream(this.LocalFile + "\\" + fileName, FileMode.Create, FileAccess.Write))
+            using (FileStream fs = new FileStream(this.LocalFile + "\\" + FileName, FileMode.Create, FileAccess.Write))
             {
                 fs.SetLength(Math.Max(this.FileSize, 0));
             }
@@ -949,38 +927,28 @@ namespace DownloadsManager.Core.Concrete
         /// <returns>Resource information</returns>
         private ResourceInfo GetNextResourceInfo()
         {
-            if (Mirrors == null || Mirrors.Count == 0)
+            if (Mirrors == null || mirrors.Count() == 0)
             {
                 return this.ResourceInfo;
             }
 
             lock (Mirrors)
             {
-                if (mirrorCounter >= Mirrors.Count)
+                if (mirrorCounter >= mirrors.Count())
                 {
                     mirrorCounter = 0;
 
                     return this.ResourceInfo;
                 }
 
-                return Mirrors[mirrorCounter++];
+                return mirrors[mirrorCounter++];
             }
-        }
-
-        /// <summary>
-        /// Gets iterator for segments collection
-        /// </summary>
-        /// <returns>Segment iterator</returns>
-        public SegmentsIterator GetSegmentsIterator()
-        {
-            return new SegmentsIterator(this);
         }
 
         #endregion
 
         #region INotifyPropertyChanged
 
-        public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string property)
         {
             if (PropertyChanged != null)

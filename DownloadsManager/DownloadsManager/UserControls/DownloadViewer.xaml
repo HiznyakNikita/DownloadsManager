@@ -12,19 +12,32 @@
     <Grid>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
-                <Label x:Name="lblDownloadFileName" HorizontalAlignment="Left" Content ="{Binding FileName}" FontFamily="Segoe" FontSize="18" Foreground="WhiteSmoke" Height="35" Width="215"/>
-                <Label x:Name="lblStateInfo" HorizontalAlignment="Left" FontFamily="Segoe" FontSize="18" Foreground="WhiteSmoke" Content="{Binding State, UpdateSourceTrigger=PropertyChanged}" Height="35" Width="160"/>
-                <Button x:Name="btnAdditionalInfo" Content="Info" Style="{StaticResource buttonWithTextStyle}" Click="btnAdditionalInfo_Click" Width="48"></Button>
+                <Label x:Name="lblDownloadFileName" HorizontalAlignment="Left" 
+                       Content ="{Binding FileName}" Style="{StaticResource LabelSmallStyle}" 
+                       Height="35" Width="215"/>
+                <Label x:Name="lblStateInfo" HorizontalAlignment="Left" 
+                       Style="{StaticResource LabelSmallStyle}" Content="{Binding State, UpdateSourceTrigger=PropertyChanged}" 
+                       Height="35" Width="160"/>
             </StackPanel>
-            <Label x:Name="lblSizeInfo" HorizontalAlignment="Left" FontFamily="Segoe" FontSize="12" Foreground="WhiteSmoke" Content="{Binding SizeInfo, UpdateSourceTrigger=PropertyChanged}" Height="25" Width="272"></Label>
-            <Label x:Name="lblAddedInfo" HorizontalAlignment="Left" FontFamily="Segoe" FontSize="12" Foreground="WhiteSmoke" Content="{Binding Added}" Height="25" Width="120"></Label>
+            <Label x:Name="lblSizeInfo" HorizontalAlignment="Left" 
+                   Style="{StaticResource LabelSmallStyle}" Content="{Binding SizeInfo, UpdateSourceTrigger=PropertyChanged}" 
+                   Height="25" Width="272"></Label>
+            <Label x:Name="lblAddedInfo" HorizontalAlignment="Left" 
+                   Style="{StaticResource LabelSmallStyle}"  Content="{Binding Added}" 
+                   Height="25" Width="120"/>
             <StackPanel Orientation="Horizontal">
-                <Label Content="Rate:" Foreground="WhiteSmoke"></Label>
-                <Label x:Name="lblRateInfo" HorizontalAlignment="Left" FontFamily="Segoe" FontSize="12" Foreground="WhiteSmoke" Content="{Binding Rate, UpdateSourceTrigger=PropertyChanged}" Height="25" Width="120"></Label>
-                <Label Content="Progress:" Foreground="WhiteSmoke"></Label>
-                <Label x:Name="lblProgressInfo" HorizontalAlignment="Left" FontFamily="Segoe" FontSize="12" Foreground="WhiteSmoke" Content="{Binding Progress, UpdateSourceTrigger=PropertyChanged}" Height="25" Width="120"></Label>
+                <Label Content="Rate:" Foreground="WhiteSmoke"/>
+                <Label x:Name="lblRateInfo" HorizontalAlignment="Left" 
+                       Style="{StaticResource LabelSmallStyle}" Content="{Binding Rate, UpdateSourceTrigger=PropertyChanged}" 
+                       Height="25" Width="120"/>
+                <Label Content="Progress:" Foreground="WhiteSmoke"/>
+                <Label x:Name="lblProgressInfo" HorizontalAlignment="Left" 
+                       Style="{StaticResource LabelSmallStyle}" Content="{Binding Progress, UpdateSourceTrigger=PropertyChanged}" 
+                       Height="25" Width="120"/>
             </StackPanel>
-            <Label x:Name="lblUrlInfo" HorizontalAlignment="Left" FontFamily="Segoe" FontSize="12" Foreground="WhiteSmoke" Content="{Binding LinkInfo, UpdateSourceTrigger=PropertyChanged}" Height="25" Width="500"></Label>
+            <Label x:Name="lblUrlInfo" HorizontalAlignment="Left" 
+                   Style="{StaticResource LabelSmallStyle}" Content="{Binding LinkInfo, UpdateSourceTrigger=PropertyChanged}" 
+                   Height="25" Width="500"/>
         </StackPanel>   
     </Grid>
 </UserControl>

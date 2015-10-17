@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DownloadsManager.Core.Concrete.Enums
+namespace DownloadsManager.Core.Concrete
 {
     /// <summary>
     /// Enum which represented downloading states for file
     /// </summary>
-    public enum DownloadState : byte
+    public enum DownloadState : int
     {
         NeedToPrepare = 0,
         Preparing,

@@ -12,18 +12,18 @@ namespace DownloadsManager.Core.Abstract
         /// <summary>
         /// Method for getting response stream for resource
         /// </summary>
-        /// <param name="ri">information about remote resource</param>
+        /// <param name="resourceInfo">information about remote resource</param>
         /// <param name="startRangePosition">start range position for segment download</param>
         /// <param name="endRangePosition">end position of segment download</param>
         /// <returns>stream</returns>
-        Stream CreateResponseStream(ResourceInfo ri, int startRangePosition, int endRangePosition);
+        Stream CreateResponseStream(ResourceInfo resourceInfo, int startRangePosition, int endRangePosition);
 
         /// <summary>
         /// Method for getting information about remote file on server
         /// </summary>
-        /// <param name="ri">information about remote resource</param>
+        /// <param name="resourceInfo">information about remote resource</param>
         /// <param name="stream">stream to write file</param>
         /// <returns>information about remote file on server</returns>
-        RemoteFileInfo GetFileInfo(ResourceInfo ri, out Stream stream);
+        RemoteFileInfo GetFileInfo(ResourceInfo resourceInfo, out Stream stream);
     }
 }

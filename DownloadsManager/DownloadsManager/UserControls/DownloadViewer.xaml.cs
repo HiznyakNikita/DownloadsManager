@@ -30,10 +30,5 @@ namespace DownloadsManager.UserControls
             InitializeComponent();
         }
 
-        private void btnAdditionalInfo_Click(object sender, RoutedEventArgs e)
-        {
-            SegmentsInfoView segmentsInfoView = new SegmentsInfoView(((DownloadViewerVM)this.DataContext).Download);
-            segmentsInfoView.ShowDialog();
-        }
     }
 }
