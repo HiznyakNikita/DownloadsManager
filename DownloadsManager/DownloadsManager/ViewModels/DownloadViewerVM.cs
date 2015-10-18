@@ -1,4 +1,5 @@
 ﻿using DownloadsManager.Core.Concrete;
+using DownloadsManager.ViewModels.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -26,6 +27,8 @@ namespace DownloadsManager.ViewModels
             if (downloader != null)
                 this.download = downloader;
 
+            this.StartDownloadCmd = new Command(this.StartDownload);
+            this.PauseDownloadCmd = new Command(this.PauseDownload);
             //// Attach EventHandler
             this.download.PropertyChanged += Downloader_PropertyChanged;
         }
@@ -119,6 +122,19 @@ namespace DownloadsManager.ViewModels
                 return download.Progress.ToString(CultureInfo.InvariantCulture).Length > 4 ? 
                     download.Progress.ToString(CultureInfo.InvariantCulture).Substring(0, 4) + " %" : "0.0 %";
             }
+        }
+
+        public Command PauseDownloadCmd { get; set; }
+        public Command StartDownloadCmd { get; set; }
+
+        private void StartDownload(object param)
+        {
+            download.Start();
+        }
+
+        private void PauseDownload(object param)
+        {
+            download.Pause();
         }
 
         private void Downloader_PropertyChanged(object sender, PropertyChangedEventArgs e)

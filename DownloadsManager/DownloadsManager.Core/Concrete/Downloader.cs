@@ -23,7 +23,6 @@ namespace DownloadsManager.Core.Concrete
     [Serializable]
     /// <summary>
     /// Class which represent every download
-    /// TODO State,Download providers, segments (for pause and speed manipulations)
     /// </summary>
     public class Downloader : IDownloader, INotifyPropertyChanged
     {

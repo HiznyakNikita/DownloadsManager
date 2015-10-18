@@ -30,5 +30,13 @@ namespace DownloadsManager.UserControls
             InitializeComponent();
         }
 
+        public DownloadViewerVM Model
+        {
+            get
+            {
+                return this.DataContext as DownloadViewerVM;
+            }
+        }
+
     }
 }

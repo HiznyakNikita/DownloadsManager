@@ -1,4 +1,5 @@
 ﻿using DownloadsManager.Core.Concrete;
+using DownloadsManager.Core.Concrete.DownloadStates;
 using DownloadsManager.Helpers;
 using DownloadsManager.UserControls;
 using DownloadsManager.ViewModels.Infrastructure;
@@ -74,14 +75,26 @@ namespace DownloadsManager.ViewModels
         /// </summary>
         public Command AddDownloadCmd { get; set; }
 
+        /// <summary>
+        /// Command for closing app window and saving results
+        /// </summary>
         public Command CloseCmd { get; set; }
+
+      
 
         private void Close(object param)
         {
             List<Downloader> downloadsToSave = new List<Downloader>();
             foreach(var download in _itemsToDownloaders.Keys.OfType<Downloader>().ToList())
             {
-                download.State.Pause();
+                try
+                {
+                    download.State.Pause();
+                }
+                catch(InvalidOperationException)
+                {
+                    Console.WriteLine();
+                }
                 downloadsToSave.Add(download);
             }
             DownloadsSerializer.Serialize(downloadsToSave);

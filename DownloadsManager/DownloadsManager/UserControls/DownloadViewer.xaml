@@ -34,6 +34,9 @@
                 <Label x:Name="lblProgressInfo" HorizontalAlignment="Left" 
                        Style="{StaticResource LabelSmallStyle}" Content="{Binding Progress, UpdateSourceTrigger=PropertyChanged}" 
                        Height="25" Width="120"/>
+                <Button x:Name="btnPause" Command="{Binding PauseDownloadCmd}" Content="Pause" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20"></Button>
+                <Button x:Name="btnStart" Margin="10" Command="{Binding StartDownloadCmd}" Content="Start" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20"></Button>
+
             </StackPanel>
             <Label x:Name="lblUrlInfo" HorizontalAlignment="Left" 
                    Style="{StaticResource LabelSmallStyle}" Content="{Binding LinkInfo, UpdateSourceTrigger=PropertyChanged}" 
