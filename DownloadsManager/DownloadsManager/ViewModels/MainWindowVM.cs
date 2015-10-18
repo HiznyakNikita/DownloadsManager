@@ -43,7 +43,11 @@ namespace DownloadsManager.ViewModels
                 List<Downloader> downloads = DownloadsSerializer.Deserialize();
                 foreach (var fileToDownload in downloads)
                 {
-                    DownloaderManager.Instance.Add(fileToDownload, true);
+                    if (fileToDownload.State.GetType() != typeof(DownloadEndedState)
+                        && fileToDownload.State.GetType() != typeof(DownloadEndedWithErrorState))
+                    {
+                        DownloaderManager.Instance.Add(fileToDownload, true);
+                    }
                     DownloadViewer viewer = new DownloadViewer();
                     viewer.DataContext = new DownloadViewerVM(fileToDownload);
                     _itemsToDownloaders.Add(fileToDownload, viewer);
@@ -126,7 +130,6 @@ namespace DownloadsManager.ViewModels
                 newDownloadView.Model.Mirror, 
                 newDownloadView.Model.Mirrors.ToArray(),
                 newDownloadView.Model.SavePath, 
-                newDownloadView.Model.SegmentsCount, 
                 fileName);
             DownloaderManager.Instance.Add(fileToDownload, true);
                     

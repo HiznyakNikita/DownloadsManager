@@ -13,25 +13,8 @@ namespace DownloadsManager.ViewModels
         private readonly List<ResourceInfo> mirrors = new List<ResourceInfo>();
         private ResourceInfo mirror;
         private string savePath;
-        private int segmentsCount;
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        /// Gets or sets count of download segments
-        /// </summary>
-        public int SegmentsCount
-        { 
-            get
-            {
-                return segmentsCount;
-            }
-
-            set
-            {
-                segmentsCount = value;
-            }
-        }
 
         /// <summary>
         /// Gets mirrors for downloading

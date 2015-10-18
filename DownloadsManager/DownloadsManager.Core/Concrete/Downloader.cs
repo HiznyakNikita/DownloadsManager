@@ -51,31 +51,6 @@ namespace DownloadsManager.Core.Concrete
         public Downloader() { }
 
         /// <summary>
-        /// ctor
-        /// </summary>
-        /// <param name="resourceInfo">resource info</param>
-        /// <param name="mirrors">mirrors for download</param>
-        /// <param name="localFile">local file info</param>
-        /// <param name="segmentCount">segment count</param>
-        /// <param name="fileName">name of file</param>
-        public Downloader(
-            ResourceInfo resourceInfo, 
-            ResourceInfo[] mirrors, 
-            string localFile, 
-            int segmentCount, 
-            string fileName) 
-            : this(resourceInfo, mirrors, localFile, fileName)
-        {
-            ////SetState(DownloaderState.NeedToPrepare);
-
-            CreatedDateTime = DateTime.Now;
-            RequestedSegments = segmentCount;
-            this.segments = new List<FileSegment>();
-            State = new DownloadNeedToPrepareState(this);
-            FileName = fileName;
-        }
-
-        /// <summary>
         /// more complicated ctor need for change downloader statuses
         /// </summary>
         /// <param name="resourceInfo">resource info</param>
@@ -92,7 +67,6 @@ namespace DownloadsManager.Core.Concrete
             string localFile,
             List<FileSegment> segments,
             RemoteFileInfo remoteInfo,
-            int requestedSegmentCount,
             DateTime createdDateTime,
             string fileName)
             : this(resourceInfo, mirrors, localFile, fileName)
@@ -108,7 +82,7 @@ namespace DownloadsManager.Core.Concrete
 
             CreatedDateTime = createdDateTime;
             this.remoteFileInfo = remoteInfo;
-            RequestedSegments = requestedSegmentCount;
+            RequestedSegments = Settings.Default.DefaultSegmentsCount;
             this.segments = segments;
             State = new DownloadNeedToPrepareState(this);
             FileName = fileName;
@@ -122,8 +96,14 @@ namespace DownloadsManager.Core.Concrete
         /// <param name="mirrors">resource info mirrors</param>
         /// <param name="localFile">local file for this downloader</param>
         /// <param name="fileName">name of file</param>
-        private Downloader(ResourceInfo ri, ResourceInfo[] mirrors, string localFile, string fileName)
+        public Downloader(ResourceInfo ri, ResourceInfo[] mirrors, string localFile, string fileName)
         {
+            CreatedDateTime = DateTime.Now;
+            RequestedSegments = Settings.Default.DefaultSegmentsCount;
+            this.segments = new List<FileSegment>();
+            State = new DownloadNeedToPrepareState(this);
+            FileName = fileName;
+
             this.threads = new List<Thread>();
             ResourceInfo = ri;
             this.mirrors = mirrors == null 

@@ -61,11 +61,7 @@ namespace DownloadsManager.Views
                     }
 
                     model.SavePath = string.IsNullOrEmpty(tbSaveToPath.Text) ? string.Empty : tbSaveToPath.Text;
-                    if (!string.IsNullOrEmpty(tbSegmentsCount.Text))
-                    {
-                        model.SegmentsCount = Convert.ToInt32(tbSegmentsCount.Text, NumberFormatInfo.InvariantInfo);
-                    }
-
+                    
                     this.Close();
                 }
             }

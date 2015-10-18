@@ -106,5 +106,17 @@ namespace DownloadsManager.Core.Properties {
                 this["MinSegmentWidthToNewSegment"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int DefaultSegmentsCount {
+            get {
+                return ((int)(this["DefaultSegmentsCount"]));
+            }
+            set {
+                this["DefaultSegmentsCount"] = value;
+            }
+        }
     }
 }

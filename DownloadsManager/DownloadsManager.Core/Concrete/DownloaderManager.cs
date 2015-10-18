@@ -123,9 +123,9 @@ namespace DownloadsManager.Core.Concrete
             }
         }
 
-        public Downloader Add(ResourceInfo resourceInfo, ResourceInfo[] mirrors, string localFile, int segments, bool autoStart, string fileName)
+        public Downloader Add(ResourceInfo resourceInfo, ResourceInfo[] mirrors, string localFile, bool autoStart, string fileName)
         {
-            Downloader d = new Downloader(resourceInfo, mirrors, localFile, segments, fileName);
+            Downloader d = new Downloader(resourceInfo, mirrors, localFile, fileName);
             Add(d, autoStart);
 
             return d;
@@ -142,7 +142,7 @@ namespace DownloadsManager.Core.Concrete
             DateTime createdDateTime,
             string fileName)
         {
-            Downloader d = new Downloader(resourceInfo, mirrors, localFile, segments, remoteInfo, requestedSegmentCount, createdDateTime, fileName);
+            Downloader d = new Downloader(resourceInfo, mirrors, localFile, segments, remoteInfo, createdDateTime, fileName);
             Add(d, autoStart);
 
             return d;
