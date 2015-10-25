@@ -24,7 +24,7 @@ namespace DownloadsManager.ViewModels
     /// </summary>
     public class MainWindowVM : MainVM
     {
-        private Hashtable _itemsToDownloaders = new Hashtable();
+        private Dictionary<Downloader, DownloadViewer> _itemsToDownloaders = new Dictionary<Downloader,DownloadViewer>();
 
         /// <summary>
         /// ctor
@@ -37,6 +37,86 @@ namespace DownloadsManager.ViewModels
 
         }
 
+        public List<DownloadViewer> MusicDownloads 
+        { 
+            get
+            {
+                List<Downloader> downloads =  _itemsToDownloaders.Keys.Where(d => d.FileType == Core.Concrete.Enums.FileType.Music).ToList();
+                List<DownloadViewer> views = new List<DownloadViewer>();
+                foreach(var d in downloads)
+                {
+                    views.Add(_itemsToDownloaders[d]);
+                }
+                return views;
+            }
+        }
+
+        public List<DownloadViewer> AllDownloads
+        {
+            get
+            {
+                List<DownloadViewer> views = new List<DownloadViewer>();
+                views = _itemsToDownloaders.Values.ToList();
+                return views;
+            }
+        }
+
+        public List<DownloadViewer> VideoDownloads
+        {
+            get
+            {
+                List<Downloader> downloads = _itemsToDownloaders.Keys.Where(d => d.FileType == Core.Concrete.Enums.FileType.Video).ToList();
+                List<DownloadViewer> views = new List<DownloadViewer>();
+                foreach (var d in downloads)
+                {
+                    views.Add(_itemsToDownloaders[d]);
+                }
+                return views;
+                NotifyView();
+            }
+        }
+
+        public List<DownloadViewer> DocumentDownloads
+        {
+            get
+            {
+                List<Downloader> downloads = _itemsToDownloaders.Keys.Where(d => d.FileType == Core.Concrete.Enums.FileType.Document).ToList();
+                List<DownloadViewer> views = new List<DownloadViewer>();
+                foreach (var d in downloads)
+                {
+                    views.Add(_itemsToDownloaders[d]);
+                }
+                return views;
+            }
+        }
+
+        public List<DownloadViewer> ApplicationDownloads
+        {
+            get
+            {
+                List<Downloader> downloads = _itemsToDownloaders.Keys.Where(d => d.FileType == Core.Concrete.Enums.FileType.Application).ToList();
+                List<DownloadViewer> views = new List<DownloadViewer>();
+                foreach (var d in downloads)
+                {
+                    views.Add(_itemsToDownloaders[d]);
+                }
+                return views;
+            }
+        }
+
+        public List<DownloadViewer> PictureDownloads
+        {
+            get
+            {
+                List<Downloader> downloads = _itemsToDownloaders.Keys.Where(d => d.FileType == Core.Concrete.Enums.FileType.Picture).ToList();
+                List<DownloadViewer> views = new List<DownloadViewer>();
+                foreach (var d in downloads)
+                {
+                    views.Add(_itemsToDownloaders[d]);
+                }
+                return views;
+            }
+        }
         private void AddSavedDownloads()
         {
             try
@@ -55,15 +135,33 @@ namespace DownloadsManager.ViewModels
                     _itemsToDownloaders.Add(fileToDownload, viewer);
                 }
 
-                NotifyPropertyChanged("ItemsToDownloaders");
+                NotifyView();
+
             }
             catch (FileNotFoundException)
             {
                 //@
             }
         }
+<<<<<<< HEAD
+=======
 
-        public Hashtable ItemsToDownloaders
+        private void NotifyView()
+        {
+            NotifyPropertyChanged("ItemsToDownloaders");
+            NotifyPropertyChanged("PictureDownloads");
+            NotifyPropertyChanged("MusicDownloads");
+            NotifyPropertyChanged("VideoDownloads");
+            NotifyPropertyChanged("DocumentDownloads");
+            NotifyPropertyChanged("ApplicationDownloads");
+            NotifyPropertyChanged("AllDownloads");
+        }
+            
+
+        public event PropertyChangedEventHandler PropertyChanged;
+>>>>>>> origin/master
+
+        public Dictionary<Downloader,DownloadViewer> ItemsToDownloaders
         { 
             get
             {
@@ -127,7 +225,7 @@ namespace DownloadsManager.ViewModels
             viewer.DataContext = new DownloadViewerVM(fileToDownload);
 
             _itemsToDownloaders.Add(fileToDownload, viewer);
-            NotifyPropertyChanged("ItemsToDownloaders");
+            NotifyView();
         }
 
         private static string GetFileName(ResourceInfo mirror)

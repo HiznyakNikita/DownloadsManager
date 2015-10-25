@@ -1,5 +1,4 @@
-﻿using DownloadsManager.Core.Abstract;
-using DownloadsManager.Core.Concrete;
+﻿using DownloadsManager.Core.Concrete;
 using DownloadsManager.Core.Concrete.DownloadStates;
 using DownloadsManager.Helpers;
 using DownloadsManager.UserControls;
@@ -22,7 +21,7 @@ namespace DownloadsManager.ViewModels
     /// <summary>
     /// Main Window View Model
     /// </summary>
-    public class MainWindowVM : MainVM
+    public class MainWindowVM : INotifyPropertyChanged
     {
         private Hashtable _itemsToDownloaders = new Hashtable();
 
@@ -41,16 +40,15 @@ namespace DownloadsManager.ViewModels
         {
             try
             {
-                var downloads = DownloadsSerializer.Deserialize();
+                List<Downloader> downloads = DownloadsSerializer.Deserialize();
                 foreach (var fileToDownload in downloads)
                 {
-                    //@
-                    if (fileToDownload.State.State != DownloadState.Ended
-                        && fileToDownload.State.State != DownloadState.EndedWithError)
+                    if (fileToDownload.State.GetType() != typeof(DownloadEndedState)
+                        && fileToDownload.State.GetType() != typeof(DownloadEndedWithErrorState))
                     {
                         DownloaderManager.Instance.Add(fileToDownload, true);
                     }
-                    var viewer = new DownloadViewer();
+                    DownloadViewer viewer = new DownloadViewer();
                     viewer.DataContext = new DownloadViewerVM(fileToDownload);
                     _itemsToDownloaders.Add(fileToDownload, viewer);
                 }
@@ -59,9 +57,12 @@ namespace DownloadsManager.ViewModels
             }
             catch (FileNotFoundException)
             {
-                //@
+
             }
         }
+            
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public Hashtable ItemsToDownloaders
         { 
@@ -83,6 +84,8 @@ namespace DownloadsManager.ViewModels
         /// </summary>
         public Command CloseCmd { get; set; }
 
+      
+
         private void Close(object param)
         {
             List<Downloader> downloadsToSave = new List<Downloader>();
@@ -101,7 +104,6 @@ namespace DownloadsManager.ViewModels
             DownloadsSerializer.Serialize(downloadsToSave);
         }
 
-        //AutoFac
         /// <summary>
         /// Method for adding download
         /// </summary>
@@ -111,9 +113,18 @@ namespace DownloadsManager.ViewModels
             NewDownloadView newDownloadView = new NewDownloadView();
             newDownloadView.ShowDialog();
             string fileName = string.Empty;
-            fileName = newDownloadView.Model.Mirror != null
-                ? GetFileName(newDownloadView.Model.Mirror)
-                : GetFileName(newDownloadView.Model.Mirrors.First());
+            if (newDownloadView.Model.Mirror != null)
+            {
+                Uri uri = new Uri(newDownloadView.Model.Mirror.Url);
+                fileName = uri.Segments[uri.Segments.Length - 1];
+                fileName = HttpUtility.UrlDecode(fileName).Replace("/", "\\");
+            }
+            else if (newDownloadView.Model.Mirrors.Count != 0)
+            {
+                Uri uri = new Uri(newDownloadView.Model.Mirrors[0].Url);
+                fileName = uri.Segments[uri.Segments.Length - 1];
+                fileName = HttpUtility.UrlDecode(fileName).Replace("/", "\\");
+            }
 
             Downloader fileToDownload = new Downloader(
                 newDownloadView.Model.Mirror, 
@@ -122,7 +133,7 @@ namespace DownloadsManager.ViewModels
                 fileName);
             DownloaderManager.Instance.Add(fileToDownload, true);
                     
-            var viewer = new DownloadViewer();
+            DownloadViewer viewer = new DownloadViewer();
             
             viewer.DataContext = new DownloadViewerVM(fileToDownload);
 
@@ -130,11 +141,16 @@ namespace DownloadsManager.ViewModels
             NotifyPropertyChanged("ItemsToDownloaders");
         }
 
-        private static string GetFileName(ResourceInfo mirror)
+        #endregion
+
+        #region INotifyPropertyChanged
+
+        private void NotifyPropertyChanged(string property)
         {
-            Uri uri = new Uri(mirror.Url);
-            var fileName = uri.Segments[uri.Segments.Length - 1];
-            return HttpUtility.UrlDecode(fileName).Replace("/", "\\");
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
+            }
         }
 
         #endregion
