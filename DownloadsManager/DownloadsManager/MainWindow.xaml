@@ -15,9 +15,34 @@
             </TabControl.Resources>
             <TabItem Header="DOWNLOADS">
                 <Grid>
+                    <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden">
                     <ItemsControl  Width="Auto" 
                        Height="Auto" x:Name="itemsControlDownloads"
-                       ItemsSource="{Binding ItemsToDownloaders.Values, UpdateSourceTrigger=PropertyChanged}">
+                       ItemsSource="{Binding AllDownloads, UpdateSourceTrigger=PropertyChanged}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <uc:DownloadViewer></uc:DownloadViewer>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style>
+                                <Setter Property="FrameworkElement.Margin" Value="5"/>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                    </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+<<<<<<< HEAD
+            <TabItem Header="STATISTIC">
+                
+            </TabItem>
+=======
+            <TabItem Header="MUSIC">
+                <Grid>
+                    <ItemsControl  Width="Auto" 
+                       Height="Auto" x:Name="itemsControlMusicDownloads"
+                       ItemsSource="{Binding MusicDownloads, UpdateSourceTrigger=PropertyChanged}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <uc:DownloadViewer></uc:DownloadViewer>
@@ -31,9 +56,80 @@
                     </ItemsControl>
                 </Grid>
             </TabItem>
-            <TabItem Header="STATISTIC">
-                
+            <TabItem Header="VIDEO">
+                <Grid>
+                <ItemsControl  Width="Auto" 
+                       Height="Auto" x:Name="itemsControlVideoDownloads"
+                       ItemsSource="{Binding VideoDownloads, UpdateSourceTrigger=PropertyChanged}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <uc:DownloadViewer></uc:DownloadViewer>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style>
+                            <Setter Property="FrameworkElement.Margin" Value="5"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                </ItemsControl>
+                </Grid>
             </TabItem>
+            <TabItem Header="PICTURES">
+                <Grid>
+                <ItemsControl  Width="Auto" 
+                       Height="Auto" x:Name="itemsControlPicturesDownloads"
+                       ItemsSource="{Binding PictureDownloads, UpdateSourceTrigger=PropertyChanged}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <uc:DownloadViewer></uc:DownloadViewer>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style>
+                            <Setter Property="FrameworkElement.Margin" Value="5"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                </ItemsControl>
+                </Grid>
+            </TabItem>
+            <TabItem Header="DOCUMENTS">
+                <Grid>
+                <ItemsControl  Width="Auto" 
+                       Height="Auto" x:Name="itemsControlDocumentsDownloads"
+                       ItemsSource="{Binding DocumentDownloads, UpdateSourceTrigger=PropertyChanged}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <uc:DownloadViewer></uc:DownloadViewer>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style>
+                            <Setter Property="FrameworkElement.Margin" Value="5"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                </ItemsControl>
+                </Grid>
+            </TabItem>
+            <TabItem Header="APPLICATIONS">
+                <Grid>
+                <ItemsControl  Width="Auto" 
+                       Height="Auto" x:Name="itemsControlApplicationsDownloads"
+                       ItemsSource="{Binding ApplicationDownloads, UpdateSourceTrigger=PropertyChanged}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <uc:DownloadViewer></uc:DownloadViewer>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style>
+                            <Setter Property="FrameworkElement.Margin" Value="5"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                </ItemsControl>
+                </Grid>
+            </TabItem>
+            <TabItem Header="STATISTIC"></TabItem>
+>>>>>>> origin/master
         </TabControl>
         <Button HorizontalAlignment="Right" Click="BtnCloseWindow_Click" Margin="556,3,0,0" Command="{Binding CloseCmd}" VerticalAlignment="Top" Width="20" Height="20" x:Name="BtnCloseWindow" Style="{StaticResource closeWindowButtonStyle}"/>
         <Button HorizontalAlignment="Right" Click="BtnHideWindow_Click" Margin="0,3,23,0" VerticalAlignment="Top" Width="20" Height="20" x:Name="BtnHideWindow" Style="{StaticResource hideWindowButtonStyle}"/>
