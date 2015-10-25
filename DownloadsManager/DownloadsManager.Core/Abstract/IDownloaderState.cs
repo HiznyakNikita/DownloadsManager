@@ -35,6 +35,8 @@ namespace DownloadsManager.Core.Abstract
         /// Method for paused download
         /// </summary>
         void Pause();
+
+        DownloadState State { get; }
     }
 
 }

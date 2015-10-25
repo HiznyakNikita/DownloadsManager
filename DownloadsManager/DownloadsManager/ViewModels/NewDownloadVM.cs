@@ -1,4 +1,5 @@
 ﻿using DownloadsManager.Core.Concrete;
+using DownloadsManager.ViewModels.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,13 +9,11 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.ViewModels
 {
-    public class NewDownloadVM : INotifyPropertyChanged
+    public class NewDownloadVM : MainVM
     {
         private readonly List<ResourceInfo> mirrors = new List<ResourceInfo>();
         private ResourceInfo mirror;
         private string savePath;
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Gets mirrors for downloading
@@ -92,17 +91,5 @@ namespace DownloadsManager.ViewModels
             this.mirror = ri;
             NotifyPropertyChanged("Mirror");
         }
-
-        #region INotifyPropertyChanged
-
-        private void NotifyPropertyChanged(string property)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
-            }
-        }
-
-        #endregion
     }
 }

@@ -27,8 +27,8 @@ namespace DownloadsManager
     public partial class MainWindow : Window
     {
 
-        private DispatcherTimer timer = new DispatcherTimer();
-        private MainWindowVM model;
+       private DispatcherTimer timer = new DispatcherTimer();
+       private MainWindowVM model;
 
         /// <summary>
         /// MainWindow ctor
@@ -44,7 +44,6 @@ namespace DownloadsManager
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            this.itemsControlDownloads.ItemsSource = null;
             this.itemsControlDownloads.ItemsSource = model.ItemsToDownloaders.Values;
         }
 

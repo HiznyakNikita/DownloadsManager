@@ -129,7 +129,8 @@
     </Compile>
     <Compile Include="ViewModels\AppSettingsVM.cs" />
     <Compile Include="ViewModels\DownloadViewerVM.cs" />
-    <Compile Include="ViewModels\Infrastruture\Command.cs" />
+    <Compile Include="ViewModels\Infrastructure\Command.cs" />
+    <Compile Include="ViewModels\Infrastructure\MainVM.cs" />
     <Compile Include="ViewModels\MainWindowVM.cs" />
     <Compile Include="ViewModels\NewDownloadVM.cs" />
     <Compile Include="Views\AppSettingsView.xaml.cs">

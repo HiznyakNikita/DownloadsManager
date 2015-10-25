@@ -1,4 +1,5 @@
-﻿using DownloadsManager.Core.Concrete;
+﻿using DownloadsManager.Core.Abstract;
+using DownloadsManager.Core.Concrete;
 using DownloadsManager.Core.Concrete.DownloadStates;
 using DownloadsManager.Helpers;
 using DownloadsManager.UserControls;
@@ -21,9 +22,9 @@ namespace DownloadsManager.ViewModels
     /// <summary>
     /// Main Window View Model
     /// </summary>
-    public class MainWindowVM : INotifyPropertyChanged
+    public class MainWindowVM : MainVM
     {
-        private Hashtable _itemsToDownloaders = new Hashtable();
+        private Dictionary<Downloader, DownloadViewer> _itemsToDownloaders = new Dictionary<Downloader,DownloadViewer>();
 
         /// <summary>
         /// ctor
@@ -36,35 +37,128 @@ namespace DownloadsManager.ViewModels
 
         }
 
+        public List<DownloadViewer> MusicDownloads 
+        { 
+            get
+            {
+                List<Downloader> downloads =  _itemsToDownloaders.Keys.Where(d => d.FileType == Core.Concrete.Enums.FileType.Music).ToList();
+                List<DownloadViewer> views = new List<DownloadViewer>();
+                foreach(var d in downloads)
+                {
+                    views.Add(_itemsToDownloaders[d]);
+                }
+                return views;
+            }
+        }
+
+        public List<DownloadViewer> AllDownloads
+        {
+            get
+            {
+                List<DownloadViewer> views = new List<DownloadViewer>();
+                views = _itemsToDownloaders.Values.ToList();
+                return views;
+            }
+        }
+
+        public List<DownloadViewer> VideoDownloads
+        {
+            get
+            {
+                List<Downloader> downloads = _itemsToDownloaders.Keys.Where(d => d.FileType == Core.Concrete.Enums.FileType.Video).ToList();
+                List<DownloadViewer> views = new List<DownloadViewer>();
+                foreach (var d in downloads)
+                {
+                    views.Add(_itemsToDownloaders[d]);
+                }
+                return views;
+                NotifyView();
+            }
+        }
+
+        public List<DownloadViewer> DocumentDownloads
+        {
+            get
+            {
+                List<Downloader> downloads = _itemsToDownloaders.Keys.Where(d => d.FileType == Core.Concrete.Enums.FileType.Document).ToList();
+                List<DownloadViewer> views = new List<DownloadViewer>();
+                foreach (var d in downloads)
+                {
+                    views.Add(_itemsToDownloaders[d]);
+                }
+                return views;
+            }
+        }
+
+        public List<DownloadViewer> ApplicationDownloads
+        {
+            get
+            {
+                List<Downloader> downloads = _itemsToDownloaders.Keys.Where(d => d.FileType == Core.Concrete.Enums.FileType.Application).ToList();
+                List<DownloadViewer> views = new List<DownloadViewer>();
+                foreach (var d in downloads)
+                {
+                    views.Add(_itemsToDownloaders[d]);
+                }
+                return views;
+            }
+        }
+
+        public List<DownloadViewer> PictureDownloads
+        {
+            get
+            {
+                List<Downloader> downloads = _itemsToDownloaders.Keys.Where(d => d.FileType == Core.Concrete.Enums.FileType.Picture).ToList();
+                List<DownloadViewer> views = new List<DownloadViewer>();
+                foreach (var d in downloads)
+                {
+                    views.Add(_itemsToDownloaders[d]);
+                }
+                return views;
+            }
+        }
         private void AddSavedDownloads()
         {
             try
             {
-                List<Downloader> downloads = DownloadsSerializer.Deserialize();
+                var downloads = DownloadsSerializer.Deserialize();
                 foreach (var fileToDownload in downloads)
                 {
-                    if (fileToDownload.State.GetType() != typeof(DownloadEndedState)
-                        && fileToDownload.State.GetType() != typeof(DownloadEndedWithErrorState))
+                    //@
+                    if (fileToDownload.State.State != DownloadState.Ended
+                        && fileToDownload.State.State != DownloadState.EndedWithError)
                     {
                         DownloaderManager.Instance.Add(fileToDownload, true);
                     }
-                    DownloadViewer viewer = new DownloadViewer();
+                    var viewer = new DownloadViewer();
                     viewer.DataContext = new DownloadViewerVM(fileToDownload);
                     _itemsToDownloaders.Add(fileToDownload, viewer);
                 }
 
-                NotifyPropertyChanged("ItemsToDownloaders");
+                NotifyView();
+
             }
             catch (FileNotFoundException)
             {
-
+                //@
             }
+        }
+
+        private void NotifyView()
+        {
+            NotifyPropertyChanged("ItemsToDownloaders");
+            NotifyPropertyChanged("PictureDownloads");
+            NotifyPropertyChanged("MusicDownloads");
+            NotifyPropertyChanged("VideoDownloads");
+            NotifyPropertyChanged("DocumentDownloads");
+            NotifyPropertyChanged("ApplicationDownloads");
+            NotifyPropertyChanged("AllDownloads");
         }
             
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public Hashtable ItemsToDownloaders
+        public Dictionary<Downloader,DownloadViewer> ItemsToDownloaders
         { 
             get
             {
@@ -104,6 +198,7 @@ namespace DownloadsManager.ViewModels
             DownloadsSerializer.Serialize(downloadsToSave);
         }
 
+        //AutoFac
         /// <summary>
         /// Method for adding download
         /// </summary>
@@ -113,18 +208,9 @@ namespace DownloadsManager.ViewModels
             NewDownloadView newDownloadView = new NewDownloadView();
             newDownloadView.ShowDialog();
             string fileName = string.Empty;
-            if (newDownloadView.Model.Mirror != null)
-            {
-                Uri uri = new Uri(newDownloadView.Model.Mirror.Url);
-                fileName = uri.Segments[uri.Segments.Length - 1];
-                fileName = HttpUtility.UrlDecode(fileName).Replace("/", "\\");
-            }
-            else if (newDownloadView.Model.Mirrors.Count != 0)
-            {
-                Uri uri = new Uri(newDownloadView.Model.Mirrors[0].Url);
-                fileName = uri.Segments[uri.Segments.Length - 1];
-                fileName = HttpUtility.UrlDecode(fileName).Replace("/", "\\");
-            }
+            fileName = newDownloadView.Model.Mirror != null
+                ? GetFileName(newDownloadView.Model.Mirror)
+                : GetFileName(newDownloadView.Model.Mirrors.First());
 
             Downloader fileToDownload = new Downloader(
                 newDownloadView.Model.Mirror, 
@@ -133,24 +219,19 @@ namespace DownloadsManager.ViewModels
                 fileName);
             DownloaderManager.Instance.Add(fileToDownload, true);
                     
-            DownloadViewer viewer = new DownloadViewer();
+            var viewer = new DownloadViewer();
             
             viewer.DataContext = new DownloadViewerVM(fileToDownload);
 
             _itemsToDownloaders.Add(fileToDownload, viewer);
-            NotifyPropertyChanged("ItemsToDownloaders");
+            NotifyView();
         }
 
-        #endregion
-
-        #region INotifyPropertyChanged
-
-        private void NotifyPropertyChanged(string property)
+        private static string GetFileName(ResourceInfo mirror)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
-            }
+            Uri uri = new Uri(mirror.Url);
+            var fileName = uri.Segments[uri.Segments.Length - 1];
+            return HttpUtility.UrlDecode(fileName).Replace("/", "\\");
         }
 
         #endregion

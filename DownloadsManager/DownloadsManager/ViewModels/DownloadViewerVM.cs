@@ -14,7 +14,7 @@ namespace DownloadsManager.ViewModels
     /// <summary>
     /// View model for DownloadViewer
     /// </summary>
-    public class DownloadViewerVM : INotifyPropertyChanged
+    public class DownloadViewerVM : MainVM
     {
         private Downloader download;
 
@@ -32,8 +32,6 @@ namespace DownloadsManager.ViewModels
             //// Attach EventHandler
             this.download.PropertyChanged += Downloader_PropertyChanged;
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Gets download
@@ -127,12 +125,12 @@ namespace DownloadsManager.ViewModels
         public Command PauseDownloadCmd { get; set; }
         public Command StartDownloadCmd { get; set; }
 
-        private void StartDownload(object param)
+        private void StartDownload()
         {
             download.Start();
         }
 
-        private void PauseDownload(object param)
+        private void PauseDownload()
         {
             download.Pause();
         }
@@ -146,17 +144,5 @@ namespace DownloadsManager.ViewModels
             NotifyPropertyChanged("Info");
             NotifyPropertyChanged("SizeInfo");
         }
-
-        #region INotifyPropertyChanged
-
-        private void NotifyPropertyChanged(string property)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
-            }
-        }
-
-        #endregion
     }
 }

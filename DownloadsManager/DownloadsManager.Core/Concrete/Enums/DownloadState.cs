@@ -9,9 +9,9 @@ namespace DownloadsManager.Core.Concrete
     /// <summary>
     /// Enum which represented downloading states for file
     /// </summary>
-    public enum DownloadState : int
+    public enum DownloadState
     {
-        NeedToPrepare = 0,
+        NeedToPrepare,
         Preparing,
         WaitingForReconnect,
         Prepared,

@@ -21,6 +21,11 @@ namespace DownloadsManager.ViewModels.Infrastructure
             ExecuteDelegate = action;
         }
 
+        public Command(Action action)
+        {
+            ExecuteDelegate = (o) => action();
+        }
+
         /// <summary>
         /// event for canExecute prop changed
         /// </summary>

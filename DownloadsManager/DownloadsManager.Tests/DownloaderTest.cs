@@ -36,7 +36,7 @@ namespace DownloadsManager.Tests
                 resourceInfo, null, Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "test.jpg");
             DownloaderManager.Instance.Add(download, true);
             Thread.Sleep(30000);
-            Assert.AreEqual(typeof(DownloadEndedState), download.State.GetType());
+            Assert.AreEqual(DownloadState.Ended, download.State.State);
             File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\test.jpg");
         }
 

@@ -38,8 +38,7 @@ namespace DownloadsManager.Helpers
 
             using (var fs = File.Open("test.bin", FileMode.Open))
             {
-                List<Downloader> downloads = (List<Downloader>)new BinaryFormatter().Deserialize(fs);
-                return downloads;
+                return (List<Downloader>)new BinaryFormatter().Deserialize(fs);
             }
             //using (MemoryStream ms = new MemoryStream())
             //{
