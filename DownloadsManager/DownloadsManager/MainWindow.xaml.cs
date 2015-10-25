@@ -44,6 +44,7 @@ namespace DownloadsManager
 
         private void Timer_Tick(object sender, EventArgs e)
         {
+            this.itemsControlDownloads.ItemsSource = null;
             this.itemsControlDownloads.ItemsSource = model.ItemsToDownloaders.Values;
         }
 

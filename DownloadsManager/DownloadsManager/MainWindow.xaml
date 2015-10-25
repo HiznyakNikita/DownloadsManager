@@ -15,6 +15,7 @@
             </TabControl.Resources>
             <TabItem Header="DOWNLOADS">
                 <Grid>
+                    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
                     <ItemsControl  Width="Auto" 
                        Height="Auto" x:Name="itemsControlDownloads"
                        ItemsSource="{Binding ItemsToDownloaders.Values, UpdateSourceTrigger=PropertyChanged}">
@@ -29,6 +30,7 @@
                             </Style>
                         </ItemsControl.ItemContainerStyle>
                     </ItemsControl>
+                    </ScrollViewer>
                 </Grid>
             </TabItem>
             <TabItem Header="STATISTIC">
