@@ -1,6 +1,7 @@
 ﻿using DownloadsManager.Core.Abstract;
 using DownloadsManager.Core.Concrete;
 using DownloadsManager.Core.Concrete.DownloadStates;
+using DownloadsManager.Core.Concrete.Enums;
 using DownloadsManager.Helpers;
 using DownloadsManager.UserControls;
 using DownloadsManager.ViewModels.Infrastructure;
@@ -35,6 +36,30 @@ namespace DownloadsManager.ViewModels
             this.CloseCmd = new Command(this.Close);
             AddSavedDownloads();
 
+        }
+
+        public List<DownloadStatisticWrapper> DownloadTypesStatistic 
+        { 
+            get
+            {
+                return GetTypesStatistic();
+            }
+        }
+
+        public List<DownloadStatisticWrapper> DownloadStatesStatistic
+        {
+            get
+            {
+                return GetStatesStatistic();
+            }
+        }
+
+        public long TotalBytesDownloadedStatistic
+        { 
+            get
+            {
+                return _itemsToDownloaders.Keys.OfType<Downloader>().Select(d => d.FileSize).Sum();
+            }
         }
 
         private void AddSavedDownloads()
@@ -137,6 +162,34 @@ namespace DownloadsManager.ViewModels
             return HttpUtility.UrlDecode(fileName).Replace("/", "\\");
         }
 
+        #endregion
+
+        #region Statistic
+        private List<DownloadStatisticWrapper> GetTypesStatistic()
+        {
+            List<DownloadStatisticWrapper> result = new List<DownloadStatisticWrapper>();
+            foreach(Downloader file in _itemsToDownloaders.Keys)
+            {
+                if (result.Where(d => d.FileType == file.FileType).Count() > 0)
+                    result.Where(d => d.FileType == file.FileType).FirstOrDefault().Count++;
+                else
+                    result.Add(new DownloadStatisticWrapper(file.FileType,1,file.State.State));
+            }
+            return result;
+        }
+
+        private List<DownloadStatisticWrapper> GetStatesStatistic()
+        {
+            List<DownloadStatisticWrapper> result = new List<DownloadStatisticWrapper>();
+            foreach (Downloader file in _itemsToDownloaders.Keys)
+            {
+                if (result.Where(d => d.State == file.State.State).Count() > 0)
+                    result.Where(d => d.State == file.State.State).FirstOrDefault().Count++;
+                else
+                    result.Add(new DownloadStatisticWrapper(file.FileType, 1, file.State.State));
+            }
+            return result;
+        }
         #endregion
     }
 }

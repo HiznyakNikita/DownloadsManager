@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:DownloadsManager.ViewModels"
         xmlns:uc="clr-namespace:DownloadsManager.UserControls"
+        xmlns:metroChart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart"
         Title="MainWindow" Height="350" Width="587" 
         Background="#FF575757" WindowStyle="None" ResizeMode="NoResize" WindowState="Maximized">
     <Window.Resources>
@@ -16,25 +17,68 @@
             <TabItem Header="DOWNLOADS">
                 <Grid>
                     <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
-                    <ItemsControl  Width="Auto" 
+                        <ItemsControl  Width="Auto" 
                        Height="Auto" x:Name="itemsControlDownloads"
                        ItemsSource="{Binding ItemsToDownloaders.Values, UpdateSourceTrigger=PropertyChanged}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <uc:DownloadViewer></uc:DownloadViewer>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                        <ItemsControl.ItemContainerStyle>
-                            <Style>
-                                <Setter Property="FrameworkElement.Margin" Value="5"/>
-                            </Style>
-                        </ItemsControl.ItemContainerStyle>
-                    </ItemsControl>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <uc:DownloadViewer></uc:DownloadViewer>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemContainerStyle>
+                                <Style>
+                                    <Setter Property="FrameworkElement.Margin" Value="5"/>
+                                </Style>
+                            </ItemsControl.ItemContainerStyle>
+                        </ItemsControl>
                     </ScrollViewer>
                 </Grid>
             </TabItem>
             <TabItem Header="STATISTIC">
-                
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Total downloads:" IsEnabled="False" FontSize="20" HorizontalAlignment="Left"
+                                   VerticalAlignment="Top" Foreground="WhiteSmoke"  Style="{StaticResource LabelSmallStyle}"/>
+                                <Label x:Name="lblTotalDownloads" Content="{Binding ItemsToDownloaders.Count}" IsEnabled="False" HorizontalAlignment="Left"
+                                   VerticalAlignment="Top" Foreground="WhiteSmoke" FontSize="20" Style="{StaticResource LabelSmallStyle}"/>
+
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Bytes downloaded:" IsEnabled="False" HorizontalAlignment="Left"
+                                   VerticalAlignment="Top" Foreground="WhiteSmoke" FontSize="20" Style="{StaticResource LabelSmallStyle}"/>
+                                <Label x:Name="lblTotalBytesDownloaded" Content="{Binding TotalBytesDownloadedStatistic}" IsEnabled="False" HorizontalAlignment="Left"
+                                   VerticalAlignment="Top" Foreground="WhiteSmoke" FontSize="20" Style="{StaticResource LabelSmallStyle}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <metroChart:PieChart
+                        ChartTitle="Downloads types"
+                        ChartSubTitle="statistic"
+                        SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" Height="310" Width="430">
+                            <metroChart:PieChart.Series>
+                                <metroChart:ChartSeries
+                                SeriesTitle="Types"
+                                DisplayMember="FileType"
+                                ValueMember="Count"
+                                ItemsSource="{Binding Path=DownloadTypesStatistic}" />
+                            </metroChart:PieChart.Series>
+                        </metroChart:PieChart>
+
+                        <metroChart:PieChart
+                        ChartTitle="Downloads states"
+                        ChartSubTitle="statistic"
+                        SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" Height="310" Width="430">
+                            <metroChart:PieChart.Series>
+                                <metroChart:ChartSeries
+                                SeriesTitle="States"
+                                DisplayMember="State"
+                                ValueMember="Count"
+                                ItemsSource="{Binding Path=DownloadStatesStatistic}" />
+                            </metroChart:PieChart.Series>
+                        </metroChart:PieChart>
+                    </StackPanel>
+                </StackPanel>
             </TabItem>
         </TabControl>
         <Button HorizontalAlignment="Right" Click="BtnCloseWindow_Click" Margin="556,3,0,0" Command="{Binding CloseCmd}" VerticalAlignment="Top" Width="20" Height="20" x:Name="BtnCloseWindow" Style="{StaticResource closeWindowButtonStyle}"/>

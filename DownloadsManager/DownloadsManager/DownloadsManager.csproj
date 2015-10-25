@@ -75,6 +75,9 @@
     <StyleCopEnabled>True</StyleCopEnabled>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="De.TorstenMandelkow.MetroChart">
+      <HintPath>..\..\..\Projects\TicketReminder\packages\De.TorstenMandelkow.MetroChart.1.0.0\lib\De.TorstenMandelkow.MetroChart.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
@@ -123,6 +126,7 @@
     </ApplicationDefinition>
     <Compile Include="Helpers\ClipboardState.cs" />
     <Compile Include="Helpers\DownloadsSerializer.cs" />
+    <Compile Include="Helpers\DownloadStatisticWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserControls\DownloadViewer.xaml.cs">
       <DependentUpon>DownloadViewer.xaml</DependentUpon>
