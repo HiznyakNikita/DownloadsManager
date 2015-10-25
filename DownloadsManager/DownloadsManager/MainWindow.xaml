@@ -78,6 +78,24 @@
                             </metroChart:PieChart.Series>
                         </metroChart:PieChart>
                     </StackPanel>
+                    <StackPanel Orientation="Vertical" Margin="0,0,-459,0">
+                        <Label Content="Download history" HorizontalAlignment="Left" 
+                                   VerticalAlignment="Top" FontSize="24" Style="{StaticResource LabelSmallStyle}"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                            <Label Content="Period:" HorizontalAlignment="Left" 
+                                   VerticalAlignment="Top" Style="{StaticResource LabelSmallStyle}"/>
+                            <TextBox x:Name="tbDownloadsHistoryPeriod" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Left"
+                                     Margin="2" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="240"/>
+                            <Button Command="{Binding SetHistoryPeriodCmd}" Content="Set" CommandParameter="{Binding Text, ElementName=tbDownloadsHistoryPeriod}" 
+                                    VerticalAlignment="Top" Width="75" Height="25" Margin="2"
+                        	x:Name="BtnChooseHistoryPeriod" Style="{StaticResource buttonWithTextStyle}"/>
+                        </StackPanel>
+                        <ListBox x:Name="lstBoxDownloadsHistory" Margin="5,5,0,5" Width="1031" HorizontalAlignment="Left"
+                                 ItemsSource="{Binding DownloadsHistory, UpdateSourceTrigger=PropertyChanged}"
+                             ScrollViewer.VerticalScrollBarVisibility="Disabled" BorderBrush="#FF74B71B" 
+                                 Foreground="#FF74B71B" Background="Transparent" DisplayMemberPath="FileName" 
+                             Height="350"  VerticalAlignment="Top" IsEnabled="True" Style="{StaticResource ListBoxStyle}"/>
+                    </StackPanel>
                 </StackPanel>
             </TabItem>
         </TabControl>

@@ -26,6 +26,7 @@ namespace DownloadsManager.ViewModels
     public class MainWindowVM : MainVM
     {
         private Hashtable _itemsToDownloaders = new Hashtable();
+        private int _historyPeriod = 1;
 
         /// <summary>
         /// ctor
@@ -34,8 +35,18 @@ namespace DownloadsManager.ViewModels
         {
             this.AddDownloadCmd = new Command(this.AddDownload);
             this.CloseCmd = new Command(this.Close);
+            this.SetHistoryPeriodCmd = new Command(this.SetHistoryPeriod);
             AddSavedDownloads();
 
+        }
+
+        public List<Downloader> DownloadsHistory
+        { 
+            get
+            {
+                return _itemsToDownloaders.Keys.OfType<Downloader>()
+                    .Where(d => d.CreatedDateTime.CompareTo(DateTime.Now.AddDays(-_historyPeriod))>0).ToList();
+            }
         }
 
         public List<DownloadStatisticWrapper> DownloadTypesStatistic 
@@ -107,6 +118,18 @@ namespace DownloadsManager.ViewModels
         /// Command for closing app window and saving results
         /// </summary>
         public Command CloseCmd { get; set; }
+
+        /// <summary>
+        /// Command for set value of days in downloads history period
+        /// </summary>
+        public Command SetHistoryPeriodCmd { get; set; }
+
+        private void SetHistoryPeriod(object param)
+        {
+            if (!Int32.TryParse(param.ToString(), out _historyPeriod))
+                throw new InvalidOperationException();
+            NotifyPropertyChanged("DownloadsHistory");
+        }
 
         private void Close(object param)
         {
