@@ -16,6 +16,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Globalization;
 using System.Xml.Serialization;
+using DownloadsManager.Core.Concrete.Enums;
+using DownloadsManager.Core.Concrete.Helpers;
 
 namespace DownloadsManager.Core.Concrete
 {
@@ -45,7 +47,6 @@ namespace DownloadsManager.Core.Concrete
         [NonSerialized]
         private List<Thread> threads = new List<Thread>();
 
-        [NonSerialized]
         private IFileSegmentCalculator fileSegmentCalculator;
 
         public Downloader() { }
@@ -92,11 +93,11 @@ namespace DownloadsManager.Core.Concrete
         /// <summary>
         /// default ctor (super)
         /// </summary>
-        /// <param name="ri">resource info</param>
+        /// <param name="resourceInfo">resource info</param>
         /// <param name="mirrors">resource info mirrors</param>
         /// <param name="localFile">local file for this downloader</param>
         /// <param name="fileName">name of file</param>
-        public Downloader(ResourceInfo ri, ResourceInfo[] mirrors, string localFile, string fileName)
+        public Downloader(ResourceInfo resourceInfo, ResourceInfo[] mirrors, string localFile, string fileName)
         {
             CreatedDateTime = DateTime.Now;
             RequestedSegments = Settings.Default.DefaultSegmentsCount;
@@ -105,14 +106,14 @@ namespace DownloadsManager.Core.Concrete
             FileName = fileName;
 
             this.threads = new List<Thread>();
-            ResourceInfo = ri;
+            ResourceInfo = resourceInfo;
             this.mirrors = mirrors == null 
                 ? new List<ResourceInfo>()
                 : new List<ResourceInfo>(mirrors);
 
             LocalFile = localFile;
-
-            ProtocolProvider = ri.BindProtocolProviderInstance();
+            if(resourceInfo!=null)
+                ProtocolProvider = resourceInfo.BindProtocolProviderInstance();
 
             fileSegmentCalculator = new FileSegmentSizeCalculatorHelper();
             FileName = fileName;
@@ -139,6 +140,14 @@ namespace DownloadsManager.Core.Concrete
         {
             get;
             private set;
+        }
+
+        public FileType FileType 
+        { 
+            get
+            {
+                return FileTypeIdentifier.IdentifyType(FileName);
+            }
         }
 
         /// <summary>
@@ -834,7 +843,7 @@ namespace DownloadsManager.Core.Concrete
                     }
 
                     //// check if the user have requested to pause the download
-                    if (State.GetType() == typeof(DownloadPausingState))
+                    if (State.State == DownloadState.Pausing)
                     {
                         segment.State = FileSegmentState.Paused;
                         NotifyPropertyChanged("Segment");

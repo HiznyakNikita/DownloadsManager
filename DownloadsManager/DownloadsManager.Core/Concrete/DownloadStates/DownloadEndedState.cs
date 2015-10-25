@@ -15,6 +15,14 @@ namespace DownloadsManager.Core.Concrete.DownloadStates
     {
         private Downloader downloader;
 
+        public DownloadState State
+        {
+            get
+            {
+                return DownloadState.Ended;
+            }
+        }
+
         public DownloadEndedState(Downloader downloader)
         {
             this.downloader = downloader;

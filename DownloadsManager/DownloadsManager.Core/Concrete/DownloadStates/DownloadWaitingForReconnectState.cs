@@ -15,6 +15,15 @@ namespace DownloadsManager.Core.Concrete.DownloadStates
     {
         private Downloader downloader;
 
+        public DownloadState State
+        {
+            get
+            {
+                return DownloadState.WaitingForReconnect;
+            }
+        }
+
+
         public DownloadWaitingForReconnectState(Downloader downloader)
         {
             this.downloader = downloader;

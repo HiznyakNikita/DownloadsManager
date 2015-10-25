@@ -64,8 +64,10 @@
     <Compile Include="Concrete\DownloadStates\DownloadDownloadingState.cs" />
     <Compile Include="Concrete\Enums\DownloadState.cs" />
     <Compile Include="Concrete\Enums\FileSegmentState.cs" />
+    <Compile Include="Concrete\Enums\FileType.cs" />
     <Compile Include="Concrete\FileSegment.cs" />
     <Compile Include="Concrete\Helpers\FileSegmentSizeCalculatorHelper.cs" />
+    <Compile Include="Concrete\Helpers\FileTypeIdentifier.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

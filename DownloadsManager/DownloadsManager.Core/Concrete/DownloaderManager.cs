@@ -60,7 +60,7 @@ namespace DownloadsManager.Core.Concrete
                 {
                     for (int i = 0; i < this.Downloads.Count; i++)
                     {
-                        if (this.Downloads[i].State.GetType() == typeof(DownloadDownloadingState))
+                        if (this.Downloads[i].State.State == DownloadState.Working)
                         {
                             total += this.Downloads[i].Rate;
                         }
@@ -84,9 +84,9 @@ namespace DownloadsManager.Core.Concrete
         {
             if (downloader != null)
             {
-                if (downloader.State.GetType() != typeof(DownloadNeedToPrepareState) ||
-                    downloader.State.GetType() != typeof(DownloadEndedState) ||
-                    downloader.State.GetType() != typeof(DownloadPausedState))
+                if (downloader.State.State != DownloadState.NeedToPrepare ||
+                    downloader.State.State != DownloadState.Ended ||
+                    downloader.State.State != DownloadState.Paused)
                 {
                     downloader.Pause();
                 }
@@ -104,7 +104,7 @@ namespace DownloadsManager.Core.Concrete
             {
                 for (int i = downloads.Count - 1; i >= 0; i--)
                 {
-                    if (downloads[i].State.GetType() == typeof(DownloadEndedState))
+                    if (downloads[i].State.State == DownloadState.Ended)
                     {
                         downloads.RemoveAt(i);
                     }
@@ -136,8 +136,7 @@ namespace DownloadsManager.Core.Concrete
             ResourceInfo[] mirrors, 
             string localFile, 
             List<FileSegment> segments, 
-            RemoteFileInfo remoteInfo, 
-            int requestedSegmentCount, 
+            RemoteFileInfo remoteInfo,  
             bool autoStart, 
             DateTime createdDateTime,
             string fileName)

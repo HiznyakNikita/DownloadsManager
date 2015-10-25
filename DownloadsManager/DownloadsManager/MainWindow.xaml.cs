@@ -27,8 +27,8 @@ namespace DownloadsManager
     public partial class MainWindow : Window
     {
 
-        private DispatcherTimer timer = new DispatcherTimer();
-        private MainWindowVM model;
+       private DispatcherTimer timer = new DispatcherTimer();
+       private MainWindowVM model;
 
         /// <summary>
         /// MainWindow ctor

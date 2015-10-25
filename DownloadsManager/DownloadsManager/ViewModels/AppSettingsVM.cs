@@ -9,10 +9,8 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.ViewModels
 {
-    public class AppSettingsVM : INotifyPropertyChanged
+    public class AppSettingsVM : MainVM
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public AppSettingsVM()
         {
             this.SaveSettingsCmd = new Command(SaveSettings);
@@ -64,7 +62,7 @@ namespace DownloadsManager.ViewModels
 
         public Command SaveSettingsCmd { get; set; }
 
-        private void SaveSettings(object param)
+        private void SaveSettings()
         {
             Settings.Default.CleanEndedDownloads = CleanEndedDownloads;
             Settings.Default.DefaultSavePathApps = DefaultSavePathApps;
@@ -80,17 +78,5 @@ namespace DownloadsManager.ViewModels
             NotifyPropertyChanged("DefaultSavePathPictures");
             NotifyPropertyChanged("CleanEndedDownloads");
         }
-
-        #region INotifyPropertyChanged
-
-        private void NotifyPropertyChanged(string property)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
-            }
-        }
-
-        #endregion
     }
 }

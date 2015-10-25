@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.Core.Concrete
 {
+    [Serializable]
     public class FileSegmentSizeCalculatorHelper : IFileSegmentCalculator
     {
         /// <summary>

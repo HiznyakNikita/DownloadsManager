@@ -9,11 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DownloadsManager.Core", "Do
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DownloadsManager.Tests", "DownloadsManager.Tests\DownloadsManager.Tests.csproj", "{9649A739-A6C7-43A8-8CDF-ADF1E72903C0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{F87158AD-7066-48B0-88A2-496E268AF3CA}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\packages.config = .nuget\packages.config
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
