@@ -6,14 +6,22 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace DownloadsManager.ViewModels
 {
-    public class NewDownloadVM : MainVM
+    public class NewDownloadVM : MainVM, INewDownloadVM
     {
         private readonly List<ResourceInfo> mirrors = new List<ResourceInfo>();
         private ResourceInfo mirror;
         private string savePath;
+
+        /// <summary>
+        /// ctor
+        /// </summary>
+        public NewDownloadVM()
+        {
+        }
 
         /// <summary>
         /// Gets mirrors for downloading
@@ -90,6 +98,33 @@ namespace DownloadsManager.ViewModels
             ri.Url = mirrorToAdd;
             this.mirror = ri;
             NotifyPropertyChanged("Mirror");
+        }
+
+        public void AddDownload()
+        {
+            string fileName = string.Empty;
+            fileName = Mirror != null
+                ? GetFileName(Mirror)
+                : GetFileName(Mirrors.First());
+
+            Downloader fileToDownload = new Downloader(
+                Mirror,
+                Mirrors.ToArray(),
+                SavePath,
+                fileName);
+            DownloaderManager.Instance.Add(fileToDownload, true);
+        }
+
+        private static string GetFileName(ResourceInfo mirror)
+        {
+            Uri uri = new Uri(mirror.Url);
+            var fileName = uri.Segments[uri.Segments.Length - 1];
+            return HttpUtility.UrlDecode(fileName).Replace("/", "\\");
+        }
+
+        public void AddSavePath(string path)
+        {
+            SavePath = path;
         }
     }
 }

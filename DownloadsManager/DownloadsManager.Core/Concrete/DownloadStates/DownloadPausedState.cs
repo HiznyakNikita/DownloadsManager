@@ -15,17 +15,17 @@ namespace DownloadsManager.Core.Concrete.DownloadStates
     {
         private Downloader downloader;
 
+        public DownloadPausedState(Downloader downloader)
+        {
+            this.downloader = downloader;
+        }
+
         public DownloadState State
         {
             get
             {
                 return DownloadState.Paused;
             }
-        }
-
-        public DownloadPausedState(Downloader downloader)
-        {
-            this.downloader = downloader;
         }
 
         public void Pause()

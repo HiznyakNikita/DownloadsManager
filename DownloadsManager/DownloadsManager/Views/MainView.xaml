@@ -1,4 +1,4 @@
-﻿<Window x:Class="DownloadsManager.MainWindow"
+﻿<Window x:Class="DownloadsManager.MainView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:DownloadsManager.ViewModels"
@@ -36,22 +36,7 @@
             </TabItem>
             <TabItem Header="STATISTIC">
                 <StackPanel Orientation="Vertical">
-                    <StackPanel Orientation="Horizontal">
-                        <StackPanel Orientation="Vertical">
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Total downloads:" IsEnabled="False" FontSize="20" HorizontalAlignment="Left"
-                                   VerticalAlignment="Top" Foreground="WhiteSmoke"  Style="{StaticResource LabelSmallStyle}"/>
-                                <Label x:Name="lblTotalDownloads" Content="{Binding ItemsToDownloaders.Count}" IsEnabled="False" HorizontalAlignment="Left"
-                                   VerticalAlignment="Top" Foreground="WhiteSmoke" FontSize="20" Style="{StaticResource LabelSmallStyle}"/>
-
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Bytes downloaded:" IsEnabled="False" HorizontalAlignment="Left"
-                                   VerticalAlignment="Top" Foreground="WhiteSmoke" FontSize="20" Style="{StaticResource LabelSmallStyle}"/>
-                                <Label x:Name="lblTotalBytesDownloaded" Content="{Binding TotalBytesDownloadedStatistic}" IsEnabled="False" HorizontalAlignment="Left"
-                                   VerticalAlignment="Top" Foreground="WhiteSmoke" FontSize="20" Style="{StaticResource LabelSmallStyle}"/>
-                            </StackPanel>
-                        </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <metroChart:PieChart
                         ChartTitle="Downloads types"
                         ChartSubTitle="statistic"
@@ -78,7 +63,23 @@
                             </metroChart:PieChart.Series>
                         </metroChart:PieChart>
                     </StackPanel>
-                    <StackPanel Orientation="Vertical" Margin="0,0,-459,0">
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Total downloads:" IsEnabled="False" FontSize="20" HorizontalAlignment="Left"
+                                   VerticalAlignment="Top" Foreground="WhiteSmoke"  Style="{StaticResource LabelSmallStyle}"/>
+                                <Label x:Name="lblTotalDownloads" Content="{Binding ItemsToDownloaders.Count}" IsEnabled="False" HorizontalAlignment="Left"
+                                   VerticalAlignment="Top" Foreground="WhiteSmoke" FontSize="20" Style="{StaticResource LabelSmallStyle}"/>
+
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Bytes downloaded:" IsEnabled="False" HorizontalAlignment="Left"
+                                   VerticalAlignment="Top" Foreground="WhiteSmoke" FontSize="20" Style="{StaticResource LabelSmallStyle}"/>
+                                <Label x:Name="lblTotalBytesDownloaded" Content="{Binding TotalBytesDownloadedStatistic}" IsEnabled="False" HorizontalAlignment="Left"
+                                   VerticalAlignment="Top" Foreground="WhiteSmoke" FontSize="20" Style="{StaticResource LabelSmallStyle}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Right">
                         <Label Content="Download history" HorizontalAlignment="Left" 
                                    VerticalAlignment="Top" FontSize="24" Style="{StaticResource LabelSmallStyle}"/>
                         <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
@@ -90,12 +91,20 @@
                                     VerticalAlignment="Top" Width="75" Height="25" Margin="2"
                         	x:Name="BtnChooseHistoryPeriod" Style="{StaticResource buttonWithTextStyle}"/>
                         </StackPanel>
-                        <ListBox x:Name="lstBoxDownloadsHistory" Margin="5,5,0,5" Width="1031" HorizontalAlignment="Left"
+                            <ListBox x:Name="lstBoxDownloadsHistory" Margin="5,5,0,5" Width="436" HorizontalAlignment="Left"
                                  ItemsSource="{Binding DownloadsHistory, UpdateSourceTrigger=PropertyChanged}"
-                             ScrollViewer.VerticalScrollBarVisibility="Disabled" BorderBrush="#FF74B71B" 
-                                 Foreground="#FF74B71B" Background="Transparent" DisplayMemberPath="FileName" 
-                             Height="350"  VerticalAlignment="Top" IsEnabled="True" Style="{StaticResource ListBoxStyle}"/>
+                             ScrollViewer.VerticalScrollBarVisibility="Disabled" BorderBrush="  #6495ED" 
+                                 Foreground="  #6495ED" Background="Transparent" DisplayMemberPath="FileName" 
+                             Height="350"  VerticalAlignment="Top" IsEnabled="True">
+                            <ListBox.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Show in folder" Command="{Binding ShowInFolderCmd}"
+                                        CommandParameter="{Binding ElementName=lstBoxDownloadsHistory, Path=SelectedIndex}"></MenuItem>
+                                </ContextMenu>
+                            </ListBox.ContextMenu>
+                        </ListBox>
                     </StackPanel>
+                </StackPanel>
                 </StackPanel>
             </TabItem>
         </TabControl>

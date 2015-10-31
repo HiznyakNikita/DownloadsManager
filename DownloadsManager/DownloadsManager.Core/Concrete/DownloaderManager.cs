@@ -42,6 +42,12 @@ namespace DownloadsManager.Core.Concrete
 
         #region Properties
 
+        public Downloader LastDownload
+        {
+            get;
+            private set;
+        }
+
         public ReadOnlyCollection<Downloader> Downloads
         {
             get
@@ -154,6 +160,7 @@ namespace DownloadsManager.Core.Concrete
                 lock (lockObj)
                 {
                     downloads.Add(downloader);
+                    LastDownload = downloader;
                 }
 
                 if (autoStart)

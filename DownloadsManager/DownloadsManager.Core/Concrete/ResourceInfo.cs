@@ -51,6 +51,18 @@ namespace DownloadsManager.Core.Concrete
             set { password = value; }
         }
 
+        /// <summary>
+        /// Gets protocol provider for resource
+        /// </summary>
+        /// <returns>IProtocolProvider object for resource</returns>
+        public IProtocolProvider ProtocolProvider
+        {
+            get
+            {
+                return BindProtocolProviderInstance();
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -65,7 +77,7 @@ namespace DownloadsManager.Core.Concrete
         public static ResourceInfo[] FromUrlArray(string[] urls)
         {
             List<ResourceInfo> result = new List<ResourceInfo>();
-            if(urls != null)
+            if (urls != null)
             for (int i = 0; i < urls.Length; i++)
             {
                 ////TODO check is it url by regex
@@ -88,18 +100,6 @@ namespace DownloadsManager.Core.Concrete
             ri.Password = password;
             return ri;
         } 
-
-        /// <summary>
-        /// Gets protocol provider for resource
-        /// </summary>
-        /// <returns>IProtocolProvider object for resource</returns>
-        public IProtocolProvider ProtocolProvider
-        {
-            get
-            {
-                return BindProtocolProviderInstance();
-            }
-        }
 
         /// <summary>
         /// bind protocol provider for resource

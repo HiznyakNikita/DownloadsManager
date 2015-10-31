@@ -23,10 +23,11 @@ namespace DownloadsManager.Core.Concrete
 {
     [CLSCompliant(true)]
     [Serializable]
+
     /// <summary>
     /// Class which represent every download
     /// </summary>
-    public class Downloader : IDownloader, INotifyPropertyChanged
+    public class Downloader : IDownloader, INotifyPropertyChanged, IEquatable<Downloader>
     {
         [NonSerialized]
         private Thread mainThread;
@@ -59,7 +60,6 @@ namespace DownloadsManager.Core.Concrete
         /// <param name="localFile">local file info for downloading</param>
         /// <param name="segments">segments for downloading</param>
         /// <param name="remoteInfo">remote file info (place here after getting file info from server)</param>
-        /// <param name="requestedSegmentCount">segment ount for request</param>
         /// <param name="createdDateTime">date time of creating dowloader</param>
         /// <param name="fileName">name of file</param>
         public Downloader(
@@ -112,7 +112,7 @@ namespace DownloadsManager.Core.Concrete
                 : new List<ResourceInfo>(mirrors);
 
             LocalFile = localFile;
-            if(resourceInfo!=null)
+            if (resourceInfo != null)
                 ProtocolProvider = resourceInfo.BindProtocolProviderInstance();
 
             fileSegmentCalculator = new FileSegmentSizeCalculatorHelper();
@@ -234,6 +234,7 @@ namespace DownloadsManager.Core.Concrete
         }
 
         [XmlIgnore]
+
         /// <summary>
         /// Gets work download threads
         /// </summary>
@@ -327,6 +328,7 @@ namespace DownloadsManager.Core.Concrete
             {
                 return state;
             }
+
             set
             {
                 state = value;
@@ -361,6 +363,7 @@ namespace DownloadsManager.Core.Concrete
         }
 
         [XmlIgnore]
+
         /// <summary>
         /// Gets or sets main thread
         /// </summary>
@@ -457,6 +460,7 @@ namespace DownloadsManager.Core.Concrete
             {
                 calculatedSegments = this.SegmentCalculator.GetSegments(segmentCount, remoteFileInfo);
             }
+
             if (threads != null)
             {
                 lock (threads)
@@ -464,6 +468,7 @@ namespace DownloadsManager.Core.Concrete
                     threads.Clear();
                 }
             }
+
             lock (segments)
             {
                 segments.Clear();
@@ -502,6 +507,7 @@ namespace DownloadsManager.Core.Concrete
                     workThreads.AddRange(threads);
                 }
             }
+
             foreach (Thread t in workThreads)
             {
                 bool finished = t.Join(timeout);
@@ -529,7 +535,7 @@ namespace DownloadsManager.Core.Concrete
             }
             catch (Exception)
             {
-                throw new Exception();
+                throw new InvalidOperationException();
             }
         }
 
@@ -541,7 +547,7 @@ namespace DownloadsManager.Core.Concrete
             }
             catch (Exception)
             {
-                throw new Exception();
+                throw new InvalidOperationException();
             }
         }
 
@@ -952,6 +958,43 @@ namespace DownloadsManager.Core.Concrete
 
                 return mirrors[mirrorCounter++];
             }
+        }
+
+        public override int GetHashCode()
+        {
+            return this.CreatedDateTime.GetHashCode() 
+                ^ this.FileName.GetHashCode() 
+                ^ this.FileSize.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Downloader);
+        }
+
+        //public override bool operator=(Downloader other)
+        //{
+        //    return EqualityComparer<Downloader>.Default.Equals(this, other);
+        //}
+
+        //public override bool operator!=(Downloader other)
+        //{
+        //    return !(this == other);
+        //}
+
+        public bool Equals(Downloader other)
+        {
+            if (other == null)
+                return false;
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            return this.FileName == other.FileName
+                && this.FileSize == other.FileSize
+                && this.CreatedDateTime == other.CreatedDateTime;
         }
 
         #endregion

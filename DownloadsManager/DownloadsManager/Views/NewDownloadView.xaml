@@ -30,9 +30,9 @@
                     <Label Content="URL:" IsEnabled="False" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource LabelSmallStyle}"/>
                     <TextBox IsEnabled ="False" Margin="5,5,0,5" x:Name="tbUrlToDownloadAlternative" Style="{StaticResource TextBoxStyle}" 
                              HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="261"/>
-                    <ListBox x:Name="lstBoxAlternativeUrl" Margin="5" HorizontalAlignment="Left" ItemsSource="{Binding Mirrors, UpdateSourceTrigger=PropertyChanged}" 
-                             ScrollViewer.VerticalScrollBarVisibility="Disabled" BorderBrush="#FF74B71B" Foreground="#FF74B71B" Background="#FF575757" 
-                             Height="154" VerticalAlignment="Top" Width="272" IsEnabled="False" Style="{StaticResource ListBoxStyle}"/>
+                    <ListBox x:Name="lstBoxAlternativeUrl" Margin="5,5,0,5" HorizontalAlignment="Left" ItemsSource="{Binding Mirrors, UpdateSourceTrigger=PropertyChanged}" 
+                             ScrollViewer.VerticalScrollBarVisibility="Disabled" BorderBrush="  #6495ED" Foreground="  #6495ED" Background="#FF575757" 
+                             Height="154" VerticalAlignment="Top" Width="261" IsEnabled="False" Style="{StaticResource ListBoxStyle}"/>
                     <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Right">
                         <Button Margin="5" x:Name="btnOk" Content="OK" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="BtnOk_Click" Style="{StaticResource buttonWithTextStyle}" Height="20"/>
                         <Button Margin="5" x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="BtnCancel_Click" Style="{StaticResource buttonWithTextStyle}" Height="20"/>

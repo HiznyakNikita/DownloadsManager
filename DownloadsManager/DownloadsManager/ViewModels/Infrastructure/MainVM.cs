@@ -15,7 +15,8 @@ namespace DownloadsManager.ViewModels.Infrastructure
 
         protected void NotifyPropertyChanged(string property)
         {
-            if (PropertyChanged != null)
+            var propertyChanged = PropertyChanged;
+            if (propertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(property));
             }

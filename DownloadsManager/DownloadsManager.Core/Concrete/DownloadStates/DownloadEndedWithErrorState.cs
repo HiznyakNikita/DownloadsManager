@@ -15,17 +15,17 @@ namespace DownloadsManager.Core.Concrete.DownloadStates
     {
         private Downloader downloader;
 
+        public DownloadEndedWithErrorState(Downloader downloader)
+        {
+            this.downloader = downloader;
+        }
+
         public DownloadState State 
         { 
             get
             {
                 return DownloadState.EndedWithError;
             }
-        }
-
-        public DownloadEndedWithErrorState(Downloader downloader)
-        {
-            this.downloader = downloader;
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace DownloadsManager.Core.Concrete.DownloadStates
         /// <summary>
         /// StartDownloadThreadProc
         /// </summary>
-        /// <param name="objSegmentCount">Segment count</param>
+        /// <param name="startDownloadThreadParameter">Segment count</param>
         public void StartDownloadThread(object startDownloadThreadParameter) 
         {
             downloader.SetState(new DownloadPreparingState(downloader));
@@ -60,7 +60,7 @@ namespace DownloadsManager.Core.Concrete.DownloadStates
 
             do
             {
-                downloader.DownloadingErrors= null;
+                downloader.DownloadingErrors = null;
 
                 downloader.SetState(new DownloadPreparingState(downloader));
 

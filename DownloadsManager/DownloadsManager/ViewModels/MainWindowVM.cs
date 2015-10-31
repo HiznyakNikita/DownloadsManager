@@ -10,6 +10,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,7 @@ namespace DownloadsManager.ViewModels
     /// <summary>
     /// Main Window View Model
     /// </summary>
-    public class MainWindowVM : MainVM
+    public class MainWindowVM : MainVM, IMainWindowVM
     {
         private Hashtable _itemsToDownloaders = new Hashtable();
         private int _historyPeriod = 1;
@@ -36,16 +37,37 @@ namespace DownloadsManager.ViewModels
             this.AddDownloadCmd = new Command(this.AddDownload);
             this.CloseCmd = new Command(this.Close);
             this.SetHistoryPeriodCmd = new Command(this.SetHistoryPeriod);
+            this.ShowInFolderCmd = new Command(this.ShowInFolder);
             AddSavedDownloads();
 
         }
+
+        /// <summary>
+        /// Gets or sets Command for adding download
+        /// </summary>
+        public Command AddDownloadCmd { get; set; }
+
+        /// <summary>
+        /// Command for closing app window and saving results
+        /// </summary>
+        public Command CloseCmd { get; set; }
+
+        /// <summary>
+        /// Command for set value of days in downloads history period
+        /// </summary>
+        public Command SetHistoryPeriodCmd { get; set; }
+
+        /// <summary>
+        /// Command for showing download in folder
+        /// </summary>
+        public Command ShowInFolderCmd { get; set; }
 
         public List<Downloader> DownloadsHistory
         { 
             get
             {
                 return _itemsToDownloaders.Keys.OfType<Downloader>()
-                    .Where(d => d.CreatedDateTime.CompareTo(DateTime.Now.AddDays(-_historyPeriod))>0).ToList();
+                    .Where(d => d.CreatedDateTime.CompareTo(DateTime.Now.AddDays(-_historyPeriod)) > 0).ToList();
             }
         }
 
@@ -73,6 +95,14 @@ namespace DownloadsManager.ViewModels
             }
         }
 
+        public Hashtable ItemsToDownloaders
+        {
+            get
+            {
+                return _itemsToDownloaders;
+            }
+        }
+
         private void AddSavedDownloads()
         {
             try
@@ -80,53 +110,42 @@ namespace DownloadsManager.ViewModels
                 var downloads = DownloadsSerializer.Deserialize();
                 foreach (var fileToDownload in downloads)
                 {
-                    //@
                     if (fileToDownload.State.State != DownloadState.Ended
                         && fileToDownload.State.State != DownloadState.EndedWithError)
                     {
                         DownloaderManager.Instance.Add(fileToDownload, true);
                     }
-                    var viewer = new DownloadViewer();
-                    viewer.DataContext = new DownloadViewerVM(fileToDownload);
-                    _itemsToDownloaders.Add(fileToDownload, viewer);
+
+                    using (var container = AutofacHelper.Container)
+                    {
+                        var controlCreator = new ControlCreator();
+                        var viewer = controlCreator.CreateControl(new DownloadViewerVM(fileToDownload));
+                        _itemsToDownloaders.Add(fileToDownload, viewer);
+                    }
                 }
 
                 NotifyPropertyChanged("ItemsToDownloaders");
             }
             catch (FileNotFoundException)
             {
-                //@
-            }
-        }
-
-        public Hashtable ItemsToDownloaders
-        { 
-            get
-            {
-                return _itemsToDownloaders;
+                throw new FileNotFoundException();
             }
         }
 
         #region Commands
 
-        /// <summary>
-        /// Gets or sets Command for adding download
-        /// </summary>
-        public Command AddDownloadCmd { get; set; }
-
-        /// <summary>
-        /// Command for closing app window and saving results
-        /// </summary>
-        public Command CloseCmd { get; set; }
-
-        /// <summary>
-        /// Command for set value of days in downloads history period
-        /// </summary>
-        public Command SetHistoryPeriodCmd { get; set; }
+        private void ShowInFolder(object param)
+        {
+            if (param != null)
+            {
+                Downloader download = param as Downloader;
+                Process.Start(download.LocalFile);
+            }
+        }
 
         private void SetHistoryPeriod(object param)
         {
-            if (!Int32.TryParse(param.ToString(), out _historyPeriod))
+            if (!int.TryParse(param.ToString(), out _historyPeriod))
                 throw new InvalidOperationException();
             NotifyPropertyChanged("DownloadsHistory");
         }
@@ -134,55 +153,44 @@ namespace DownloadsManager.ViewModels
         private void Close(object param)
         {
             List<Downloader> downloadsToSave = new List<Downloader>();
-            foreach(var download in _itemsToDownloaders.Keys.OfType<Downloader>().ToList())
+            foreach (var download in _itemsToDownloaders.Keys.OfType<Downloader>().ToList())
             {
                 try
                 {
                     download.State.Pause();
                 }
-                catch(InvalidOperationException)
+                catch (InvalidOperationException)
                 {
                     Console.WriteLine();
                 }
+
                 downloadsToSave.Add(download);
             }
+
             DownloadsSerializer.Serialize(downloadsToSave);
         }
 
-        //AutoFac
+        public Hashtable GetDownloaders()
+        {
+            return ItemsToDownloaders;
+        }
+
         /// <summary>
         /// Method for adding download
         /// </summary>
         /// <param name="param">Download param</param>
         private void AddDownload(object param)
         {
-            NewDownloadView newDownloadView = new NewDownloadView();
-            newDownloadView.ShowDialog();
-            string fileName = string.Empty;
-            fileName = newDownloadView.Model.Mirror != null
-                ? GetFileName(newDownloadView.Model.Mirror)
-                : GetFileName(newDownloadView.Model.Mirrors.First());
+            IWindowOpener windowOpener = new WindowOpener();
+            windowOpener.OpenNewWindow(new NewDownloadVM());
+            Downloader fileToDownload = DownloaderManager.Instance.LastDownload;
 
-            Downloader fileToDownload = new Downloader(
-                newDownloadView.Model.Mirror, 
-                newDownloadView.Model.Mirrors.ToArray(),
-                newDownloadView.Model.SavePath, 
-                fileName);
-            DownloaderManager.Instance.Add(fileToDownload, true);
-                    
-            var viewer = new DownloadViewer();
+            IControlCreator controlCreator = new ControlCreator();
+            DownloadViewerVM model = new DownloadViewerVM(fileToDownload);
+            var viewer = controlCreator.CreateControl(model);
             
-            viewer.DataContext = new DownloadViewerVM(fileToDownload);
-
             _itemsToDownloaders.Add(fileToDownload, viewer);
             NotifyPropertyChanged("ItemsToDownloaders");
-        }
-
-        private static string GetFileName(ResourceInfo mirror)
-        {
-            Uri uri = new Uri(mirror.Url);
-            var fileName = uri.Segments[uri.Segments.Length - 1];
-            return HttpUtility.UrlDecode(fileName).Replace("/", "\\");
         }
 
         #endregion
@@ -191,13 +199,14 @@ namespace DownloadsManager.ViewModels
         private List<DownloadStatisticWrapper> GetTypesStatistic()
         {
             List<DownloadStatisticWrapper> result = new List<DownloadStatisticWrapper>();
-            foreach(Downloader file in _itemsToDownloaders.Keys)
+            foreach (Downloader file in _itemsToDownloaders.Keys)
             {
                 if (result.Where(d => d.FileType == file.FileType).Count() > 0)
                     result.Where(d => d.FileType == file.FileType).FirstOrDefault().Count++;
                 else
-                    result.Add(new DownloadStatisticWrapper(file.FileType,1,file.State.State));
+                    result.Add(new DownloadStatisticWrapper(file.FileType, 1, file.State.State));
             }
+
             return result;
         }
 
@@ -211,6 +220,7 @@ namespace DownloadsManager.ViewModels
                 else
                     result.Add(new DownloadStatisticWrapper(file.FileType, 1, file.State.State));
             }
+
             return result;
         }
         #endregion

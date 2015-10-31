@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace DownloadsManager.Core.Concrete
 {
     [Serializable]
+
     /// <summary>
     /// Information about remote downoloaded file
     /// </summary>

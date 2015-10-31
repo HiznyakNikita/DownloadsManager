@@ -3,6 +3,7 @@ using DownloadsManager.ViewModels.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,7 @@ namespace DownloadsManager.ViewModels
     /// <summary>
     /// View model for DownloadViewer
     /// </summary>
-    public class DownloadViewerVM : MainVM
+    public class DownloadViewerVM : MainVM, IDownloadViewerVM
     {
         private Downloader download;
 
@@ -28,7 +29,8 @@ namespace DownloadsManager.ViewModels
                 this.download = downloader;
 
             this.StartDownloadCmd = new Command(this.StartDownload);
-            this.PauseDownloadCmd = new Command(this.PauseDownload);
+            this.PauseDownloadCommand = new Command(this.PauseDownload);
+            this.ShowInFolderCmd = new Command(this.ShowInFolder);
             //// Attach EventHandler
             this.download.PropertyChanged += Downloader_PropertyChanged;
         }
@@ -122,17 +124,40 @@ namespace DownloadsManager.ViewModels
             }
         }
 
-        public Command PauseDownloadCmd { get; set; }
+        public Command PauseDownloadCommand { get; set; }
+
         public Command StartDownloadCmd { get; set; }
+
+        /// <summary>
+        /// Command for showing download in folder
+        /// </summary>
+        public Command ShowInFolderCmd { get; set; }
+
+        private void ShowInFolder(object param)
+        {
+            Process.Start(download.LocalFile);
+        }
 
         private void StartDownload()
         {
-            download.Start();
+            try
+            {
+                download.Start();
+            }
+            catch(InvalidOperationException) 
+            { 
+            }
         }
 
         private void PauseDownload()
         {
-            download.Pause();
+            try
+            {
+                download.Pause();
+            }
+            catch (InvalidOperationException) 
+            { 
+            }
         }
 
         private void Downloader_PropertyChanged(object sender, PropertyChangedEventArgs e)

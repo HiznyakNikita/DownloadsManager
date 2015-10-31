@@ -14,6 +14,8 @@ namespace DownloadsManager.Core.Abstract
 {
     public interface IDownloaderState
     {
+        DownloadState State { get; }
+
         /// <summary>
         /// Change state of object
         /// </summary>
@@ -35,8 +37,6 @@ namespace DownloadsManager.Core.Abstract
         /// Method for paused download
         /// </summary>
         void Pause();
-
-        DownloadState State { get; }
     }
 
 }

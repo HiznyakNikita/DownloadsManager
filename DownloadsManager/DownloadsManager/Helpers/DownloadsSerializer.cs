@@ -20,6 +20,7 @@ namespace DownloadsManager.Helpers
                 new BinaryFormatter().Serialize(fs, downloads);
                 fs.Flush();
             }
+
             //using (MemoryStream ms = new MemoryStream())
             //{
             //    using (FileStream file = new FileStream("d:\\file.txt", FileMode.Create, FileAccess.Write))

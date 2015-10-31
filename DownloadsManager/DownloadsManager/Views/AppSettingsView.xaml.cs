@@ -1,4 +1,5 @@
 ﻿using DownloadsManager.ViewModels;
+using DownloadsManager.ViewModels.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,11 +22,12 @@ namespace DownloadsManager.Views
     /// </summary>
     public partial class AppSettingsView : Window, INotifyPropertyChanged
     {
-        private AppSettingsVM model;
+        private IAppSettingsVM model;
 
-        public AppSettingsView()
+        public AppSettingsView(IAppSettingsVM viewModel)
         {
             InitializeComponent();
+            this.DataContext = model = viewModel;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -33,7 +35,7 @@ namespace DownloadsManager.Views
         /// <summary>
         /// Gets or sets VM of view
         /// </summary>
-        public AppSettingsVM Model
+        public IAppSettingsVM Model
         {
             get
             {
@@ -52,65 +54,7 @@ namespace DownloadsManager.Views
             this.Close();
         }
 
-        private void BtnChooseMusicFolderSaveTo_Click(object sender, RoutedEventArgs e)
-        {
-            using (System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog())
-            {
-                System.Windows.Forms.DialogResult result = folderBrowserDialog1.ShowDialog();
-                if (result == System.Windows.Forms.DialogResult.OK)
-                {
-                    tbSaveMusicPathTo.Text = folderBrowserDialog1.SelectedPath;
-                }
-            }
-        }
-
-        private void BtnChoosePictureFolderSaveTo_Click(object sender, RoutedEventArgs e)
-        {
-            using (System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog())
-            {
-                System.Windows.Forms.DialogResult result = folderBrowserDialog1.ShowDialog();
-                if (result == System.Windows.Forms.DialogResult.OK)
-                {
-                    tbSavePictureToPath.Text = folderBrowserDialog1.SelectedPath;
-                }
-            }
-        }
-
-        private void BtnChooseVideoFolderSaveTo_Click(object sender, RoutedEventArgs e)
-        {
-            using (System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog())
-            {
-                System.Windows.Forms.DialogResult result = folderBrowserDialog1.ShowDialog();
-                if (result == System.Windows.Forms.DialogResult.OK)
-                {
-                    tbSaveVideoToPath.Text = folderBrowserDialog1.SelectedPath;
-                }
-            }
-        }
-
-        private void BtnChooseDocumentsFolderSaveTo_Click(object sender, RoutedEventArgs e)
-        {
-            using (System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog())
-            {
-                System.Windows.Forms.DialogResult result = folderBrowserDialog1.ShowDialog();
-                if (result == System.Windows.Forms.DialogResult.OK)
-                {
-                    tbSaveDocumentsToPath.Text = folderBrowserDialog1.SelectedPath;
-                }
-            }
-        }
-
-        private void BtnChooseAppFolderSaveTo_Click(object sender, RoutedEventArgs e)
-        {
-            using (System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog())
-            {
-                System.Windows.Forms.DialogResult result = folderBrowserDialog1.ShowDialog();
-                if (result == System.Windows.Forms.DialogResult.OK)
-                {
-                    tbSaveAppToPath.Text = folderBrowserDialog1.SelectedPath;
-                }
-            }
-        }
+        
 
         #region INotifyPropertyChanged
 

@@ -11,6 +11,7 @@ using System.Xml.Serialization;
 namespace DownloadsManager.Core.Concrete
 {
     [Serializable]
+
     /// <summary>
     /// Class for implementing chunked download
     /// Represent segment of file for downloading
@@ -107,6 +108,7 @@ namespace DownloadsManager.Core.Concrete
         }
 
         [XmlIgnore]
+
         /// <summary>
         /// Gets or sets last error while downloading
         /// </summary>

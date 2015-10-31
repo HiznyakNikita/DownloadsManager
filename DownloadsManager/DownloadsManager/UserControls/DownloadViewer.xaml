@@ -34,8 +34,11 @@
                 <Label x:Name="lblProgressInfo" HorizontalAlignment="Left" 
                        Style="{StaticResource LabelSmallStyle}" Content="{Binding Progress, UpdateSourceTrigger=PropertyChanged}" 
                        Height="25" Width="120"/>
+                <StackPanel Orientation="Horizontal">
                 <Button x:Name="btnPause" Command="{Binding PauseDownloadCmd}" Content="Pause" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20"></Button>
                 <Button x:Name="btnStart" Margin="10" Command="{Binding StartDownloadCmd}" Content="Start" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20"></Button>
+                <Button x:Name="btnShowInFolder" Margin="10" Command="{Binding ShowInFolderCmd}" Content="Folder" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20"></Button>
+                </StackPanel>
 
             </StackPanel>
             <Label x:Name="lblUrlInfo" HorizontalAlignment="Left" 

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.Helpers
 {
+    /// <summary>
+    /// State of clipboard
+    /// </summary>
     public enum ClipboardState
     {
         HasValue,

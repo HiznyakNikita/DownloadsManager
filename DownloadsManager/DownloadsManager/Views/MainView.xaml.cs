@@ -1,6 +1,7 @@
 ﻿using DownloadsManager.Core.Concrete;
 using DownloadsManager.UserControls;
 using DownloadsManager.ViewModels;
+using DownloadsManager.ViewModels.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,19 +25,19 @@ namespace DownloadsManager
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainView : Window
     {
 
        private DispatcherTimer timer = new DispatcherTimer();
-       private MainWindowVM model;
+       private IMainWindowVM _model;
 
         /// <summary>
         /// MainWindow ctor
         /// </summary>
-        public MainWindow()
+        public MainView(IMainWindowVM model)
         {
             InitializeComponent();
-            this.DataContext = model = new MainWindowVM();
+            this.DataContext = _model = model;
             timer.Interval = TimeSpan.FromSeconds(0.5);
             timer.Tick += Timer_Tick;
             timer.Start();
@@ -45,7 +46,7 @@ namespace DownloadsManager
         private void Timer_Tick(object sender, EventArgs e)
         {
             this.itemsControlDownloads.ItemsSource = null;
-            this.itemsControlDownloads.ItemsSource = model.ItemsToDownloaders.Values;
+            this.itemsControlDownloads.ItemsSource = _model.GetDownloaders().Values;
         }
 
         private void BtnCloseWindow_Click(object sender, RoutedEventArgs e)

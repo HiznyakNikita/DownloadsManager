@@ -15,17 +15,17 @@ namespace DownloadsManager.Core.Concrete.DownloadStates
     {
         private Downloader downloader;
 
+        public DownloadPreparedState(Downloader downloader)
+        {
+            this.downloader = downloader;
+        }
+
         public DownloadState State
         {
             get
             {
                 return DownloadState.Prepared;
             }
-        }
-
-        public DownloadPreparedState(Downloader downloader)
-        {
-            this.downloader = downloader;
         }
 
         public void Pause()
@@ -50,7 +50,7 @@ namespace DownloadsManager.Core.Concrete.DownloadStates
 
             do
             {
-                downloader.DownloadingErrors= null;
+                downloader.DownloadingErrors = null;
 
                 downloader.SetState(new DownloadPreparingState(downloader));
 

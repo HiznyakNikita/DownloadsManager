@@ -1,4 +1,5 @@
 ﻿using DownloadsManager.ViewModels;
+using DownloadsManager.ViewModels.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,12 +23,12 @@ namespace DownloadsManager.Views
     /// </summary>
     public partial class NewDownloadView : Window, INotifyPropertyChanged
     {
-        private NewDownloadVM model;
+        private INewDownloadVM _model;
 
-        public NewDownloadView()
+        public NewDownloadView(INewDownloadVM model)
         {
             InitializeComponent();
-            this.DataContext = model = new NewDownloadVM();
+            this.DataContext = _model = model;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -35,16 +36,16 @@ namespace DownloadsManager.Views
         /// <summary>
         /// Gets or sets VM of view
         /// </summary>
-        public NewDownloadVM Model 
+        public INewDownloadVM Model 
         { 
             get
             {
-                return model;
+                return _model;
             }
 
             set
             {
-                model = value;
+                _model = value;
                 NotifyPropertyChanged("Model");
             }
         }
@@ -57,11 +58,12 @@ namespace DownloadsManager.Views
                 {
                     if (!string.IsNullOrEmpty(tbUrlToDownload.Text.ToString()))
                     {
-                        model.AddMirror(tbUrlToDownload.Text);
+                        _model.AddMirror(tbUrlToDownload.Text);
                     }
 
-                    model.SavePath = string.IsNullOrEmpty(tbSaveToPath.Text) ? string.Empty : tbSaveToPath.Text;
-                    
+                    _model.AddSavePath(string.IsNullOrEmpty(tbSaveToPath.Text) ? string.Empty : tbSaveToPath.Text);
+
+                    _model.AddDownload();
                     this.Close();
                 }
             }
@@ -75,7 +77,7 @@ namespace DownloadsManager.Views
         {
             if (lstBoxAlternativeUrl.SelectedItem != null)
             {
-                model.RemoveMirrorFromList(lstBoxAlternativeUrl.SelectedValue.ToString());
+                _model.RemoveMirrorFromList(lstBoxAlternativeUrl.SelectedValue.ToString());
             }
         }
 
@@ -83,7 +85,7 @@ namespace DownloadsManager.Views
         {
             if (!string.IsNullOrEmpty(tbUrlToDownloadAlternative.Text))
             {
-                model.AddMirrorToList(tbUrlToDownloadAlternative.Text);
+                _model.AddMirrorToList(tbUrlToDownloadAlternative.Text);
             }
         }
 

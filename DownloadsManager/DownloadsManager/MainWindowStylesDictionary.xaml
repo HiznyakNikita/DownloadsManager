@@ -194,12 +194,12 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="BorderBrush">
                                 <Setter.Value>
-                                    <SolidColorBrush Color="#FF74B71B"/>
+                                    <SolidColorBrush Color="  #6495ED"/>
                                 </Setter.Value>
                             </Setter>
                             <Setter Property="Foreground">
                                 <Setter.Value>
-                                    <SolidColorBrush Color="#FF74B71B"/>
+                                    <SolidColorBrush Color="  #6495ED"/>
                                 </Setter.Value>
                             </Setter>
                         </Trigger>
@@ -316,10 +316,10 @@
                                 <Condition Property="IsMouseOver" Value="True" />
                                 <Condition Property="IsSelected" Value="False"/>
                             </MultiTrigger.Conditions>
-                            <Setter Property="Foreground" Value="#FF74B71B" />
+                            <Setter Property="Foreground" Value="  #6495ED" />
                         </MultiTrigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Foreground" Value="#FF74B71B" />
+                            <Setter Property="Foreground" Value="  #6495ED" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

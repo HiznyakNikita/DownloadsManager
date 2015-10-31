@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.ViewModels
 {
-    public class AppSettingsVM : MainVM
+    public class AppSettingsVM : MainVM, IAppSettingsVM
     {
         public AppSettingsVM()
         {
@@ -22,34 +22,43 @@ namespace DownloadsManager.ViewModels
             {
                 return Settings.Default.DefaultSavePathMusic;
             }
+
         }
+        
         public static string DefaultSavePathVideo 
         { 
             get
             {
                 return Settings.Default.DefaultSavePathVideo;
             }
+
         }
+        
         public static string DefaultSavePathPictures 
         { 
             get
             {
                 return Settings.Default.DefaultSavePathPictures;
             }
+
         }
+        
         public static string DefaultSavePathApps 
         { 
             get
             {
                 return Settings.Default.DefaultSavePathApps;
             }
+
         }
+
         public static string DefaultSavePathDocuments 
         { 
             get
             {
                 return Settings.Default.DefaultSavePathDocuments;
             }
+
         }
 
         public static bool CleanEndedDownloads 
@@ -58,6 +67,7 @@ namespace DownloadsManager.ViewModels
             {
                 return Settings.Default.CleanEndedDownloads;
             }
+
         }
 
         public Command SaveSettingsCmd { get; set; }

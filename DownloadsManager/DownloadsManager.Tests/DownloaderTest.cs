@@ -14,44 +14,44 @@ namespace DownloadsManager.Tests
     [TestClass]
     public class DownloaderTest
     {
-        [TestMethod]
-        public void DownloadingFileExistTest()
-        {
-            ResourceInfo resourceInfo = new ResourceInfo();
-            resourceInfo.Url = "http://victoriafallsriverlodge.com/wp-content/uploads/2013/09/Lodge-from-walkway.jpg";
-            Downloader download = new Downloader(
-                resourceInfo, null, Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "test.jpg");
-            DownloaderManager.Instance.Add(download, true);
-            Thread.Sleep(30000);
-            Assert.AreEqual(true, File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\test.jpg"));
-            File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\test.jpg");
-        }
+        //[TestMethod]
+        //public void DownloadingFileExistTest()
+        //{
+        //    ResourceInfo resourceInfo = new ResourceInfo();
+        //    resourceInfo.Url = "http://victoriafallsriverlodge.com/wp-content/uploads/2013/09/Lodge-from-walkway.jpg";
+        //    Downloader download = new Downloader(
+        //        resourceInfo, null, Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "test.jpg");
+        //    DownloaderManager.Instance.Add(download, true);
+        //    Thread.Sleep(30000);
+        //    Assert.AreEqual(true, File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\test.jpg"));
+        //    File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\test.jpg");
+        //}
 
-        [TestMethod]
-        public void DownloadingFileEndedTest()
-        {
-            ResourceInfo resourceInfo = new ResourceInfo();
-            resourceInfo.Url = "http://victoriafallsriverlodge.com/wp-content/uploads/2013/09/Lodge-from-walkway.jpg";
-            Downloader download = new Downloader(
-                resourceInfo, null, Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "test.jpg");
-            DownloaderManager.Instance.Add(download, true);
-            Thread.Sleep(30000);
-            Assert.AreEqual(DownloadState.Ended, download.State.State);
-            File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\test.jpg");
-        }
+        //[TestMethod]
+        //public void DownloadingFileEndedTest()
+        //{
+        //    ResourceInfo resourceInfo = new ResourceInfo();
+        //    resourceInfo.Url = "http://victoriafallsriverlodge.com/wp-content/uploads/2013/09/Lodge-from-walkway.jpg";
+        //    Downloader download = new Downloader(
+        //        resourceInfo, null, Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "test.jpg");
+        //    DownloaderManager.Instance.Add(download, true);
+        //    Thread.Sleep(30000);
+        //    Assert.AreEqual(DownloadState.Ended, download.State.State);
+        //    File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\test.jpg");
+        //}
 
-        [TestMethod]
-        public void DownloadSegmentationTest()
-        {
-            ResourceInfo resourceInfo = new ResourceInfo();
-            resourceInfo.Url = "http://victoriafallsriverlodge.com/wp-content/uploads/2013/09/Lodge-from-walkway.jpg";
-            Downloader download = new Downloader(
-                resourceInfo, null, Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "test.jpg");
-            DownloaderManager.Instance.Add(download, true);
-            Thread.Sleep(20000);
-            Assert.AreEqual(5, download.FileSegments.Count);
-            File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\test.jpg");
-        }
+        //[TestMethod]
+        //public void DownloadSegmentationTest()
+        //{
+        //    ResourceInfo resourceInfo = new ResourceInfo();
+        //    resourceInfo.Url = "http://victoriafallsriverlodge.com/wp-content/uploads/2013/09/Lodge-from-walkway.jpg";
+        //    Downloader download = new Downloader(
+        //        resourceInfo, null, Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "test.jpg");
+        //    DownloaderManager.Instance.Add(download, true);
+        //    Thread.Sleep(20000);
+        //    Assert.AreEqual(5, download.FileSegments.Count);
+        //    File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\test.jpg");
+        //}
 
         //[TestMethod]
         //public void PausedResumedDownloadTest()
