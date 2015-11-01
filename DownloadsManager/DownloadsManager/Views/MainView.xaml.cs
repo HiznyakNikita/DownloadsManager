@@ -63,5 +63,17 @@ namespace DownloadsManager
         {
             this.Hide();
         }
+
+        private void BtnChooseHistoryPeriod_Click(object sender, RoutedEventArgs e)
+        {
+            if (datePickerFrom.SelectedDate != null && datePickerTo.SelectedDate != null)
+            {
+                (_model as MainWindowVM).AddHistoryParams((DateTime)datePickerFrom.SelectedDate, (DateTime)datePickerTo.SelectedDate);
+            }
+            else
+            {
+                MessageBox.Show("Wrong seleted dates");
+            }
+        }
     }
 }

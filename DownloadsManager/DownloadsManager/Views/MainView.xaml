@@ -4,7 +4,7 @@
         xmlns:vm="clr-namespace:DownloadsManager.ViewModels"
         xmlns:uc="clr-namespace:DownloadsManager.UserControls"
         xmlns:metroChart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart"
-        Title="MainWindow" Height="350" Width="587" 
+        Title="MainWindow" Height="850" Width="1236" 
         Background="#FF575757" WindowStyle="None" ResizeMode="NoResize" WindowState="Maximized">
     <Window.Resources>
         <DataTemplate DataType="{x:Type vm:MainWindowVM}"/>
@@ -33,15 +33,10 @@
             <TabItem Header="DOWNLOADS">
                 <Grid>
                     <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
-                        <ItemsControl  Width="Auto" 
+                            <ItemsControl  Width="Auto" 
                        Height="Auto" x:Name="itemsControlDownloads"
                        ItemsSource="{Binding ItemsToDownloaders.Values, UpdateSourceTrigger=PropertyChanged}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <uc:DownloadViewer></uc:DownloadViewer>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                            <ItemsControl.ItemContainerStyle>
+                                <ItemsControl.ItemContainerStyle>
                                 <Style>
                                     <Setter Property="FrameworkElement.Margin" Value="5"/>
                                 </Style>
@@ -56,86 +51,76 @@
                         <metroChart:PieChart
                         ChartTitle="Downloads types"
                         ChartSubTitle="statistic"
-                        SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" Height="310" Width="430">
+                        SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" Height="310" Width="588">
                             <metroChart:PieChart.Series>
                                 <metroChart:ChartSeries
                                 SeriesTitle="Types"
                                 DisplayMember="FileType"
                                 ValueMember="Count"
-                                ItemsSource="{Binding Path=DownloadTypesStatistic}" />
+                                ItemsSource="{Binding Path=DownloadTypesStatistic, UpdateSourceTrigger=PropertyChanged}" />
                             </metroChart:PieChart.Series>
                         </metroChart:PieChart>
 
                         <metroChart:PieChart
                         ChartTitle="Downloads states"
                         ChartSubTitle="statistic"
-                        SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" Height="310" Width="430">
+                        SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" Height="310" Width="604">
                             <metroChart:PieChart.Series>
                                 <metroChart:ChartSeries
                                 SeriesTitle="States"
                                 DisplayMember="State"
                                 ValueMember="Count"
-                                ItemsSource="{Binding Path=DownloadStatesStatistic}" />
+                                ItemsSource="{Binding Path=DownloadStatesStatistic, UpdateSourceTrigger=PropertyChanged}" />
                             </metroChart:PieChart.Series>
                         </metroChart:PieChart>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Orientation="Vertical">
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Total downloads:" 
-                                       IsEnabled="False" 
+                                    <Label Content="Total downloads:" 
                                        Style="{StaticResource LabelSmallFont20Style}"/>
-                                <Label x:Name="lblTotalDownloads" 
+                                    <Label x:Name="lblTotalDownloads" 
                                        Content="{Binding ItemsToDownloaders.Count}"
-                                       IsEnabled="False"
-                                       Style="{StaticResource LabelSmallFont20Style}"/>
-
+                                       Style="{StaticResource LabelSmallFont20Style}" Height="38" Width="444"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Bytes downloaded:" 
-                                       IsEnabled="False" 
+                                <Label Content="Total downloaded:" 
                                        Style="{StaticResource LabelSmallFont20Style}"/>
                                 <Label x:Name="lblTotalBytesDownloaded" 
-                                       Content="{Binding TotalBytesDownloadedStatistic}" 
-                                       IsEnabled="False"
-                                       Style="{StaticResource LabelSmallFont20Style}"/>
+                                       Content="{Binding TotalBytesDownloadedStatistic, UpdateSourceTrigger=PropertyChanged}" 
+                                       Style="{StaticResource LabelSmallFont20Style}" FontSize="14" Height="34" Width="440"/>
                             </StackPanel>
                         </StackPanel>
-                    <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Right">
-                        <Label Content="Download history"
-                               FontSize="24" 
-                               Style="{StaticResource LabelSmallInListStyle}"/>
-                        <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-                            <Label Content="Period:" 
-                                   Style="{StaticResource LabelSmallInListStyle}"/>
-                            <TextBox x:Name="tbDownloadsHistoryPeriod" 
-                                     Style="{StaticResource TextBoxStyle}" 
-                                     HorizontalAlignment="Left"
-                                     Margin="2" 
-                                     Height="23" 
-                                     TextWrapping="Wrap" 
-                                     VerticalAlignment="Top" 
-                                     Width="240"/>
-                            <Button Command="{Binding SetHistoryPeriodCmd}" 
-                                    CommandParameter="{Binding Text, ElementName=tbDownloadsHistoryPeriod}" 
-                                    Content="Set" 
-                                    VerticalAlignment="Top" Width="75" Height="25" Margin="2"
-                                    x:Name="BtnChooseHistoryPeriod" Style="{StaticResource buttonWithTextStyle}"/>
+                            <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Right" Width="588">
+                                <Label Content="Download history"
+                    		FontSize="24" 
+                    		Style="{StaticResource LabelSmallInListStyle}"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                                    <Label Content="Period from:" 
+                    			Style="{StaticResource LabelSmallInListStyle}"/>
+                                    <DatePicker x:Name="datePickerFrom" Width="154"/>
+                                    <Label Content="to:" 
+                    			Style="{StaticResource LabelSmallInListStyle}"/>
+                                    <DatePicker x:Name="datePickerTo" Width="154"/>
+                                    <Button 
+                    			Content="Set" 
+                    			VerticalAlignment="Top" Width="75" Height="25" Margin="2"
+                    			x:Name="BtnChooseHistoryPeriod" Style="{StaticResource buttonWithTextStyle}" Click="BtnChooseHistoryPeriod_Click"/>
+                                </StackPanel>
+                                <ListBox x:Name="lstBoxDownloadsHistory" Margin="5,5,0,5" Width="573" HorizontalAlignment="Left"
+                    		ItemsSource="{Binding DownloadsHistory, UpdateSourceTrigger=PropertyChanged}"
+                    		ScrollViewer.VerticalScrollBarVisibility="Disabled" BorderBrush="  #6495ED" 
+                    		Foreground="  #6495ED" Background="Transparent" DisplayMemberPath="FileName" 
+                    		Height="350"  VerticalAlignment="Top" IsEnabled="True">
+                                    <ListBox.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Show in folder" Command="{Binding ShowInFolderCmd}"
+                    					CommandParameter="{Binding SelectedIndex, ElementName=lstBoxDownloadsHistory}"/>
+                                        </ContextMenu>
+                                    </ListBox.ContextMenu>
+                                </ListBox>
+                            </StackPanel>
                         </StackPanel>
-                            <ListBox x:Name="lstBoxDownloadsHistory" Margin="5,5,0,5" Width="435" HorizontalAlignment="Left"
-                                 ItemsSource="{Binding DownloadsHistory, UpdateSourceTrigger=PropertyChanged}"
-                             ScrollViewer.VerticalScrollBarVisibility="Disabled" BorderBrush="  #6495ED" 
-                                 Foreground="  #6495ED" Background="Transparent" DisplayMemberPath="FileName" 
-                             Height="350"  VerticalAlignment="Top" IsEnabled="True">
-                            <ListBox.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Header="Show in folder" Command="{Binding ShowInFolderCmd}"
-                                        CommandParameter="{Binding ElementName=lstBoxDownloadsHistory, Path=SelectedIndex}"></MenuItem>
-                                </ContextMenu>
-                            </ListBox.ContextMenu>
-                        </ListBox>
-                    </StackPanel>
-                </StackPanel>
                 </StackPanel>
             </TabItem>
         </TabControl>

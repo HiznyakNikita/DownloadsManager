@@ -119,6 +119,7 @@
     <Compile Include="Helpers\AutofacHelper.cs" />
     <Compile Include="Helpers\ClipboardState.cs" />
     <Compile Include="Helpers\ControlCreator.cs" />
+    <Compile Include="Helpers\Converters.cs" />
     <Compile Include="Helpers\DownloadsSerializer.cs" />
     <Compile Include="Helpers\DownloadStatisticWrapper.cs" />
     <Compile Include="Helpers\Abstract\IControlCreator.cs" />

@@ -133,8 +133,7 @@ namespace DownloadsManager.ViewModels
         { 
             get
             {
-                return download.Progress.ToString(CultureInfo.InvariantCulture).Length > 4 ? 
-                    download.Progress.ToString(CultureInfo.InvariantCulture).Substring(0, 4) + " %" : "0.0 %";
+                return Math.Round(download.Progress,1).ToString(CultureInfo.CurrentCulture) + " %";
             }
         }
 
