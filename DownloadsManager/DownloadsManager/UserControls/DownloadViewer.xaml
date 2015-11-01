@@ -3,47 +3,65 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:c="clr-namespace:DownloadsManager.UserControls"
              xmlns:vm="clr-namespace:DownloadsManager.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="500" Background="#858585" Opacity="0.3" BorderBrush="WhiteSmoke">
     <UserControl.Resources>
         <DataTemplate DataType="{x:Type vm:DownloadViewerVM}"/>
+        <c:FileTypeToTypeIconConverter x:Key="fileTypeToIconConverter"/>
     </UserControl.Resources>
     <Grid>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
                 <Label x:Name="lblDownloadFileName" HorizontalAlignment="Left" 
-                       Content ="{Binding FileName}" Style="{StaticResource LabelSmallStyle}" 
-                       Height="35" Width="215"/>
+        			Content ="{Binding FileName}" Style="{StaticResource LabelSmallStyle}" 
+        			Height="35" Width="215"/>
                 <Label x:Name="lblStateInfo" HorizontalAlignment="Left" 
-                       Style="{StaticResource LabelSmallStyle}" Content="{Binding State, UpdateSourceTrigger=PropertyChanged}" 
-                       Height="35" Width="160"/>
+        			Style="{StaticResource LabelSmallStyle}" Content="{Binding State, UpdateSourceTrigger=PropertyChanged}" 
+        			Height="35" Width="237"/>
+                <Image x:Name="imgTypeDownload" HorizontalAlignment="Right" Width="40"
+                	Source="{Binding Download.FileType, Converter={StaticResource fileTypeToIconConverter}}"/>
             </StackPanel>
-            <Label x:Name="lblSizeInfo" HorizontalAlignment="Left" 
-                   Style="{StaticResource LabelSmallStyle}" Content="{Binding SizeInfo, UpdateSourceTrigger=PropertyChanged}" 
-                   Height="25" Width="272"></Label>
-            <Label x:Name="lblAddedInfo" HorizontalAlignment="Left" 
-                   Style="{StaticResource LabelSmallStyle}"  Content="{Binding Added}" 
-                   Height="25" Width="120"/>
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Vertical">
+                    <Label x:Name="lblSizeInfo" HorizontalAlignment="Left" 
+        		        Style="{StaticResource LabelSmallStyle}" Content="{Binding SizeInfo, UpdateSourceTrigger=PropertyChanged}" 
+        		        Height="25" Width="272"/>
+                    <Label x:Name="lblAddedInfo" HorizontalAlignment="Left" 
+        		        Style="{StaticResource LabelSmallStyle}"  Content="{Binding Added}" 
+        		        Height="25" Width="120"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Width="227">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Max rate (kb/sec):" Foreground="WhiteSmoke"/>
+                        <TextBox x:Name="tbDownloadMaxRate" Width="118" Height="26"></TextBox>
+                    </StackPanel>
+                    <Button x:Name="btnDownloadSettings" HorizontalAlignment="Right" Margin="5"
+                            Command="{Binding DownloadSettingsCmd}" CommandParameter="{Binding ElementName=tbDownloadMaxRate, Path=Text}"
+                            Content="Save" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20" Click="btnDownloadSettings_Click"/>
+                </StackPanel>
+            </StackPanel>
+
             <StackPanel Orientation="Horizontal">
                 <Label Content="Rate:" Foreground="WhiteSmoke"/>
                 <Label x:Name="lblRateInfo" HorizontalAlignment="Left" 
-                       Style="{StaticResource LabelSmallStyle}" Content="{Binding Rate, UpdateSourceTrigger=PropertyChanged}" 
-                       Height="25" Width="120"/>
+        			Style="{StaticResource LabelSmallStyle}" Content="{Binding Rate, UpdateSourceTrigger=PropertyChanged}" 
+        			Height="25" Width="120"/>
                 <Label Content="Progress:" Foreground="WhiteSmoke"/>
                 <Label x:Name="lblProgressInfo" HorizontalAlignment="Left" 
-                       Style="{StaticResource LabelSmallStyle}" Content="{Binding Progress, UpdateSourceTrigger=PropertyChanged}" 
-                       Height="25" Width="120"/>
+        			Style="{StaticResource LabelSmallStyle}" Content="{Binding Progress, UpdateSourceTrigger=PropertyChanged}" 
+        			Height="25" Width="120"/>
                 <StackPanel Orientation="Horizontal">
-                <Button x:Name="btnPause" Command="{Binding PauseDownloadCmd}" Content="Pause" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20"></Button>
-                <Button x:Name="btnStart" Margin="10" Command="{Binding StartDownloadCmd}" Content="Start" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20"></Button>
-                <Button x:Name="btnShowInFolder" Margin="10" Command="{Binding ShowInFolderCmd}" Content="Folder" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20"></Button>
+                    <Button x:Name="btnPause" Command="{Binding PauseDownloadCmd}" Content="Pause" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20"/>
+                    <Button x:Name="btnStart" Margin="10" Command="{Binding StartDownloadCmd}" Content="Start" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20"/>
+                    <Button x:Name="btnShowInFolder" Margin="10" Command="{Binding ShowInFolderCmd}" Content="Folder" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20"/>
                 </StackPanel>
 
             </StackPanel>
             <Label x:Name="lblUrlInfo" HorizontalAlignment="Left" 
-                   Style="{StaticResource LabelSmallStyle}" Content="{Binding LinkInfo, UpdateSourceTrigger=PropertyChanged}" 
-                   Height="25" Width="500"/>
-        </StackPanel>   
+        		Style="{StaticResource LabelSmallStyle}" Content="{Binding LinkInfo, UpdateSourceTrigger=PropertyChanged}" 
+        		Height="25" Width="500"/>
+        </StackPanel>
     </Grid>
 </UserControl>

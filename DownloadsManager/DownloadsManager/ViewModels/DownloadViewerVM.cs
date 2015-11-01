@@ -1,4 +1,5 @@
 ﻿using DownloadsManager.Core.Concrete;
+using DownloadsManager.Helpers;
 using DownloadsManager.ViewModels.Infrastructure;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,7 @@ namespace DownloadsManager.ViewModels
             this.StartDownloadCmd = new Command(this.StartDownload);
             this.PauseDownloadCommand = new Command(this.PauseDownload);
             this.ShowInFolderCmd = new Command(this.ShowInFolder);
+            this.DownloadSettingsCmd = new Command(this.DownloadSettings);
             //// Attach EventHandler
             this.download.StateChanged += download_StateChanged;
             this.download.ThreadAdded += download_ThreadAdded;
@@ -101,7 +103,7 @@ namespace DownloadsManager.ViewModels
         { 
             get
             {
-                return download.Rate.ToString(CultureInfo.InvariantCulture);
+                return (download.Rate / 100).ToString(CultureInfo.InvariantCulture) + " kb/sec";
             }
         }
 
@@ -132,10 +134,26 @@ namespace DownloadsManager.ViewModels
 
         public Command StartDownloadCmd { get; set; }
 
+        public Command DownloadSettingsCmd { get; set; }
         /// <summary>
         /// Command for showing download in folder
         /// </summary>
         public Command ShowInFolderCmd { get; set; }
+
+        private void DownloadSettings(object param)
+        {
+            try
+            {
+                if(!string.IsNullOrEmpty(param.ToString()))
+                {
+                    download.MaxRate = Convert.ToDouble(param.ToString(), new NumberFormatInfo());
+                }
+            }
+            catch(Exception)
+            {
+                
+            }
+        }
 
         private void ShowInFolder(object param)
         {

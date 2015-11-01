@@ -260,7 +260,13 @@
     <Resource Include="Resources\icons\hide_selected.png" />
     <Resource Include="Resources\icons\hide_unselected.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\icons\app_icon.png" />
+    <Resource Include="Resources\icons\doc_icon.png" />
+    <Resource Include="Resources\icons\image_icon.png" />
+    <Resource Include="Resources\icons\music_icon.png" />
+    <Resource Include="Resources\icons\video_icon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

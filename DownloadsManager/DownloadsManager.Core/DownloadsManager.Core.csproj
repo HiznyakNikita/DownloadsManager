@@ -75,6 +75,8 @@
     <Compile Include="Concrete\Helpers\FileSegmentSizeCalculatorHelper.cs" />
     <Compile Include="Concrete\Helpers\FileTypeIdentifier.cs" />
     <Compile Include="Concrete\Helpers\LocalFilesHelper.cs" />
+    <Compile Include="Concrete\Helpers\SpeedLimitHelper.cs" />
+    <Compile Include="Concrete\LimitedSpeedStreamProxy.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -85,6 +87,7 @@
     <Compile Include="Concrete\RemoteFileInfo.cs" />
     <Compile Include="Concrete\ResourceInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Protocol\HttpProtocolProviderSpeedLimitProxy.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

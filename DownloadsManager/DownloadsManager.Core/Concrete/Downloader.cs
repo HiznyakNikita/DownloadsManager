@@ -86,6 +86,7 @@ namespace DownloadsManager.Core.Concrete
             this.segments = segments;
             State = new DownloadNeedToPrepareState(this);
             FileName = fileName;
+            MaxRate = double.MaxValue;
 
         }
 
@@ -112,10 +113,14 @@ namespace DownloadsManager.Core.Concrete
 
             LocalFile = localFile;
             if (resourceInfo != null)
+            {
                 ProtocolProvider = resourceInfo.BindProtocolProviderInstance();
+                ProtocolProvider = resourceInfo.BindProtocolProviderProxy(new SpeedLimitHelper(this));
+            }
 
             fileSegmentCalculator = new FileSegmentSizeCalculatorHelper();
             FileName = fileName;
+            MaxRate = double.MaxValue;
         }
 
         #region Properties
@@ -142,6 +147,12 @@ namespace DownloadsManager.Core.Concrete
         {
             get;
             private set;
+        }
+
+        public double MaxRate 
+        { 
+            get; 
+            set; 
         }
 
         /// <summary>

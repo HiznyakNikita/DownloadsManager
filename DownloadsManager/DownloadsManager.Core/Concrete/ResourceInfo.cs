@@ -1,4 +1,6 @@
 ﻿using DownloadsManager.Core.Abstract;
+using DownloadsManager.Core.Concrete.Helpers;
+using DownloadsManager.Core.Protocol;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -110,6 +112,21 @@ namespace DownloadsManager.Core.Concrete
             if (provider == null)
             {
                 provider = new HttpProtocolProvider();
+            }
+
+            return provider;
+        }
+
+        /// <summary>
+        /// bind proxy speed limit provider to resource provider
+        /// </summary>
+        /// <param name="speedLimit">speed limit for download</param>
+        /// <returns>proxy provider</returns>
+        public IProtocolProvider BindProtocolProviderProxy(SpeedLimitHelper speedLimit)
+        {
+            if(provider != null)
+            {
+                provider = new HttpProtocolProviderSpeedLimitProxy(provider, speedLimit);
             }
 
             return provider;
