@@ -21,20 +21,19 @@ using DownloadsManager.Core.Concrete.Helpers;
 
 namespace DownloadsManager.Core.Concrete
 {
-    [CLSCompliant(true)]
-    [Serializable]
 
     /// <summary>
     /// Class which represent every download
     /// </summary>
-    public class Downloader : IDownloader, INotifyPropertyChanged, IEquatable<Downloader>
+    [CLSCompliant(true)]
+    [Serializable]
+    public class Downloader : IDownloader, IEquatable<Downloader>
     {
         [NonSerialized]
         private Thread mainThread;
         private RemoteFileInfo remoteFileInfo;
         [NonSerialized]
         private AggregateException downloadingErrors;
-        private IDownloaderState state;
 
         private object syncObject = new object();
         
@@ -119,10 +118,22 @@ namespace DownloadsManager.Core.Concrete
             FileName = fileName;
         }
 
-        [field: NonSerialized]
-        public event PropertyChangedEventHandler PropertyChanged;
-
         #region Properties
+
+        #region Events
+
+        [field: NonSerialized]
+        public event EventHandler SegmentChanged;
+        [field: NonSerialized]
+        public event EventHandler ThreadAdded;
+        [field: NonSerialized]
+        public event EventHandler LocalFileInfoChanged;
+        [field: NonSerialized]
+        public event EventHandler RemoteFileInfoChanged;
+        [field: NonSerialized]
+        public event EventHandler StateChanged;
+
+        #endregion
 
         /// <summary>
         /// Gets ResourceInfo for downloader
@@ -144,10 +155,7 @@ namespace DownloadsManager.Core.Concrete
 
         public FileType FileType 
         { 
-            get
-            {
-                return FileTypeIdentifier.IdentifyType(FileName);
-            }
+            get { return FileTypeIdentifier.IdentifyType(FileName); }
         }
 
         /// <summary>
@@ -155,10 +163,7 @@ namespace DownloadsManager.Core.Concrete
         /// </summary>
         public List<ResourceInfo> Mirrors
         {
-            get
-            {
-                return mirrors;
-            }
+            get { return mirrors; }
         }
 
         /// <summary>
@@ -233,17 +238,13 @@ namespace DownloadsManager.Core.Concrete
             }
         }
 
-        [XmlIgnore]
-
         /// <summary>
         /// Gets work download threads
         /// </summary>
+        [XmlIgnore]
         public List<Thread> Threads
         {
-            get 
-            {
-                return threads;
-            }
+            get { return threads; }
         }
 
         /// <summary>
@@ -309,10 +310,7 @@ namespace DownloadsManager.Core.Concrete
 
         public List<FileSegment> FileSegments
         {
-            get
-            {
-                return segments;
-            }
+            get { return segments; }
         }
 
         [XmlIgnore]
@@ -324,15 +322,8 @@ namespace DownloadsManager.Core.Concrete
 
         public IDownloaderState State
         {
-            get
-            {
-                return state;
-            }
-
-            set
-            {
-                state = value;
-            }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -362,212 +353,22 @@ namespace DownloadsManager.Core.Concrete
             set { fileSegmentCalculator = value; }
         }
 
-        [XmlIgnore]
-
         /// <summary>
-        /// Gets or sets main thread
+        /// Gets or sets man thread
         /// </summary>
+        [XmlIgnore]
         public Thread MainThread
         {
-            get
-            {
-                return mainThread;
-            }
-
-            set
-            {
-                mainThread = value;
-            }
+            get { return mainThread; }
+            set { mainThread = value; }
         }
 
         #endregion
 
-        /// <summary>
-        /// ctor
-        /// </summary>
-        /// <param name="uri">uri</param>
-        /// <param name="path">path</param>
-        public void Download(string uri, string path)
-        {
-            Stream downloadStream;
-            int currentTry = 0;
-
-            do
-            {
-                currentTry++;
-                try
-                {
-                    remoteFileInfo = ProtocolProvider.GetFileInfo(ResourceInfo, out downloadStream);
-                    break;
-                }
-                catch (ThreadAbortException)
-                {
-                    return;
-                }
-                catch (Exception)
-                {
-                    Thread.Sleep(TimeSpan.FromSeconds(10));
-                }
-            }
-            while (true);
-        }
-
-        /// <summary>
-        /// Sets state of downloader
-        /// </summary>
-        /// <param name="stateToSet">State of downloader</param>
-        public void SetState(IDownloaderState stateToSet)
-        {
-            if (stateToSet != null)
-            {
-                State = stateToSet;
-                NotifyPropertyChanged("State");
-            }
-        }
-
-        /// <summary>
-        /// start prepeare fow download
-        /// startDownloadThread method of state starting
-        /// </summary>
-        public void StartToPrepare()
-        {
-            mainThread = new Thread(new ParameterizedThreadStart(State.StartDownloadThread));
-            mainThread.Start(RequestedSegments);
-        }
-
-        /// <summary>
-        /// start already prepeared downloader for file downloading
-        /// </summary>
-        public void StartPrepared()
-        {
-            mainThread = new Thread(new ThreadStart(RestartDownload));
-            mainThread.Start();
-        }
-
-        public void StartSegments(int segmentCount, Stream inputStream)
-        {
-            ////Pre-downloading locate file on local disk
-            LocateLocalFile();
-
-            NotifyPropertyChanged("LocalFile");
-            List<CalculatedFileSegment> calculatedSegments;
-
-            if (!remoteFileInfo.AcceptRanges)
-            {
-                calculatedSegments = new List<CalculatedFileSegment> { new CalculatedFileSegment(0, remoteFileInfo.FileSize) };
-            }
-            else
-            {
-                calculatedSegments = this.SegmentCalculator.GetSegments(segmentCount, remoteFileInfo);
-            }
-
-            if (threads != null)
-            {
-                lock (threads)
-                {
-                    threads.Clear();
-                }
-            }
-
-            lock (segments)
-            {
-                segments.Clear();
-            }
-
-            for (int i = 0; i < calculatedSegments.Count; i++)
-            {
-                FileSegment segment = new FileSegment();
-                if (i == 0)
-                {
-                    segment.InputStream = inputStream;
-                }
-
-                segment.Index = i;
-                segment.InitialStartPosition = calculatedSegments[i].SegmentStartPosition;
-                segment.StartPosition = calculatedSegments[i].SegmentStartPosition;
-                segment.EndPosition = calculatedSegments[i].SegmentEndPosition;
-
-                segments.Add(segment);
-            }
-
-            NotifyPropertyChanged("Segment");
-
-            RunSegments();
-        }
-
-        public bool AllWorkersStopped(int timeout)
-        {
-            bool allFinished = true;
-
-            List<Thread> workThreads = new List<Thread>();
-            if (threads != null)
-            {
-                lock (threads)
-                {
-                    workThreads.AddRange(threads);
-                }
-            }
-
-            foreach (Thread t in workThreads)
-            {
-                bool finished = t.Join(timeout);
-                allFinished = allFinished & finished;
-
-                if (finished && threads != null)
-                {
-                    lock (threads)
-                    {
-                        threads.Remove(t);
-                    }
-                }
-            }
-
-            NotifyPropertyChanged("Threads");
-
-            return allFinished;
-        }
-
-        public void Start()
-        {
-            try
-            {
-                State.Start();
-            }
-            catch (Exception)
-            {
-                throw new InvalidOperationException();
-            }
-        }
-
-        public void Pause()
-        {
-            try
-            {
-                State.Pause();
-            }
-            catch (Exception)
-            {
-                throw new InvalidOperationException();
-            }
-        }
-
-        public void StartDownloadThread(object valueSegmentCount)
-        {
-            try
-            {
-                State.StartDownloadThread(valueSegmentCount);
-                NotifyPropertyChanged("State");
-            }
-            catch (Exception)
-            {
-                throw new Exception();
-            }
-        }
-
         private void RunSegments()
         {
             State.SetState(new DownloadDownloadingState(this));
-            NotifyPropertyChanged("State");
+            OnStateChanged();
             using (FileStream fs = new FileStream(this.LocalFile + "\\" + FileName, FileMode.Open, FileAccess.Write))
             {
                 for (int i = 0; i < this.FileSegments.Count; i++)
@@ -578,7 +379,7 @@ namespace DownloadsManager.Core.Concrete
 
                 do
                 {
-                    while (!AllWorkersStopped(1000));
+                    while (!AllWorkersStopped(1000)) ;
                 }
                 while (RestartFailedSegments());
             }
@@ -593,7 +394,7 @@ namespace DownloadsManager.Core.Concrete
             }
 
             State.SetState(new DownloadEndedState(this));
-            NotifyPropertyChanged("State");
+            OnStateChanged();
         }
 
         private bool RestartFailedSegments()
@@ -623,7 +424,7 @@ namespace DownloadsManager.Core.Concrete
                 }
             }
 
-            NotifyPropertyChanged("Segment");
+            OnSegmentChanged();
 
             Thread.Sleep((int)delay);
 
@@ -634,7 +435,7 @@ namespace DownloadsManager.Core.Concrete
         {
             Thread segmentThread = new Thread(new ParameterizedThreadStart(FileSegmentThreadProc));
             segmentThread.Start(newSegment);
-            NotifyPropertyChanged("Threads");
+            OnThreadAdded();
             if (threads == null)
                 threads = new List<Thread>();
             lock (threads)
@@ -649,7 +450,6 @@ namespace DownloadsManager.Core.Concrete
             int restartTriesCounter = 0;
             ////need for check if information on server have changed while waiting for restart
             RemoteFileInfo reloadedFileInfo;
-
             try
             {
                 do
@@ -660,7 +460,7 @@ namespace DownloadsManager.Core.Concrete
                     try
                     {
                         reloadedFileInfo = ProtocolProvider.GetFileInfo(this.ResourceInfo, out downloadStream);
-                        NotifyPropertyChanged("FileInfo");
+                        OnRemoteFileInfoChanged();
                         break;
                     }
                     catch (Exception)
@@ -668,7 +468,7 @@ namespace DownloadsManager.Core.Concrete
                         if (restartTriesCounter < Settings.Default.MaxTries)
                         {
                             State.SetState(new DownloadWaitingForReconnectState(this));
-                            NotifyPropertyChanged("State");
+                            OnStateChanged();
                             Thread.Sleep(TimeSpan.FromSeconds(Settings.Default.RetrySleepInterval));
                         }
                         else
@@ -682,7 +482,7 @@ namespace DownloadsManager.Core.Concrete
             finally
             {
                 State.SetState(new DownloadPreparedState(this));
-                NotifyPropertyChanged("State");
+                OnStateChanged();
             }
 
             try
@@ -693,7 +493,7 @@ namespace DownloadsManager.Core.Concrete
                     reloadedFileInfo.FileSize != RemoteFileInfo.FileSize)
                 {
                     this.remoteFileInfo = reloadedFileInfo;
-                    NotifyPropertyChanged("RemoteFileInfo");
+                    OnRemoteFileInfoChanged();
                     StartSegments(this.RequestedSegments, downloadStream);
                 }
                 else
@@ -775,13 +575,13 @@ namespace DownloadsManager.Core.Concrete
 
                     //// change the segment URL to the mirror URL
                     segment.CurrentLink = resourceInfo.Url;
-                    NotifyPropertyChanged("Segment");
+                    OnSegmentChanged();
                 }
                 else
                 {
                     ////  change the segment URL to the main URL
                     segment.CurrentLink = ResourceInfo.Url;
-                    NotifyPropertyChanged("Segment");
+                    OnSegmentChanged();
                 }
 
                 ReadSegment(segment, buffSize, buffer);
@@ -792,7 +592,7 @@ namespace DownloadsManager.Core.Concrete
                 //// store the error information
                 segment.State = FileSegmentState.Error;
                 segment.LastError = ex;
-                NotifyPropertyChanged("Segment");
+                OnSegmentChanged();
                 Debug.WriteLine(ex.ToString());
             }
             finally
@@ -820,11 +620,11 @@ namespace DownloadsManager.Core.Concrete
                     {
                         //// adjust the 'readSize' to write only necessary bytes
                         readSize = segment.EndPosition - segment.StartPosition;
-                        NotifyPropertyChanged("Segment");
+                        OnSegmentChanged();
                         if (readSize <= 0)
                         {
                             segment.StartPosition = segment.EndPosition;
-                            NotifyPropertyChanged("Segment");
+                            OnSegmentChanged();
                             break;
                         }
                     }
@@ -835,7 +635,7 @@ namespace DownloadsManager.Core.Concrete
                     {
                         segment.OutputStream.Position = segment.StartPosition;
                         segment.OutputStream.Write(buffer, 0, (int)readSize);
-                        NotifyPropertyChanged("Segment");
+                        OnSegmentChanged();
                     }
 
                     //// increse the start position of the segment and also calculates the rate
@@ -844,7 +644,7 @@ namespace DownloadsManager.Core.Concrete
                     if (segment.EndPosition > 0 && segment.StartPosition >= segment.EndPosition)
                     {
                         segment.StartPosition = segment.EndPosition;
-                        NotifyPropertyChanged("Segment");
+                        OnSegmentChanged();
                         break;
                     }
 
@@ -852,7 +652,7 @@ namespace DownloadsManager.Core.Concrete
                     if (State.State == DownloadState.Pausing)
                     {
                         segment.State = FileSegmentState.Paused;
-                        NotifyPropertyChanged("Segment");
+                        OnSegmentChanged();
                         break;
                     }
 
@@ -861,7 +661,7 @@ namespace DownloadsManager.Core.Concrete
                 if (segment.State == FileSegmentState.Downloading)
                 {
                     segment.State = FileSegmentState.Finished;
-                    NotifyPropertyChanged("State");
+                    OnStateChanged();
 
                     //// try to create other segment, 
                     //// spliting the missing bytes from one existing segment
@@ -897,7 +697,7 @@ namespace DownloadsManager.Core.Concrete
 
                         //// add the new segment to the list
                         segments.Add(newSegment);
-                        NotifyPropertyChanged("Segments");
+                        OnSegmentChanged();
 
                         StartSegment(newSegment);
 
@@ -907,34 +707,234 @@ namespace DownloadsManager.Core.Concrete
             }
         }
 
-        #region HelperMethods
-
-        private void LocateLocalFile()
+        /// <summary>
+        /// Method for downloading file from uri to path
+        /// </summary>
+        /// <param name="uri">uri</param>
+        /// <param name="path">path</param>
+        public void Download(string uri, string path)
         {
-            if (!Directory.Exists(this.LocalFile))
+            Stream downloadStream;
+            int currentTry = 0;
+            do
             {
-                Directory.CreateDirectory(this.LocalFile);
-            }
-
-            if (new FileInfo(this.LocalFile).Exists)
-            {
-                int currentVersion = 0;
-                string newFileName = this.LocalFile;
-                do
+                currentTry++;
+                try
                 {
-                    newFileName = this.LocalFile + currentVersion.ToString(CultureInfo.CurrentCulture);
+                    remoteFileInfo = ProtocolProvider.GetFileInfo(ResourceInfo, out downloadStream);
+                    break;
                 }
-                while (new FileInfo(newFileName).Exists);
-
-                LocalFile = newFileName;
-                NotifyPropertyChanged("LocalFile");
+                catch (ThreadAbortException)
+                {
+                    return;
+                }
+                catch (Exception)
+                {
+                    Thread.Sleep(TimeSpan.FromSeconds(10));
+                }
             }
+            while (true);
+        }
 
-            using (FileStream fs = new FileStream(this.LocalFile + "\\" + FileName, FileMode.Create, FileAccess.Write))
+        /// <summary>
+        /// Sets state of downloader
+        /// </summary>
+        /// <param name="stateToSet">State of downloader</param>
+        public void SetState(IDownloaderState stateToSet)
+        {
+            if (stateToSet != null)
             {
-                fs.SetLength(Math.Max(this.FileSize, 0));
+                State = stateToSet;
+                OnStateChanged();
             }
         }
+
+        /// <summary>
+        /// start prepeare fow download
+        /// startDownloadThread method of state starting
+        /// </summary>
+        public void StartToPrepare()
+        {
+            mainThread = new Thread(new ParameterizedThreadStart(State.StartDownloadThread));
+            mainThread.Start(RequestedSegments);
+        }
+
+        /// <summary>
+        /// start already prepeared downloader for file downloading
+        /// </summary>
+        public void StartPrepared()
+        {
+            mainThread = new Thread(new ThreadStart(RestartDownload));
+            mainThread.Start();
+        }
+
+        /// <summary>
+        /// Start downloading file by segments
+        /// </summary>
+        /// <param name="segmentCount">count of segments</param>
+        /// <param name="inputStream">input stream for downloading</param>
+        public void StartSegments(int segmentCount, Stream inputStream)
+        {
+            ////Pre-downloading locate file on local disk
+            LocalFilesHelper.LocateLocalFile(LocalFile, FileName, FileSize);
+
+            OnLocalFileInfoChanged();
+            List<CalculatedFileSegment> calculatedSegments;
+
+            if (!remoteFileInfo.AcceptRanges)
+            {
+                calculatedSegments = new List<CalculatedFileSegment> { new CalculatedFileSegment(0, remoteFileInfo.FileSize) };
+            }
+            else
+            {
+                calculatedSegments = this.SegmentCalculator.GetSegments(segmentCount, remoteFileInfo);
+            }
+
+            if (threads != null)
+            {
+                lock (threads)
+                {
+                    threads.Clear();
+                }
+            }
+
+            lock (segments)
+            {
+                segments.Clear();
+            }
+
+            for (int i = 0; i < calculatedSegments.Count; i++)
+            {
+                FileSegment segment = new FileSegment();
+                if (i == 0)
+                {
+                    segment.InputStream = inputStream;
+                }
+
+                segment.Index = i;
+                segment.InitialStartPosition = calculatedSegments[i].SegmentStartPosition;
+                segment.StartPosition = calculatedSegments[i].SegmentStartPosition;
+                segment.EndPosition = calculatedSegments[i].SegmentEndPosition;
+
+                segments.Add(segment);
+            }
+
+            OnSegmentChanged();
+            RunSegments();
+        }
+
+        /// <summary>
+        /// Method for ending operations wen all work threads finish operations
+        /// </summary>
+        /// <param name="timeout">timeout of threads</param>
+        /// <returns>true if threads finished false if we have error</returns>
+        public bool AllWorkersStopped(int timeout)
+        {
+            bool allFinished = true;
+
+            List<Thread> workThreads = new List<Thread>();
+            if (threads != null)
+            {
+                lock (threads)
+                {
+                    workThreads.AddRange(threads);
+                }
+            }
+
+            foreach (Thread t in workThreads)
+            {
+                bool finished = t.Join(timeout);
+                allFinished = allFinished & finished;
+
+                if (finished && threads != null)
+                {
+                    lock (threads)
+                    {
+                        threads.Remove(t);
+                    }
+                }
+            }
+
+            OnThreadAdded();
+
+            return allFinished;
+        }
+
+        /// <summary>
+        /// start downloading in state
+        /// </summary>
+        public void Start()
+        {
+            try
+            {
+                State.Start();
+            }
+            catch (Exception)
+            {
+                throw new InvalidOperationException();
+            }
+        }
+
+        /// <summary>
+        /// pause downloading in state
+        /// </summary>
+        public void Pause()
+        {
+            try
+            {
+                State.Pause();
+            }
+            catch (Exception)
+            {
+                throw new InvalidOperationException();
+            }
+        }
+
+        #region EventMethods
+
+        protected virtual void OnStateChanged()
+        {
+            if (StateChanged != null)
+            {
+                StateChanged(this, EventArgs.Empty);
+            }
+        }
+
+        protected virtual void OnSegmentChanged()
+        {
+            if (SegmentChanged != null)
+            {
+                SegmentChanged(this, EventArgs.Empty);
+            }
+        }
+
+        protected virtual void OnThreadAdded()
+        {
+            if (ThreadAdded != null)
+            {
+                ThreadAdded(this, EventArgs.Empty);
+            }
+        }
+
+        protected virtual void OnRemoteFileInfoChanged()
+        {
+            if (RemoteFileInfoChanged != null)
+            {
+                RemoteFileInfoChanged(this, EventArgs.Empty);
+            }
+        }
+
+        protected virtual void OnLocalFileInfoChanged()
+        {
+            if (LocalFileInfoChanged != null)
+            {
+                LocalFileInfoChanged(this, EventArgs.Empty);
+            }
+        }
+
+        #endregion
+
+        #region HelperMethods
 
         /// <summary>
         /// Need for get next mirror if files in mirror and main download are different
@@ -960,6 +960,10 @@ namespace DownloadsManager.Core.Concrete
             }
         }
 
+        /// <summary>
+        /// Get hash code overriding
+        /// </summary>
+        /// <returns>hash</returns>
         public override int GetHashCode()
         {
             return this.CreatedDateTime.GetHashCode() 
@@ -967,21 +971,43 @@ namespace DownloadsManager.Core.Concrete
                 ^ this.FileSize.GetHashCode();
         }
 
+        /// <summary>
+        /// Object equals overriding
+        /// </summary>
+        /// <param name="obj">param obj</param>
+        /// <returns>true/false</returns>
         public override bool Equals(object obj)
         {
             return Equals(obj as Downloader);
         }
 
-        //public override bool operator=(Downloader other)
-        //{
-        //    return EqualityComparer<Downloader>.Default.Equals(this, other);
-        //}
+        /// <summary>
+        /// overriding for == binary operator
+        /// </summary>
+        /// <param name="current">current instance of Downloader</param>
+        /// <param name="other">other instance of Downloader</param>
+        /// <returns>true/false depends on result of operation</returns>
+        public static bool operator==(Downloader current, Downloader other)
+        {
+            return EqualityComparer<Downloader>.Default.Equals(current, other);
+        }
 
-        //public override bool operator!=(Downloader other)
-        //{
-        //    return !(this == other);
-        //}
+        /// <summary>
+        /// overriding for != binary operator
+        /// </summary>
+        /// <param name="current">current instance of Downloader</param>
+        /// <param name="other">other instance of Downloader</param>
+        /// <returns>true/false depends on result of operation</returns>
+        public static bool operator!=(Downloader current, Downloader other)
+        {
+            return !(current == other);
+        }
 
+        /// <summary>
+        /// Equals overriding
+        /// </summary>
+        /// <param name="other">other instance of Downloader</param>
+        /// <returns>true if equals, false if not</returns>
         public bool Equals(Downloader other)
         {
             if (other == null)
@@ -995,18 +1021,6 @@ namespace DownloadsManager.Core.Concrete
             return this.FileName == other.FileName
                 && this.FileSize == other.FileSize
                 && this.CreatedDateTime == other.CreatedDateTime;
-        }
-
-        #endregion
-
-        #region INotifyPropertyChanged
-
-        private void NotifyPropertyChanged(string property)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
-            }
         }
 
         #endregion

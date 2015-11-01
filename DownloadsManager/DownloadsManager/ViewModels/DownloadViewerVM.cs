@@ -32,7 +32,11 @@ namespace DownloadsManager.ViewModels
             this.PauseDownloadCommand = new Command(this.PauseDownload);
             this.ShowInFolderCmd = new Command(this.ShowInFolder);
             //// Attach EventHandler
-            this.download.PropertyChanged += Downloader_PropertyChanged;
+            this.download.StateChanged += download_StateChanged;
+            this.download.ThreadAdded += download_ThreadAdded;
+            this.download.SegmentChanged += download_SegmentChanged;
+            //this.download.LocalFileInfoChanged += download_LocalFileInfoChanged;
+            //this.download.RemoteFileInfoChanged += download_RemoteFileInfoChanged;
         }
 
         /// <summary>
@@ -160,13 +164,32 @@ namespace DownloadsManager.ViewModels
             }
         }
 
-        private void Downloader_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        //void download_RemoteFileInfoChanged(object sender, EventArgs e)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //void download_LocalFileInfoChanged(object sender, EventArgs e)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        void download_SegmentChanged(object sender, EventArgs e)
         {
             NotifyPropertyChanged("Progress");
-            NotifyPropertyChanged("LinkInfo");
             NotifyPropertyChanged("Rate");
+            NotifyPropertyChanged("SizeInfo");
+        }
+
+        void download_StateChanged(object sender, EventArgs e)
+        {
             NotifyPropertyChanged("State");
-            NotifyPropertyChanged("Info");
+        }
+
+        void download_ThreadAdded(object sender, EventArgs e)
+        {
+            NotifyPropertyChanged("Progress");
+            NotifyPropertyChanged("Rate");
             NotifyPropertyChanged("SizeInfo");
         }
     }

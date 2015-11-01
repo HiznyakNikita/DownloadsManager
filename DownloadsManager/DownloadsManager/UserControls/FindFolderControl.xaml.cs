@@ -24,6 +24,7 @@ namespace DownloadsManager.UserControls
     public partial class FindFolderControl : UserControl, IControl
     {
         private IFindFolderControlVM _model;
+
         public FindFolderControl(IFindFolderControlVM model)
         {
             InitializeComponent();

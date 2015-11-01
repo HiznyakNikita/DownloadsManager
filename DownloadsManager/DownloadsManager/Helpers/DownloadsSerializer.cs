@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
@@ -15,43 +16,33 @@ namespace DownloadsManager.Helpers
     {
         public static void Serialize(List<Downloader> downloads)
         {
-            using (var fs = File.Create("test.bin"))
+            using (var fs = File.Create("downloads.bin"))
             {
                 new BinaryFormatter().Serialize(fs, downloads);
                 fs.Flush();
-            }
-
-            //using (MemoryStream ms = new MemoryStream())
-            //{
-            //    using (FileStream file = new FileStream("d:\\file.txt", FileMode.Create, FileAccess.Write))
-            //    {
-            //        BinaryFormatter bin = new BinaryFormatter();
-            //        bin.Serialize(ms, downloads);
-
-            //        ms.WriteTo(file);
-            //    }
-            //}
-            
+            }            
         }
 
         public static List<Downloader> Deserialize()
         {
-
-            using (var fs = File.Open("test.bin", FileMode.Open))
+            try
             {
-                return (List<Downloader>)new BinaryFormatter().Deserialize(fs);
+                using (var fs = File.Open("downloads.bin", FileMode.Open))
+                {
+                    return (List<Downloader>)new BinaryFormatter().Deserialize(fs);
+                }
             }
-            //using (MemoryStream ms = new MemoryStream())
-            //{
-            //    using (FileStream file = new FileStream("d:\\file.txt", FileMode.Open, FileAccess.Read))
-            //    {
-            //        file.CopyTo(ms);
-            //        BinaryFormatter bin = new BinaryFormatter();
-            //        List<Downloader> downloads = (List<Downloader>)bin.Deserialize(file);
-                    
-            //        return downloads;
-            //    }
-            //}
+            catch(FileNotFoundException)
+            {
+                using(var fs = File.Create("downloads.bin"))
+                {
+                    return new List<Downloader>();
+                }
+            }
+            catch(SerializationException)
+            {
+                return new List<Downloader>();
+            }
         }
     }
 }

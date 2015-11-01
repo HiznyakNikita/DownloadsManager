@@ -74,6 +74,7 @@
     <Compile Include="Concrete\FileSegment.cs" />
     <Compile Include="Concrete\Helpers\FileSegmentSizeCalculatorHelper.cs" />
     <Compile Include="Concrete\Helpers\FileTypeIdentifier.cs" />
+    <Compile Include="Concrete\Helpers\LocalFilesHelper.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
