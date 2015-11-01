@@ -14,11 +14,7 @@ build:
   verbosity: normal
   framework: net-4.5
 after_build:
-- ps: "if($env:APPVEYOR_REPO_TAG -eq $true){
-
-    appveyor PushArtifact ..\downloadsmanager\DownloadsManager\DownloadsManager\bin\Release\setup.exe
-
-    }"
+- ps: "if($env:APPVEYOR_REPO_TAG -eq $true){ appveyor PushArtifact ..\downloadsmanager\DownloadsManager\DownloadsManager\bin\Release\setup.exe }"
 deploy:
 - provider: GitHub
   tag: $(APPVEYOR_REPO_TAG_NAME)
