@@ -188,9 +188,12 @@ namespace DownloadsManager.ViewModels
             IControlCreator controlCreator = new ControlCreator();
             DownloadViewerVM model = new DownloadViewerVM(fileToDownload);
             var viewer = controlCreator.CreateControl(model);
-            
-            _itemsToDownloaders.Add(fileToDownload, viewer);
-            NotifyPropertyChanged("ItemsToDownloaders");
+
+            if (!_itemsToDownloaders.Keys.OfType<Downloader>().Contains(fileToDownload))
+            {
+                _itemsToDownloaders.Add(fileToDownload, viewer);
+                NotifyPropertyChanged("ItemsToDownloaders");
+            }
         }
 
         #endregion

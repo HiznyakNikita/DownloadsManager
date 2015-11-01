@@ -57,7 +57,7 @@
     <Compile Include="Abstract\IDownloaderState.cs" />
     <Compile Include="Concrete\CalculatedFileSegment.cs" />
     <Compile Include="Abstract\IDownloader.cs" />
-    <Compile Include="Abstract\IFileSegmentCalculator.cs" />
+    <Compile Include="Abstract\FileSegmentCalculator.cs" />
     <Compile Include="Concrete\Downloader.cs" />
     <Compile Include="Concrete\DownloaderManager.cs" />
     <Compile Include="Concrete\DownloadStates\DownloadEndedState.cs" />
@@ -73,7 +73,8 @@
     <Compile Include="Concrete\Enums\FileSegmentState.cs" />
     <Compile Include="Concrete\Enums\FileType.cs" />
     <Compile Include="Concrete\FileSegment.cs" />
-    <Compile Include="Concrete\Helpers\FileSegmentSizeCalculatorHelper.cs" />
+    <Compile Include="Concrete\Helpers\FileSegmentSizeCalculatorForSegmentCountHelper.cs" />
+    <Compile Include="Concrete\Helpers\FileSegmentSizeCalculatorWithResidueHelper.cs" />
     <Compile Include="Concrete\Helpers\FileTypeIdentifier.cs" />
     <Compile Include="Concrete\Helpers\LocalFilesHelper.cs" />
     <Compile Include="Concrete\Helpers\SpeedLimitHelper.cs" />

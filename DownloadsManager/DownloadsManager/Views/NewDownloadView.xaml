@@ -15,7 +15,7 @@
                             VerticalAlignment="Top"
                             Width="20" Height="20" 
                             x:Name="BtnCloseWindow" Style="{StaticResource closeWindowButtonStyle}"/>
-                    <Label Content="URL:" IsEnabled="False"  Style="{StaticResource LabelSmallInListStyle}"/>
+                    <Label Content="URL:" Style="{StaticResource LabelSmallInListStyle}"/>
                     <TextBox x:Name="tbUrlToDownload" Style="{StaticResource TextBoxInListStyle}" 
                              Height="23" Width="272"/>
                     <Label Content="Save to:" Style="{StaticResource LabelSmallInListStyle}"/>

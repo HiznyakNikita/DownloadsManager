@@ -1,4 +1,4 @@
-﻿using DownloadsManager.Core.Abstract;
+﻿using DownloadsManager.Core.Concrete;
 using DownloadsManager.Core.Properties;
 using System;
 using System.Collections.Generic;
@@ -6,32 +6,46 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DownloadsManager.Core.Concrete
+namespace DownloadsManager.Core.Abstract
 {
+    /// <summary>
+    /// Insterface for calculating file segment size and optimal segments count
+    /// </summary>
     [Serializable]
-    public class FileSegmentSizeCalculatorHelper : IFileSegmentCalculator
+    public abstract class FileSegmentCalculator
     {
-        /// <summary>
-        /// Method for calculating minimum size for file segment to download
-        /// </summary>
-        /// <param name="segmentCount">count of segments</param>
-        /// <param name="remoteFileInfo">remote file information</param>
-        /// <returns>List of calulated file segments</returns>
-        public List<CalculatedFileSegment> GetSegments(int segmentCount, RemoteFileInfo remoteFileInfo)
+        public virtual List<CalculatedFileSegment> GetSegments(int segmentCount, RemoteFileInfo remoteFileInfo)
+        {
+            long calculatedSegmentSize = CalculateSegmentSize(segmentCount, remoteFileInfo);
+            long residueBytes = CalculateResidueBytes(segmentCount, remoteFileInfo, calculatedSegmentSize);
+            return GetCalculatedSegments(segmentCount, remoteFileInfo, calculatedSegmentSize, residueBytes);
+        }
+
+        public virtual long CalculateSegmentSize(int segmentCount, RemoteFileInfo remoteFileInfo)
+        {
+            if (remoteFileInfo != null)
+            {
+                long calculatedSegmentSize = remoteFileInfo.FileSize / (long)segmentCount;
+                return calculatedSegmentSize;
+            }
+            
+            return 0;
+        }
+
+        public virtual long CalculateResidueBytes(int segmentCount, RemoteFileInfo remoteFileInfo, long calculatedSegmentSize)
+        {
+            return 0;
+        }
+
+        public virtual List<CalculatedFileSegment> GetCalculatedSegments(
+            int segmentCount, 
+            RemoteFileInfo remoteFileInfo, 
+            long calculatedSegmentSize, 
+            long residueBytes)
         {
             List<CalculatedFileSegment> calculatedSegments = new List<CalculatedFileSegment>();
             if (remoteFileInfo != null)
             {
-                long minSegmentSize = Settings.Default.MinSegmentSize;
-                long calculatedSegmentSize = remoteFileInfo.FileSize / (long)segmentCount;
-                ////optimize segment size if possible
-                while (calculatedSegmentSize < minSegmentSize && segmentCount > 1)
-                {
-                    segmentCount--;
-                    calculatedSegmentSize = remoteFileInfo.FileSize / (long)segmentCount;
-                }
-                ////check for residue after dividing
-                long residueBytes = remoteFileInfo.FileSize - (calculatedSegmentSize * segmentCount);
                 long startSegmentPosition = 0;
                 for (int i = 0; i < segmentCount; i++)
                 {
@@ -59,7 +73,6 @@ namespace DownloadsManager.Core.Concrete
                     startSegmentPosition = calculatedSegments[calculatedSegments.Count - 1].SegmentEndPosition;
                 }
             }
-
             return calculatedSegments;
         }
     }

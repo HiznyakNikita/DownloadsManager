@@ -14,7 +14,7 @@ namespace DownloadsManager.Tests
     {
         private static List<CalculatedFileSegment> GetSegmentsFromCalculator()
         {
-            IFileSegmentCalculator calculator = new FileSegmentSizeCalculatorHelper();
+            FileSegmentCalculator calculator = new FileSegmentSizeCalculatorWithResidueHelper();
             RemoteFileInfo remoteFileInfo = new RemoteFileInfo();
             remoteFileInfo.AcceptRanges = true;
             remoteFileInfo.FileSize = 4724748;
@@ -42,7 +42,7 @@ namespace DownloadsManager.Tests
         [TestMethod]
         public void TestMinimumSegmentSizeCalculation()
         {
-            IFileSegmentCalculator calculator = new FileSegmentSizeCalculatorHelper();
+            FileSegmentCalculator calculator = new FileSegmentSizeCalculatorWithResidueHelper();
             RemoteFileInfo remoteFileInfo = new RemoteFileInfo();
             remoteFileInfo.AcceptRanges = true;
             remoteFileInfo.FileSize = 1773484;

@@ -47,7 +47,7 @@ namespace DownloadsManager.Core.Concrete
         [NonSerialized]
         private List<Thread> threads = new List<Thread>();
 
-        private IFileSegmentCalculator fileSegmentCalculator;
+        private FileSegmentCalculator fileSegmentCalculator;
 
         public Downloader() { }
 
@@ -118,7 +118,7 @@ namespace DownloadsManager.Core.Concrete
                 ProtocolProvider = resourceInfo.BindProtocolProviderProxy(new SpeedLimitHelper(this));
             }
 
-            fileSegmentCalculator = new FileSegmentSizeCalculatorHelper();
+            fileSegmentCalculator = new FileSegmentSizeCalculatorWithResidueHelper();
             FileName = fileName;
             MaxRate = double.MaxValue;
         }
@@ -358,7 +358,7 @@ namespace DownloadsManager.Core.Concrete
         /// <summary>
         /// Gets or sets segments calculator for downloader
         /// </summary>
-        public IFileSegmentCalculator SegmentCalculator
+        public FileSegmentCalculator SegmentCalculator
         {
             get { return fileSegmentCalculator; }
             set { fileSegmentCalculator = value; }

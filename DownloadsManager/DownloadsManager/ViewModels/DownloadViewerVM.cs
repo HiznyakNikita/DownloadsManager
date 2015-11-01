@@ -26,19 +26,25 @@ namespace DownloadsManager.ViewModels
         /// <param name="downloader">download for view</param>
         public DownloadViewerVM(Downloader downloader)
         {
-            if (downloader != null)
-                this.download = downloader;
+            try
+            {
+                if (downloader != null)
+                    this.download = downloader;
 
-            this.StartDownloadCmd = new Command(this.StartDownload);
-            this.PauseDownloadCommand = new Command(this.PauseDownload);
-            this.ShowInFolderCmd = new Command(this.ShowInFolder);
-            this.DownloadSettingsCmd = new Command(this.DownloadSettings);
-            //// Attach EventHandler
-            this.download.StateChanged += download_StateChanged;
-            this.download.ThreadAdded += download_ThreadAdded;
-            this.download.SegmentChanged += download_SegmentChanged;
-            //this.download.LocalFileInfoChanged += download_LocalFileInfoChanged;
-            //this.download.RemoteFileInfoChanged += download_RemoteFileInfoChanged;
+                this.StartDownloadCmd = new Command(this.StartDownload);
+                this.PauseDownloadCommand = new Command(this.PauseDownload);
+                this.ShowInFolderCmd = new Command(this.ShowInFolder);
+                this.DownloadSettingsCmd = new Command(this.DownloadSettings);
+                //// Attach EventHandler
+                this.download.StateChanged += download_StateChanged;
+                this.download.ThreadAdded += download_ThreadAdded;
+                this.download.SegmentChanged += download_SegmentChanged;
+                //this.download.LocalFileInfoChanged += download_LocalFileInfoChanged;
+                //this.download.RemoteFileInfoChanged += download_RemoteFileInfoChanged;
+            }
+            catch (NullReferenceException)
+            {
+            }
         }
 
         /// <summary>
@@ -70,7 +76,7 @@ namespace DownloadsManager.ViewModels
         { 
             get
             {
-                return download.TransferBytes + " bytes from " + download.FileSize + " bytes";
+                return download.TransferBytes/1000 + " kb from " + download.FileSize/1000 + " kb";
             }
         }
 
@@ -92,7 +98,7 @@ namespace DownloadsManager.ViewModels
         { 
             get
             {
-                return download.CreatedDateTime.ToString();
+                return "Added: " + download.CreatedDateTime.ToString();
             }
         }
 
@@ -103,7 +109,9 @@ namespace DownloadsManager.ViewModels
         { 
             get
             {
-                return (download.Rate / 100).ToString(CultureInfo.InvariantCulture) + " kb/sec";
+                return (download.Rate / 100).ToString(CultureInfo.InvariantCulture) != "0" ? 
+                    (download.Rate / 100).ToString(CultureInfo.InvariantCulture).Substring(0,4) + " kb/sec" :
+                    "0 kb/sec";
             }
         }
 
@@ -114,7 +122,7 @@ namespace DownloadsManager.ViewModels
         { 
             get
             {
-                return download.ResourceInfo.Url.ToString();
+                return "Url: " + download.ResourceInfo.Url.ToString();
             }
         }
 

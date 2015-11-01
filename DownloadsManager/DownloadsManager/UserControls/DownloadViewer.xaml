@@ -6,7 +6,7 @@
              xmlns:c="clr-namespace:DownloadsManager.UserControls"
              xmlns:vm="clr-namespace:DownloadsManager.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="150" d:DesignWidth="500" Background="#858585" Opacity="0.3" BorderBrush="WhiteSmoke">
+             d:DesignHeight="160" d:DesignWidth="1200" Background="#858585" Opacity="0.3" BorderBrush="WhiteSmoke">
     <UserControl.Resources>
         <DataTemplate DataType="{x:Type vm:DownloadViewerVM}"/>
         <c:FileTypeToTypeIconConverter x:Key="fileTypeToIconConverter"/>
@@ -14,54 +14,63 @@
     <Grid>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
+                <Image x:Name="imgTypeDownload" HorizontalAlignment="Right" Width="62"
+                	Source="{Binding Download.FileType, Converter={StaticResource fileTypeToIconConverter}}" Height="58"/>
                 <Label x:Name="lblDownloadFileName" HorizontalAlignment="Left" 
-        			Content ="{Binding FileName}" Style="{StaticResource LabelSmallStyle}" 
-        			Height="35" Width="215"/>
+        			Content ="{Binding FileName}" FontSize="36" Style="{StaticResource LabelSmallStyle}" 
+        			Height="54" Width="556"/>
                 <Label x:Name="lblStateInfo" HorizontalAlignment="Left" 
         			Style="{StaticResource LabelSmallStyle}" Content="{Binding State, UpdateSourceTrigger=PropertyChanged}" 
-        			Height="35" Width="237"/>
-                <Image x:Name="imgTypeDownload" HorizontalAlignment="Right" Width="40"
-                	Source="{Binding Download.FileType, Converter={StaticResource fileTypeToIconConverter}}"/>
+        			Height="56" Width="580" FontSize="24" RenderTransformOrigin="0.5,0.5">
+                    <Label.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform AngleY="-0.126"/>
+                            <RotateTransform/>
+                            <TranslateTransform Y="-0.498"/>
+                        </TransformGroup>
+                    </Label.RenderTransform>
+                </Label>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal" Height="30">
+                <StackPanel Orientation="Horizontal" Width="621">
                     <Label x:Name="lblSizeInfo" HorizontalAlignment="Left" 
         		        Style="{StaticResource LabelSmallStyle}" Content="{Binding SizeInfo, UpdateSourceTrigger=PropertyChanged}" 
         		        Height="25" Width="272"/>
                     <Label x:Name="lblAddedInfo" HorizontalAlignment="Left" 
         		        Style="{StaticResource LabelSmallStyle}"  Content="{Binding Added}" 
-        		        Height="25" Width="120"/>
+        		        Height="25" Width="343" Margin="0,2"/>
                 </StackPanel>
-                <StackPanel Orientation="Vertical" Width="227">
                     <StackPanel Orientation="Horizontal">
                         <Label Content="Max rate (kb/sec):" Foreground="WhiteSmoke"/>
                         <TextBox x:Name="tbDownloadMaxRate" Width="118" Height="26"></TextBox>
-                    </StackPanel>
-                    <Button x:Name="btnDownloadSettings" HorizontalAlignment="Right" Margin="5"
+                        <Button x:Name="btnDownloadSettings" HorizontalAlignment="Right" Margin="5"
                             Command="{Binding DownloadSettingsCmd}" CommandParameter="{Binding ElementName=tbDownloadMaxRate, Path=Text}"
                             Content="Save" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20" Click="btnDownloadSettings_Click"/>
                 </StackPanel>
+                    
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal">
-                <Label Content="Rate:" Foreground="WhiteSmoke"/>
-                <Label x:Name="lblRateInfo" HorizontalAlignment="Left" 
+            <StackPanel Orientation="Horizontal" Height="36">
+                <StackPanel Orientation="Horizontal" Width="1200">
+                    <Label Content="Rate:" Foreground="WhiteSmoke"/>
+                    <Label x:Name="lblRateInfo" HorizontalAlignment="Left" 
         			Style="{StaticResource LabelSmallStyle}" Content="{Binding Rate, UpdateSourceTrigger=PropertyChanged}" 
         			Height="25" Width="120"/>
-                <Label Content="Progress:" Foreground="WhiteSmoke"/>
-                <Label x:Name="lblProgressInfo" HorizontalAlignment="Left" 
+                    <Label Content="Progress:" Foreground="WhiteSmoke"/>
+                    <Label x:Name="lblProgressInfo" HorizontalAlignment="Left" 
         			Style="{StaticResource LabelSmallStyle}" Content="{Binding Progress, UpdateSourceTrigger=PropertyChanged}" 
         			Height="25" Width="120"/>
-                <StackPanel Orientation="Horizontal">
-                    <Button x:Name="btnPause" Command="{Binding PauseDownloadCmd}" Content="Pause" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20"/>
-                    <Button x:Name="btnStart" Margin="10" Command="{Binding StartDownloadCmd}" Content="Start" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20"/>
-                    <Button x:Name="btnShowInFolder" Margin="10" Command="{Binding ShowInFolderCmd}" Content="Folder" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20"/>
-                </StackPanel>
-
-            </StackPanel>
-            <Label x:Name="lblUrlInfo" HorizontalAlignment="Left" 
+                    <Label x:Name="lblUrlInfo" HorizontalAlignment="Left" 
         		Style="{StaticResource LabelSmallStyle}" Content="{Binding LinkInfo, UpdateSourceTrigger=PropertyChanged}" 
-        		Height="25" Width="500"/>
+        		Height="25" Width="578" Margin="0,6"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button x:Name="btnPause" Command="{Binding PauseDownloadCmd}" Content="Pause" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20"/>
+                <Button x:Name="btnStart" Margin="7" Command="{Binding StartDownloadCmd}" Content="Start" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20"/>
+                <Button x:Name="btnShowInFolder" Command="{Binding ShowInFolderCmd}" Content="Folder" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </UserControl>
