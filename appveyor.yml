@@ -12,7 +12,7 @@ before_build:
 - ps: "if($env:APPVEYOR_REPO_BRANCH -eq \"master\"){\nif($env:APPVEYOR_REPO_TAG -eq $true){\n$env:CONFIGURATION = \"Release\"\nWrite-Host \"Switch to Release configuration\"\n}\nelse{\n$env:CONFIGURATION = \"Debug\"\nWrite-Host \"Switch to Debug configuration\"\n \n}\n}"
 build:
   verbosity: normal
-  framework:net-4.5
+  framework: net-4.5
 after_build:
 - ps: >-
     if($env:APPVEYOR_REPO_TAG -eq $true){
