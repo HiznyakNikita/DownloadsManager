@@ -15,23 +15,23 @@
                     <Button HorizontalAlignment="Right" Click="BtnCloseWindow_Click" VerticalAlignment="Top"
                             Width="20" Height="20" x:Name="BtnCloseWindow" Style="{StaticResource closeWindowButtonStyle}"/>
                     <StackPanel Orientation="Vertical">
-                    <Label Content="Default save path for music:" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource LabelSmallStyle}"/>
+                    <Label Content="Default save path for music:"  Style="{StaticResource LabelSmallInListStyle}"/>
                         <uc:FindFolderControl />
                     </StackPanel>
                     <StackPanel Orientation="Vertical">
-                        <Label Content="Default save path for video:" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource LabelSmallStyle}"/>
+                        <Label Content="Default save path for video:"  Style="{StaticResource LabelSmallInListStyle}"/>
                         <uc:FindFolderControl />
                     </StackPanel>
                     <StackPanel Orientation="Vertical">
-                        <Label Content="Default save path for pictures:" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource LabelSmallStyle}"/>
+                        <Label Content="Default save path for pictures:" Style="{StaticResource LabelSmallInListStyle}"/>
                         <uc:FindFolderControl />
                     </StackPanel>
                     <StackPanel Orientation="Vertical">
-                        <Label Content="Default save path for applications:" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource LabelSmallStyle}"/>
+                        <Label Content="Default save path for applications:"  Style="{StaticResource LabelSmallInListStyle}"/>
                         <uc:FindFolderControl />
                     </StackPanel>
                     <StackPanel Orientation="Vertical">
-                        <Label Content="Default save path for documents:" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource LabelSmallStyle}"/>
+                        <Label Content="Default save path for documents:"  Style="{StaticResource LabelSmallInListStyle}"/>
                         <uc:FindFolderControl />
                     </StackPanel>
                     <CheckBox x:Name="checkBoxCleanEndedDownloads" Margin="5" Content="Clean ended downloads before closing:" 

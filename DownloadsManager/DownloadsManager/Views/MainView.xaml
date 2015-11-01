@@ -10,6 +10,22 @@
         <DataTemplate DataType="{x:Type vm:MainWindowVM}"/>
     </Window.Resources>
     <Grid>
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button HorizontalAlignment="Right" 
+                        Click="BtnHideWindow_Click" 
+                        VerticalAlignment="Top" 
+                        Width="20" Height="20" 
+                        x:Name="BtnHideWindow" 
+                        Style="{StaticResource hideWindowButtonStyle}"/>
+                <Button HorizontalAlignment="Right" 
+                        Click="BtnCloseWindow_Click" 
+                        Command="{Binding CloseCmd}" 
+                        VerticalAlignment="Top" 
+                        Width="20" Height="20" 
+                        x:Name="BtnCloseWindow" 
+                        Style="{StaticResource closeWindowButtonStyle}"/>
+            </StackPanel>
         <TabControl  x:Name="tabControl" Background="#FF575757" Style="{StaticResource TabControlStyle}" BorderBrush="Transparent">
             <TabControl.Resources>
                 <Style TargetType="TabItem" BasedOn="{StaticResource TabItemsStyle}"/>
@@ -66,32 +82,47 @@
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Orientation="Vertical">
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Total downloads:" IsEnabled="False" FontSize="20" HorizontalAlignment="Left"
-                                   VerticalAlignment="Top" Foreground="WhiteSmoke"  Style="{StaticResource LabelSmallStyle}"/>
-                                <Label x:Name="lblTotalDownloads" Content="{Binding ItemsToDownloaders.Count}" IsEnabled="False" HorizontalAlignment="Left"
-                                   VerticalAlignment="Top" Foreground="WhiteSmoke" FontSize="20" Style="{StaticResource LabelSmallStyle}"/>
+                                <Label Content="Total downloads:" 
+                                       IsEnabled="False" 
+                                       Style="{StaticResource LabelSmallFont20Style}"/>
+                                <Label x:Name="lblTotalDownloads" 
+                                       Content="{Binding ItemsToDownloaders.Count}"
+                                       IsEnabled="False"
+                                       Style="{StaticResource LabelSmallFont20Style}"/>
 
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Bytes downloaded:" IsEnabled="False" HorizontalAlignment="Left"
-                                   VerticalAlignment="Top" Foreground="WhiteSmoke" FontSize="20" Style="{StaticResource LabelSmallStyle}"/>
-                                <Label x:Name="lblTotalBytesDownloaded" Content="{Binding TotalBytesDownloadedStatistic}" IsEnabled="False" HorizontalAlignment="Left"
-                                   VerticalAlignment="Top" Foreground="WhiteSmoke" FontSize="20" Style="{StaticResource LabelSmallStyle}"/>
+                                <Label Content="Bytes downloaded:" 
+                                       IsEnabled="False" 
+                                       Style="{StaticResource LabelSmallFont20Style}"/>
+                                <Label x:Name="lblTotalBytesDownloaded" 
+                                       Content="{Binding TotalBytesDownloadedStatistic}" 
+                                       IsEnabled="False"
+                                       Style="{StaticResource LabelSmallFont20Style}"/>
                             </StackPanel>
                         </StackPanel>
                     <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Right">
-                        <Label Content="Download history" HorizontalAlignment="Left" 
-                                   VerticalAlignment="Top" FontSize="24" Style="{StaticResource LabelSmallStyle}"/>
+                        <Label Content="Download history"
+                               FontSize="24" 
+                               Style="{StaticResource LabelSmallInListStyle}"/>
                         <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-                            <Label Content="Period:" HorizontalAlignment="Left" 
-                                   VerticalAlignment="Top" Style="{StaticResource LabelSmallStyle}"/>
-                            <TextBox x:Name="tbDownloadsHistoryPeriod" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Left"
-                                     Margin="2" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="240"/>
-                            <Button Command="{Binding SetHistoryPeriodCmd}" Content="Set" CommandParameter="{Binding Text, ElementName=tbDownloadsHistoryPeriod}" 
+                            <Label Content="Period:" 
+                                   Style="{StaticResource LabelSmallInListStyle}"/>
+                            <TextBox x:Name="tbDownloadsHistoryPeriod" 
+                                     Style="{StaticResource TextBoxStyle}" 
+                                     HorizontalAlignment="Left"
+                                     Margin="2" 
+                                     Height="23" 
+                                     TextWrapping="Wrap" 
+                                     VerticalAlignment="Top" 
+                                     Width="240"/>
+                            <Button Command="{Binding SetHistoryPeriodCmd}" 
+                                    CommandParameter="{Binding Text, ElementName=tbDownloadsHistoryPeriod}" 
+                                    Content="Set" 
                                     VerticalAlignment="Top" Width="75" Height="25" Margin="2"
-                        	x:Name="BtnChooseHistoryPeriod" Style="{StaticResource buttonWithTextStyle}"/>
+                                    x:Name="BtnChooseHistoryPeriod" Style="{StaticResource buttonWithTextStyle}"/>
                         </StackPanel>
-                            <ListBox x:Name="lstBoxDownloadsHistory" Margin="5,5,0,5" Width="436" HorizontalAlignment="Left"
+                            <ListBox x:Name="lstBoxDownloadsHistory" Margin="5,5,0,5" Width="435" HorizontalAlignment="Left"
                                  ItemsSource="{Binding DownloadsHistory, UpdateSourceTrigger=PropertyChanged}"
                              ScrollViewer.VerticalScrollBarVisibility="Disabled" BorderBrush="  #6495ED" 
                                  Foreground="  #6495ED" Background="Transparent" DisplayMemberPath="FileName" 
@@ -108,8 +139,7 @@
                 </StackPanel>
             </TabItem>
         </TabControl>
-        <Button HorizontalAlignment="Right" Click="BtnCloseWindow_Click" Margin="556,3,0,0" Command="{Binding CloseCmd}" VerticalAlignment="Top" Width="20" Height="20" x:Name="BtnCloseWindow" Style="{StaticResource closeWindowButtonStyle}"/>
-        <Button HorizontalAlignment="Right" Click="BtnHideWindow_Click" Margin="0,3,23,0" VerticalAlignment="Top" Width="20" Height="20" x:Name="BtnHideWindow" Style="{StaticResource hideWindowButtonStyle}"/>
+        </StackPanel>
     </Grid>
     <Window.ContextMenu>
         <ContextMenu>

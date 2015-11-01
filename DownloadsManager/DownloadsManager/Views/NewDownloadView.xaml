@@ -11,31 +11,49 @@
         <Border BorderBrush="WhiteSmoke" BorderThickness="2">
             <Grid>
                 <StackPanel Orientation="Vertical" Margin="10">
-                    <Button HorizontalAlignment="Right" Click="BtnCloseWindow_Click" VerticalAlignment="Top"
-                            Width="20" Height="20" x:Name="BtnCloseWindow" Style="{StaticResource closeWindowButtonStyle}"/>
-                    <Label Content="URL:" IsEnabled="False" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="WhiteSmoke"  Style="{StaticResource LabelSmallStyle}"/>
-                    <TextBox x:Name="tbUrlToDownload" Style="{StaticResource TextBoxStyle}" 
-                             HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="272"/>
-                    <Label Content="Save to:" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource LabelSmallStyle}"/>
+                    <Button HorizontalAlignment="Right" Click="BtnCloseWindow_Click"
+                            VerticalAlignment="Top"
+                            Width="20" Height="20" 
+                            x:Name="BtnCloseWindow" Style="{StaticResource closeWindowButtonStyle}"/>
+                    <Label Content="URL:" IsEnabled="False"  Style="{StaticResource LabelSmallInListStyle}"/>
+                    <TextBox x:Name="tbUrlToDownload" Style="{StaticResource TextBoxInListStyle}" 
+                             Height="23" Width="272"/>
+                    <Label Content="Save to:" Style="{StaticResource LabelSmallInListStyle}"/>
                     <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
-                        <TextBox x:Name="tbSaveToPath" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Left" Margin="2" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="242"/>
+                        <TextBox x:Name="tbSaveToPath" Style="{StaticResource TextBoxInListStyle}" 
+                                 Margin="2" Height="23" Width="242"/>
                         <Button Click="BtnChooseFolderSaveTo_Click"  VerticalAlignment="Top" Width="25" Height="23" Margin="2"
                         	x:Name="BtnChooseFolderSaveTo" Style="{StaticResource chooseFolderButtonStyle}"/>
                     </StackPanel>
-                    <CheckBox x:Name="checkBoxAlternative" Margin="5" Content="Use alternative URL's:" Foreground="WhiteSmoke" FontFamily="Segoe" HorizontalAlignment="Left" VerticalAlignment="Top" Checked="CheckBoxAlternative_Checked"/>
+                    <CheckBox x:Name="checkBoxAlternative" Margin="5" Content="Use alternative URL's:"
+                              Foreground="WhiteSmoke" FontFamily="Segoe" 
+                              HorizontalAlignment="Left" VerticalAlignment="Top" Checked="CheckBoxAlternative_Checked"/>
                     <StackPanel Orientation="Horizontal">
-                        <Button x:Name="btnAddUrl" Margin="5" Content="Add" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="BtnAdd_Click" IsEnabled="False" Style="{StaticResource buttonWithTextStyle}" Height="20"/>
-                        <Button x:Name="btnRemoveUrl" Margin="5" IsEnabled="False" Content="Remove" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="BtnRemove_Click" Style="{StaticResource buttonWithTextStyle}" Height="20"/>
+                        <Button x:Name="btnAddUrl" Margin="5" 
+                                Content="Add" HorizontalAlignment="Left" 
+                                VerticalAlignment="Top" Width="75" 
+                                Click="BtnAdd_Click" IsEnabled="False" 
+                                Style="{StaticResource buttonWithTextStyle}" Height="20"/>
+                        <Button x:Name="btnRemoveUrl" Margin="5" 
+                                IsEnabled="False" Content="Remove" 
+                                HorizontalAlignment="Left" VerticalAlignment="Top" 
+                                Width="75" Click="BtnRemove_Click" 
+                                Style="{StaticResource buttonWithTextStyle}" Height="20"/>
                     </StackPanel>
                     <Label Content="URL:" IsEnabled="False" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource LabelSmallStyle}"/>
-                    <TextBox IsEnabled ="False" Margin="5,5,0,5" x:Name="tbUrlToDownloadAlternative" Style="{StaticResource TextBoxStyle}" 
-                             HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="261"/>
-                    <ListBox x:Name="lstBoxAlternativeUrl" Margin="5,5,0,5" HorizontalAlignment="Left" ItemsSource="{Binding Mirrors, UpdateSourceTrigger=PropertyChanged}" 
+                    <TextBox IsEnabled ="False" Margin="5,5,0,5" x:Name="tbUrlToDownloadAlternative" Style="{StaticResource TextBoxInListStyle}" 
+                             Height="23" Width="261"/>
+                    <ListBox x:Name="lstBoxAlternativeUrl" Margin="5,5,0,5" HorizontalAlignment="Left" 
+                             ItemsSource="{Binding Mirrors, UpdateSourceTrigger=PropertyChanged}" 
                              ScrollViewer.VerticalScrollBarVisibility="Disabled" BorderBrush="  #6495ED" Foreground="  #6495ED" Background="#FF575757" 
                              Height="154" VerticalAlignment="Top" Width="261" IsEnabled="False" Style="{StaticResource ListBoxStyle}"/>
                     <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Right">
-                        <Button Margin="5" x:Name="btnOk" Content="OK" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="BtnOk_Click" Style="{StaticResource buttonWithTextStyle}" Height="20"/>
-                        <Button Margin="5" x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="BtnCancel_Click" Style="{StaticResource buttonWithTextStyle}" Height="20"/>
+                        <Button Margin="5" x:Name="btnOk" Content="OK" HorizontalAlignment="Left" 
+                                VerticalAlignment="Top" Width="75" Click="BtnOk_Click" 
+                                Style="{StaticResource buttonWithTextStyle}" Height="20"/>
+                        <Button Margin="5" x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" 
+                                VerticalAlignment="Top" Width="75" Click="BtnCancel_Click" 
+                                Style="{StaticResource buttonWithTextStyle}" Height="20"/>
                     </StackPanel>
                 </StackPanel>
             </Grid>
