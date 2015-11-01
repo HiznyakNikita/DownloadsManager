@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using DownloadsManager.ViewModels;
 using DownloadsManager.ViewModels.Infrastructure;
-using Microsoft.Practices.Unity;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
