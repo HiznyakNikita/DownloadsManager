@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 15
-MinimumVisualStudioVersion = 10.0.40219.1
+MinimumVisualStudioVersion = 12
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DownloadsManager", "DownloadsManager\DownloadsManager.csproj", "{74846916-DC5F-4AC7-AC7C-2C560A5002BA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DownloadsManager.Core", "DownloadsManager.Core\DownloadsManager.Core.csproj", "{1CD6E6B9-7743-4540-9EDC-B6C5DAAC6897}"
