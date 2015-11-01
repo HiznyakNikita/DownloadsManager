@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.Core.Concrete.Helpers
 {
+    [Serializable]
     public class SpeedLimitHelper
     {
         private Downloader _downloader;
