@@ -94,5 +94,17 @@ namespace DownloadsManager.Properties {
                 this["CleanEndedDownloads"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string IEExtensionGuid {
+            get {
+                return ((string)(this["IEExtensionGuid"]));
+            }
+            set {
+                this["IEExtensionGuid"] = value;
+            }
+        }
     }
 }

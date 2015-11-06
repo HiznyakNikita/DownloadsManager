@@ -31,14 +31,14 @@ namespace DownloadsManager.ViewModels
                 if (downloader != null)
                     this.download = downloader;
 
-                this.StartDownloadCmd = new Command(this.StartDownload);
+                this.StartDownloadCommand = new Command(this.StartDownload);
                 this.PauseDownloadCommand = new Command(this.PauseDownload);
-                this.ShowInFolderCmd = new Command(this.ShowInFolder);
-                this.DownloadSettingsCmd = new Command(this.DownloadSettings);
+                this.ShowInFolderCommand = new Command(this.ShowInFolder);
+                this.DownloadSettingsCommand = new Command(this.DownloadSettings);
                 //// Attach EventHandler
-                this.download.StateChanged += download_StateChanged;
-                this.download.ThreadAdded += download_ThreadAdded;
-                this.download.SegmentChanged += download_SegmentChanged;
+                this.download.StateChanged += Download_StateChanged;
+                this.download.ThreadAdded += Download_ThreadAdded;
+                this.download.SegmentChanged += Download_SegmentChanged;
                 //this.download.LocalFileInfoChanged += download_LocalFileInfoChanged;
                 //this.download.RemoteFileInfoChanged += download_RemoteFileInfoChanged;
             }
@@ -76,7 +76,7 @@ namespace DownloadsManager.ViewModels
         { 
             get
             {
-                return download.TransferBytes/1000 + " kb from " + download.FileSize/1000 + " kb";
+                return ((download.TransferBytes / 1000) + " kb from ") + ((download.FileSize / 1000) + " kb");
             }
         }
 
@@ -110,7 +110,7 @@ namespace DownloadsManager.ViewModels
             get
             {
                 return (download.Rate / 100).ToString(CultureInfo.InvariantCulture) != "0" ? 
-                    (download.Rate / 100).ToString(CultureInfo.InvariantCulture).Substring(0,4) + " kb/sec" :
+                    (download.Rate / 100).ToString(CultureInfo.InvariantCulture).Substring(0, 4) + " kb/sec" :
                     "0 kb/sec";
             }
         }
@@ -133,30 +133,31 @@ namespace DownloadsManager.ViewModels
         { 
             get
             {
-                return Math.Round(download.Progress,1).ToString(CultureInfo.CurrentCulture) + " %";
+                return Math.Round(download.Progress, 1).ToString(CultureInfo.CurrentCulture) + " %";
             }
         }
 
         public Command PauseDownloadCommand { get; set; }
 
-        public Command StartDownloadCmd { get; set; }
+        public Command StartDownloadCommand { get; set; }
 
-        public Command DownloadSettingsCmd { get; set; }
+        public Command DownloadSettingsCommand { get; set; }
+
         /// <summary>
         /// Command for showing download in folder
         /// </summary>
-        public Command ShowInFolderCmd { get; set; }
+        public Command ShowInFolderCommand { get; set; }
 
         private void DownloadSettings(object param)
         {
             try
             {
-                if(!string.IsNullOrEmpty(param.ToString()))
+                if (!string.IsNullOrEmpty(param.ToString()))
                 {
                     download.MaxRate = Convert.ToDouble(param.ToString(), new NumberFormatInfo());
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
                 
             }
@@ -173,7 +174,7 @@ namespace DownloadsManager.ViewModels
             {
                 download.Start();
             }
-            catch(InvalidOperationException) 
+            catch (InvalidOperationException) 
             { 
             }
         }
@@ -199,19 +200,19 @@ namespace DownloadsManager.ViewModels
         //    throw new NotImplementedException();
         //}
 
-        void download_SegmentChanged(object sender, EventArgs e)
+        private void Download_SegmentChanged(object sender, EventArgs e)
         {
             NotifyPropertyChanged("Progress");
             NotifyPropertyChanged("Rate");
             NotifyPropertyChanged("SizeInfo");
         }
 
-        void download_StateChanged(object sender, EventArgs e)
+        private void Download_StateChanged(object sender, EventArgs e)
         {
             NotifyPropertyChanged("State");
         }
 
-        void download_ThreadAdded(object sender, EventArgs e)
+        private void Download_ThreadAdded(object sender, EventArgs e)
         {
             NotifyPropertyChanged("Progress");
             NotifyPropertyChanged("Rate");

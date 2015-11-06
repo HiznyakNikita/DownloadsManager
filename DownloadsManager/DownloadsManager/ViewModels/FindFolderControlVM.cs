@@ -9,7 +9,11 @@ namespace DownloadsManager.ViewModels
 {
     public class FindFolderControlVM : MainVM, IFindFolderControlVM
     {
+        public FindFolderControlVM() 
+        { 
+
+        }
+
         public string FolderPath { get; set; }
-        public FindFolderControlVM() { }
     }
 }

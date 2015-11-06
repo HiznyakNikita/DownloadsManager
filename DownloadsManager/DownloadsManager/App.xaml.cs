@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using DownloadsManager.Helpers;
 using Autofac.Core;
+using DownloadsManager.Properties;
+using DownloadsManager.Core.Concrete.InternetExplorerExtension;
 
 namespace DownloadsManager
 {
@@ -28,6 +30,9 @@ namespace DownloadsManager
         /// <param name="e">events</param>
         protected override void OnStartup(StartupEventArgs e)
         {
+            //Guid IEExtensionGuid = Guid.NewGuid();
+           // RegistryHelper.AddNewRegistryKey(IEExtensionGuid);
+            //RegistryHelper.SetRegistryKeyValues(IEExtensionGuid);
             AutofacHelper.OnStartupInit();
             IWindowOpener opener = AutofacHelper.Container.Resolve<IWindowOpener>();
             opener.OpenNewWindow(AutofacHelper.Container.Resolve<IMainWindowVM>());

@@ -10,17 +10,17 @@ namespace DownloadsManager.Helpers
     {
         public static double BytesToKBConverter(double bytes)
         {
-            return Math.Round(bytes / 1024,4);
+            return Math.Round(bytes / 1024, 4);
         }
 
         public static double BytesToMBConverter(double bytes)
         {
-            return Math.Round(BytesToKBConverter(bytes) / 1024,4);
+            return Math.Round(BytesToKBConverter(bytes) / 1024, 4);
         }
 
         public static double BytesToGBConverter(double bytes)
         {
-            return Math.Round(BytesToMBConverter(bytes) / 1024,4);
+            return Math.Round(BytesToMBConverter(bytes) / 1024, 4);
         }
     }
 }

@@ -9,7 +9,7 @@
             <TextBox x:Name="tbFolderPath" Style="{StaticResource TextBoxStyle}" 
         		HorizontalAlignment="Left" Margin="2,2,2,0" Height="23" TextWrapping="Wrap" 
         		VerticalAlignment="Top" Width="242" Text="{Binding DefaultSavePathMusic, UpdateSourceTrigger=PropertyChanged}"/>
-            <Button Click="btnChooseFolder_Click"  VerticalAlignment="Top" Width="25" Height="23" Margin="2"
+            <Button Click="BtnChooseFolder_Click"  VerticalAlignment="Top" Width="25" Height="23" Margin="2"
         		x:Name="btnChooseFolder" Style="{StaticResource chooseFolderButtonStyle}"/>
         </StackPanel>
     </Grid>

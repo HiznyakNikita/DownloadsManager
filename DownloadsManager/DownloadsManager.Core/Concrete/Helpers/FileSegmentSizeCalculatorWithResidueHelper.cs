@@ -47,7 +47,11 @@ namespace DownloadsManager.Core.Concrete
             return base.CalculateSegmentSize(segmentCount, remoteFileInfo);
         }
 
-        public override List<CalculatedFileSegment> GetCalculatedSegments(int segmentCount, RemoteFileInfo remoteFileInfo, long calculatedSegmentSize, long residueBytes)
+        public override List<CalculatedFileSegment> GetCalculatedSegments(
+            int segmentCount, 
+            RemoteFileInfo remoteFileInfo, 
+            long calculatedSegmentSize, 
+            long residueBytes)
         {
             return base.GetCalculatedSegments(segmentCount, remoteFileInfo, calculatedSegmentSize, residueBytes);
         }

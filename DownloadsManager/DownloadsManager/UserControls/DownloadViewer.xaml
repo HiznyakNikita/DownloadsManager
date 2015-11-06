@@ -45,8 +45,8 @@
                         <Label Content="Max rate (kb/sec):" Foreground="WhiteSmoke"/>
                         <TextBox x:Name="tbDownloadMaxRate" Width="118" Height="26"></TextBox>
                         <Button x:Name="btnDownloadSettings" HorizontalAlignment="Right" Margin="5"
-                            Command="{Binding DownloadSettingsCmd}" CommandParameter="{Binding ElementName=tbDownloadMaxRate, Path=Text}"
-                            Content="Save" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20" Click="btnDownloadSettings_Click"/>
+                            Command="{Binding DownloadSettingsCommand}" CommandParameter="{Binding ElementName=tbDownloadMaxRate, Path=Text}"
+                            Content="Save" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20" Click="BtnDownloadSettings_Click"/>
                 </StackPanel>
                     
             </StackPanel>
@@ -67,9 +67,9 @@
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button x:Name="btnPause" Command="{Binding PauseDownloadCmd}" Content="Pause" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20"/>
-                <Button x:Name="btnStart" Margin="7" Command="{Binding StartDownloadCmd}" Content="Start" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20"/>
-                <Button x:Name="btnShowInFolder" Command="{Binding ShowInFolderCmd}" Content="Folder" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20"/>
+                <Button x:Name="btnPause" Command="{Binding PauseDownloadCommand}" Content="Pause" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20"/>
+                <Button x:Name="btnStart" Margin="7" Command="{Binding StartDownloadCommand}" Content="Start" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20"/>
+                <Button x:Name="btnShowInFolder" Command="{Binding ShowInFolderCommand}" Content="Folder" Style="{StaticResource buttonWithTextStyle}" Width="60" Height="20"/>
             </StackPanel>
         </StackPanel>
     </Grid>

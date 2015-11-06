@@ -100,6 +100,11 @@ namespace DownloadsManager.ViewModels
             NotifyPropertyChanged("Mirror");
         }
 
+        public void AddSavePath(string path)
+        {
+            SavePath = path;
+        }
+
         public void AddDownload()
         {
             string fileName = string.Empty;
@@ -120,11 +125,6 @@ namespace DownloadsManager.ViewModels
             Uri uri = new Uri(mirror.Url);
             var fileName = uri.Segments[uri.Segments.Length - 1];
             return HttpUtility.UrlDecode(fileName).Replace("/", "\\");
-        }
-
-        public void AddSavePath(string path)
-        {
-            SavePath = path;
         }
     }
 }

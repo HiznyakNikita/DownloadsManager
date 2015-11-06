@@ -16,7 +16,7 @@ namespace DownloadsManager.Helpers
     {
         public IControl CreateControl(IMainVM model)
         {
-            if(model is DownloadViewerVM)
+            if (model is DownloadViewerVM)
                 using (var container = AutofacHelper.Container)
                 {
                     return new DownloadViewer(model as IDownloadViewerVM);

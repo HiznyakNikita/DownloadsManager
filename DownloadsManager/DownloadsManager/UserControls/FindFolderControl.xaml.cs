@@ -31,7 +31,7 @@ namespace DownloadsManager.UserControls
             this.DataContext = _model = model;
         }
 
-        private void btnChooseFolder_Click(object sender, RoutedEventArgs e)
+        private void BtnChooseFolder_Click(object sender, RoutedEventArgs e)
         {
             using (System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog())
             {

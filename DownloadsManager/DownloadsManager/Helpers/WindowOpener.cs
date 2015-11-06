@@ -17,7 +17,7 @@ namespace DownloadsManager.Helpers
     {
         public void OpenNewWindow(IMainVM model)
         {
-            if(model is IMainWindowVM)
+            if (model is IMainWindowVM)
                 using (var container = AutofacHelper.Container)
                 {
                     var newWindow = new MainView((IMainWindowVM)model);

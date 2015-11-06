@@ -55,6 +55,7 @@ namespace DownloadsManager.UserControls
         /// <summary>
         /// ctor
         /// </summary>
+        /// <param name="model"> view model</param>
         public DownloadViewer(IDownloadViewerVM model)
         {
             InitializeComponent();
@@ -72,13 +73,13 @@ namespace DownloadsManager.UserControls
             }
         }
 
-        private void btnDownloadSettings_Click(object sender, RoutedEventArgs e)
+        private void BtnDownloadSettings_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 Convert.ToDouble(tbDownloadMaxRate.Text, new NumberFormatInfo());
             }
-            catch(Exception)
+            catch (Exception)
             {
                 MessageBox.Show("Wrong number in max rate!");
             }

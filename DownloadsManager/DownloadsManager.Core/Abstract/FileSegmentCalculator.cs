@@ -73,6 +73,7 @@ namespace DownloadsManager.Core.Abstract
                     startSegmentPosition = calculatedSegments[calculatedSegments.Count - 1].SegmentEndPosition;
                 }
             }
+
             return calculatedSegments;
         }
     }

@@ -54,10 +54,7 @@ namespace DownloadsManager.Views
             this.Close();
         }
 
-        
-
         #region INotifyPropertyChanged
-
         private void NotifyPropertyChanged(string property)
         {
             if (PropertyChanged != null)

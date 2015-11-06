@@ -48,11 +48,11 @@
             <TabItem Header="STATISTIC">
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <metroChart:PieChart
+                            <metroChart:PieChart
                         ChartTitle="Downloads types"
                         ChartSubTitle="statistic"
-                        SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" Height="310" Width="588">
-                            <metroChart:PieChart.Series>
+                        Height="310" Width="588">
+                                <metroChart:PieChart.Series>
                                 <metroChart:ChartSeries
                                 SeriesTitle="Types"
                                 DisplayMember="FileType"
@@ -64,7 +64,7 @@
                         <metroChart:PieChart
                         ChartTitle="Downloads states"
                         ChartSubTitle="statistic"
-                        SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" Height="310" Width="604">
+                        Height="310" Width="604">
                             <metroChart:PieChart.Series>
                                 <metroChart:ChartSeries
                                 SeriesTitle="States"

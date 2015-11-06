@@ -13,6 +13,12 @@ namespace DownloadsManager.Core.Concrete
         private Stream proxy;
         private SpeedLimitHelper speedLimit;
 
+        public LimitedSpeedProxyStream(Stream proxy, SpeedLimitHelper speedLimit)
+        {
+            this.speedLimit = speedLimit;
+            this.proxy = proxy;
+        }
+
         #region Stream
 
         public override bool CanRead
@@ -30,11 +36,6 @@ namespace DownloadsManager.Core.Concrete
             get { return proxy.CanWrite; }
         }
 
-        public override void Flush()
-        {
-            proxy.Flush();
-        }
-
         public override long Length
         {
             get { return proxy.Length; }
@@ -46,10 +47,16 @@ namespace DownloadsManager.Core.Concrete
             {
                 return proxy.Position;
             }
+
             set
             {
                 proxy.Position = value;
             }
+        }
+
+        public override void Flush()
+        {
+            proxy.Flush();
         }
 
         public override int Read(byte[] buffer, int offset, int count)
@@ -75,11 +82,5 @@ namespace DownloadsManager.Core.Concrete
         } 
 
         #endregion
-
-        public LimitedSpeedProxyStream(Stream proxy, SpeedLimitHelper speedLimit)
-        {
-            this.speedLimit = speedLimit;
-            this.proxy = proxy;
-        }
     }
 }

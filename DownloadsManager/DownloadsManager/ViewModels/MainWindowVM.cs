@@ -111,6 +111,11 @@ namespace DownloadsManager.ViewModels
             NotifyPropertyChanged("DownloadsHistory");
         }
 
+        public Hashtable GetDownloaders()
+        {
+            return ItemsToDownloaders;
+        }
+
         private void AddSavedDownloads()
         {
             try
@@ -171,11 +176,6 @@ namespace DownloadsManager.ViewModels
             DownloadsSerializer.Serialize(downloadsToSave);
         }
 
-        public Hashtable GetDownloaders()
-        {
-            return ItemsToDownloaders;
-        }
-
         /// <summary>
         /// Method for adding download
         /// </summary>
@@ -202,7 +202,7 @@ namespace DownloadsManager.ViewModels
                 NotifyPropertyChanged("DownloadStatesStatistic");
                 NotifyPropertyChanged("DownloadTypesStatistic");
             }
-            catch(ArgumentNullException)
+            catch (ArgumentNullException)
             {
 
             }
@@ -238,6 +238,7 @@ namespace DownloadsManager.ViewModels
 
             return result;
         }
+
         #endregion
     }
 }

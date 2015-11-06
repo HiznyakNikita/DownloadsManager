@@ -18,6 +18,12 @@ namespace DownloadsManager.Core.Protocol
         private IProtocolProvider proxy;
         private SpeedLimitHelper speedLimit;
 
+        public HttpProtocolProviderSpeedLimitProxy(IProtocolProvider proxy, SpeedLimitHelper speedLimit)
+        {
+            this.proxy = proxy;
+            this.speedLimit = speedLimit;
+        }
+
         #region IProtocolProvider Members
 
         public System.IO.Stream CreateResponseStream(ResourceInfo resourceInfo, int startRangePosition, int endRangePosition)
@@ -38,11 +44,5 @@ namespace DownloadsManager.Core.Protocol
         }
 
         #endregion
-
-        public HttpProtocolProviderSpeedLimitProxy(IProtocolProvider proxy, SpeedLimitHelper speedLimit)
-        {
-            this.proxy = proxy;
-            this.speedLimit = speedLimit;
-        }
     }
 }

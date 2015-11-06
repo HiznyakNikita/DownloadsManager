@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DownloadsManager.Core.Concrete.Helpers
 {
@@ -33,6 +32,7 @@ namespace DownloadsManager.Core.Concrete.Helpers
             {
                 fs.SetLength(Math.Max(fileSize, 0));
             }
+
             return newFileName;
         }
     }

@@ -376,6 +376,327 @@ namespace DownloadsManager.Core.Concrete
 
         #endregion
 
+        #region Operator overrirding
+                /// <summary>
+                /// overriding for == binary operator
+                /// </summary>
+                /// <param name="current">current instance of Downloader</param>
+                /// <param name="other">other instance of Downloader</param>
+                /// <returns>true/false depends on result of operation</returns>
+                public static bool operator ==(Downloader current, Downloader other)
+                {
+                    return EqualityComparer<Downloader>.Default.Equals(current, other);
+                }
+
+                /// <summary>
+                /// overriding for != binary operator
+                /// </summary>
+                /// <param name="current">current instance of Downloader</param>
+                /// <param name="other">other instance of Downloader</param>
+                /// <returns>true/false depends on result of operation</returns>
+                public static bool operator !=(Downloader current, Downloader other)
+                {
+                    return !(current == other);
+                }
+
+        #endregion
+
+        /// <summary>
+        /// Method for downloading file from uri to path
+        /// </summary>
+        /// <param name="uri">uri</param>
+        /// <param name="path">path</param>
+        public void Download(string uri, string path)
+        {
+            Stream downloadStream;
+            int currentTry = 0;
+            do
+            {
+                currentTry++;
+                try
+                {
+                    remoteFileInfo = ProtocolProvider.GetFileInfo(ResourceInfo, out downloadStream);
+                    break;
+                }
+                catch (ThreadAbortException)
+                {
+                    return;
+                }
+                catch (Exception)
+                {
+                    Thread.Sleep(TimeSpan.FromSeconds(10));
+                }
+            }
+            while (true);
+        }
+
+        /// <summary>
+        /// Sets state of downloader
+        /// </summary>
+        /// <param name="stateToSet">State of downloader</param>
+        public void SetState(IDownloaderState stateToSet)
+        {
+            if (stateToSet != null)
+            {
+                State = stateToSet;
+                OnStateChanged();
+            }
+        }
+
+        /// <summary>
+        /// start prepeare fow download
+        /// startDownloadThread method of state starting
+        /// </summary>
+        public void StartToPrepare()
+        {
+            mainThread = new Thread(new ParameterizedThreadStart(State.StartDownloadThread));
+            mainThread.Start(RequestedSegments);
+        }
+
+        /// <summary>
+        /// start already prepeared downloader for file downloading
+        /// </summary>
+        public void StartPrepared()
+        {
+            mainThread = new Thread(new ThreadStart(RestartDownload));
+            mainThread.Start();
+        }
+
+        /// <summary>
+        /// Start downloading file by segments
+        /// </summary>
+        /// <param name="segmentCount">count of segments</param>
+        /// <param name="inputStream">input stream for downloading</param>
+        public void StartSegments(int segmentCount, Stream inputStream)
+        {
+            ////Pre-downloading locate file on local disk
+            LocalFilesHelper.LocateLocalFile(LocalFile, FileName, FileSize);
+
+            OnLocalFileInfoChanged();
+            List<CalculatedFileSegment> calculatedSegments;
+
+            if (!remoteFileInfo.AcceptRanges)
+            {
+                calculatedSegments = new List<CalculatedFileSegment> { new CalculatedFileSegment(0, remoteFileInfo.FileSize) };
+            }
+            else
+            {
+                calculatedSegments = this.SegmentCalculator.GetSegments(segmentCount, remoteFileInfo);
+            }
+
+            if (threads != null)
+            {
+                lock (threads)
+                {
+                    threads.Clear();
+                }
+            }
+
+            lock (segments)
+            {
+                segments.Clear();
+            }
+
+            for (int i = 0; i < calculatedSegments.Count; i++)
+            {
+                FileSegment segment = new FileSegment();
+                if (i == 0)
+                {
+                    segment.InputStream = inputStream;
+                }
+
+                segment.Index = i;
+                segment.InitialStartPosition = calculatedSegments[i].SegmentStartPosition;
+                segment.StartPosition = calculatedSegments[i].SegmentStartPosition;
+                segment.EndPosition = calculatedSegments[i].SegmentEndPosition;
+
+                segments.Add(segment);
+            }
+
+            OnSegmentChanged();
+            RunSegments();
+        }
+
+        /// <summary>
+        /// Method for ending operations wen all work threads finish operations
+        /// </summary>
+        /// <param name="timeout">timeout of threads</param>
+        /// <returns>true if threads finished false if we have error</returns>
+        public bool AllWorkersStopped(int timeout)
+        {
+            bool allFinished = true;
+
+            List<Thread> workThreads = new List<Thread>();
+            if (threads != null)
+            {
+                lock (threads)
+                {
+                    workThreads.AddRange(threads);
+                }
+            }
+
+            foreach (Thread t in workThreads)
+            {
+                bool finished = t.Join(timeout);
+                allFinished = allFinished & finished;
+
+                if (finished && threads != null)
+                {
+                    lock (threads)
+                    {
+                        threads.Remove(t);
+                    }
+                }
+            }
+
+            OnThreadAdded();
+
+            return allFinished;
+        }
+
+        /// <summary>
+        /// start downloading in state
+        /// </summary>
+        public void Start()
+        {
+            try
+            {
+                State.Start();
+            }
+            catch (Exception)
+            {
+                throw new InvalidOperationException();
+            }
+        }
+
+        /// <summary>
+        /// pause downloading in state
+        /// </summary>
+        public void Pause()
+        {
+            try
+            {
+                State.Pause();
+            }
+            catch (Exception)
+            {
+                throw new InvalidOperationException();
+            }
+        }
+
+        #region HelperMethods
+
+        /// <summary>
+        /// Get hash code overriding
+        /// </summary>
+        /// <returns>hash</returns>
+        public override int GetHashCode()
+        {
+            return this.CreatedDateTime.GetHashCode() 
+                ^ this.FileName.GetHashCode() 
+                ^ this.FileSize.GetHashCode();
+        }
+
+        /// <summary>
+        /// Object equals overriding
+        /// </summary>
+        /// <param name="obj">param obj</param>
+        /// <returns>true/false</returns>
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Downloader);
+        }
+
+        /// <summary>
+        /// Equals overriding
+        /// </summary>
+        /// <param name="other">other instance of Downloader</param>
+        /// <returns>true if equals, false if not</returns>
+        public bool Equals(Downloader other)
+        {
+            if (other == null)
+                return false;
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            return this.FileName == other.FileName
+                && this.FileSize == other.FileSize
+                && this.CreatedDateTime == other.CreatedDateTime;
+        }
+
+        #endregion
+
+        #region EventMethods
+
+        protected virtual void OnStateChanged()
+        {
+            if (StateChanged != null)
+            {
+                StateChanged(this, EventArgs.Empty);
+            }
+        }
+
+        protected virtual void OnSegmentChanged()
+        {
+            if (SegmentChanged != null)
+            {
+                SegmentChanged(this, EventArgs.Empty);
+            }
+        }
+
+        protected virtual void OnThreadAdded()
+        {
+            if (ThreadAdded != null)
+            {
+                ThreadAdded(this, EventArgs.Empty);
+            }
+        }
+
+        protected virtual void OnRemoteFileInfoChanged()
+        {
+            if (RemoteFileInfoChanged != null)
+            {
+                RemoteFileInfoChanged(this, EventArgs.Empty);
+            }
+        }
+
+        protected virtual void OnLocalFileInfoChanged()
+        {
+            if (LocalFileInfoChanged != null)
+            {
+                LocalFileInfoChanged(this, EventArgs.Empty);
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Need for get next mirror if files in mirror and main download are different
+        /// </summary>
+        /// <returns>Resource information</returns>
+        private ResourceInfo GetNextResourceInfo()
+        {
+            if (Mirrors == null || mirrors.Count() == 0)
+            {
+                return this.ResourceInfo;
+            }
+
+            lock (Mirrors)
+            {
+                if (mirrorCounter >= mirrors.Count())
+                {
+                    mirrorCounter = 0;
+
+                    return this.ResourceInfo;
+                }
+
+                return mirrors[mirrorCounter++];
+            }
+        }
+
         private void RunSegments()
         {
             State.SetState(new DownloadDownloadingState(this));
@@ -390,7 +711,7 @@ namespace DownloadsManager.Core.Concrete
 
                 do
                 {
-                    while (!AllWorkersStopped(1000)) ;
+                    while (!AllWorkersStopped(10));
                 }
                 while (RestartFailedSegments());
             }
@@ -448,7 +769,7 @@ namespace DownloadsManager.Core.Concrete
             segmentThread.Start(newSegment);
             OnThreadAdded();
             if (threads == null)
-                threads = new List<Thread>();
+
             lock (threads)
             {
                 threads.Add(segmentThread);
@@ -718,322 +1039,5 @@ namespace DownloadsManager.Core.Concrete
             }
         }
 
-        /// <summary>
-        /// Method for downloading file from uri to path
-        /// </summary>
-        /// <param name="uri">uri</param>
-        /// <param name="path">path</param>
-        public void Download(string uri, string path)
-        {
-            Stream downloadStream;
-            int currentTry = 0;
-            do
-            {
-                currentTry++;
-                try
-                {
-                    remoteFileInfo = ProtocolProvider.GetFileInfo(ResourceInfo, out downloadStream);
-                    break;
-                }
-                catch (ThreadAbortException)
-                {
-                    return;
-                }
-                catch (Exception)
-                {
-                    Thread.Sleep(TimeSpan.FromSeconds(10));
-                }
-            }
-            while (true);
-        }
-
-        /// <summary>
-        /// Sets state of downloader
-        /// </summary>
-        /// <param name="stateToSet">State of downloader</param>
-        public void SetState(IDownloaderState stateToSet)
-        {
-            if (stateToSet != null)
-            {
-                State = stateToSet;
-                OnStateChanged();
-            }
-        }
-
-        /// <summary>
-        /// start prepeare fow download
-        /// startDownloadThread method of state starting
-        /// </summary>
-        public void StartToPrepare()
-        {
-            mainThread = new Thread(new ParameterizedThreadStart(State.StartDownloadThread));
-            mainThread.Start(RequestedSegments);
-        }
-
-        /// <summary>
-        /// start already prepeared downloader for file downloading
-        /// </summary>
-        public void StartPrepared()
-        {
-            mainThread = new Thread(new ThreadStart(RestartDownload));
-            mainThread.Start();
-        }
-
-        /// <summary>
-        /// Start downloading file by segments
-        /// </summary>
-        /// <param name="segmentCount">count of segments</param>
-        /// <param name="inputStream">input stream for downloading</param>
-        public void StartSegments(int segmentCount, Stream inputStream)
-        {
-            ////Pre-downloading locate file on local disk
-            LocalFilesHelper.LocateLocalFile(LocalFile, FileName, FileSize);
-
-            OnLocalFileInfoChanged();
-            List<CalculatedFileSegment> calculatedSegments;
-
-            if (!remoteFileInfo.AcceptRanges)
-            {
-                calculatedSegments = new List<CalculatedFileSegment> { new CalculatedFileSegment(0, remoteFileInfo.FileSize) };
-            }
-            else
-            {
-                calculatedSegments = this.SegmentCalculator.GetSegments(segmentCount, remoteFileInfo);
-            }
-
-            if (threads != null)
-            {
-                lock (threads)
-                {
-                    threads.Clear();
-                }
-            }
-
-            lock (segments)
-            {
-                segments.Clear();
-            }
-
-            for (int i = 0; i < calculatedSegments.Count; i++)
-            {
-                FileSegment segment = new FileSegment();
-                if (i == 0)
-                {
-                    segment.InputStream = inputStream;
-                }
-
-                segment.Index = i;
-                segment.InitialStartPosition = calculatedSegments[i].SegmentStartPosition;
-                segment.StartPosition = calculatedSegments[i].SegmentStartPosition;
-                segment.EndPosition = calculatedSegments[i].SegmentEndPosition;
-
-                segments.Add(segment);
-            }
-
-            OnSegmentChanged();
-            RunSegments();
-        }
-
-        /// <summary>
-        /// Method for ending operations wen all work threads finish operations
-        /// </summary>
-        /// <param name="timeout">timeout of threads</param>
-        /// <returns>true if threads finished false if we have error</returns>
-        public bool AllWorkersStopped(int timeout)
-        {
-            bool allFinished = true;
-
-            List<Thread> workThreads = new List<Thread>();
-            if (threads != null)
-            {
-                lock (threads)
-                {
-                    workThreads.AddRange(threads);
-                }
-            }
-
-            foreach (Thread t in workThreads)
-            {
-                bool finished = t.Join(timeout);
-                allFinished = allFinished & finished;
-
-                if (finished && threads != null)
-                {
-                    lock (threads)
-                    {
-                        threads.Remove(t);
-                    }
-                }
-            }
-
-            OnThreadAdded();
-
-            return allFinished;
-        }
-
-        /// <summary>
-        /// start downloading in state
-        /// </summary>
-        public void Start()
-        {
-            try
-            {
-                State.Start();
-            }
-            catch (Exception)
-            {
-                throw new InvalidOperationException();
-            }
-        }
-
-        /// <summary>
-        /// pause downloading in state
-        /// </summary>
-        public void Pause()
-        {
-            try
-            {
-                State.Pause();
-            }
-            catch (Exception)
-            {
-                throw new InvalidOperationException();
-            }
-        }
-
-        #region EventMethods
-
-        protected virtual void OnStateChanged()
-        {
-            if (StateChanged != null)
-            {
-                StateChanged(this, EventArgs.Empty);
-            }
-        }
-
-        protected virtual void OnSegmentChanged()
-        {
-            if (SegmentChanged != null)
-            {
-                SegmentChanged(this, EventArgs.Empty);
-            }
-        }
-
-        protected virtual void OnThreadAdded()
-        {
-            if (ThreadAdded != null)
-            {
-                ThreadAdded(this, EventArgs.Empty);
-            }
-        }
-
-        protected virtual void OnRemoteFileInfoChanged()
-        {
-            if (RemoteFileInfoChanged != null)
-            {
-                RemoteFileInfoChanged(this, EventArgs.Empty);
-            }
-        }
-
-        protected virtual void OnLocalFileInfoChanged()
-        {
-            if (LocalFileInfoChanged != null)
-            {
-                LocalFileInfoChanged(this, EventArgs.Empty);
-            }
-        }
-
-        #endregion
-
-        #region HelperMethods
-
-        /// <summary>
-        /// Need for get next mirror if files in mirror and main download are different
-        /// </summary>
-        /// <returns>Resource information</returns>
-        private ResourceInfo GetNextResourceInfo()
-        {
-            if (Mirrors == null || mirrors.Count() == 0)
-            {
-                return this.ResourceInfo;
-            }
-
-            lock (Mirrors)
-            {
-                if (mirrorCounter >= mirrors.Count())
-                {
-                    mirrorCounter = 0;
-
-                    return this.ResourceInfo;
-                }
-
-                return mirrors[mirrorCounter++];
-            }
-        }
-
-        /// <summary>
-        /// Get hash code overriding
-        /// </summary>
-        /// <returns>hash</returns>
-        public override int GetHashCode()
-        {
-            return this.CreatedDateTime.GetHashCode() 
-                ^ this.FileName.GetHashCode() 
-                ^ this.FileSize.GetHashCode();
-        }
-
-        /// <summary>
-        /// Object equals overriding
-        /// </summary>
-        /// <param name="obj">param obj</param>
-        /// <returns>true/false</returns>
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as Downloader);
-        }
-
-        /// <summary>
-        /// overriding for == binary operator
-        /// </summary>
-        /// <param name="current">current instance of Downloader</param>
-        /// <param name="other">other instance of Downloader</param>
-        /// <returns>true/false depends on result of operation</returns>
-        public static bool operator==(Downloader current, Downloader other)
-        {
-            return EqualityComparer<Downloader>.Default.Equals(current, other);
-        }
-
-        /// <summary>
-        /// overriding for != binary operator
-        /// </summary>
-        /// <param name="current">current instance of Downloader</param>
-        /// <param name="other">other instance of Downloader</param>
-        /// <returns>true/false depends on result of operation</returns>
-        public static bool operator!=(Downloader current, Downloader other)
-        {
-            return !(current == other);
-        }
-
-        /// <summary>
-        /// Equals overriding
-        /// </summary>
-        /// <param name="other">other instance of Downloader</param>
-        /// <returns>true if equals, false if not</returns>
-        public bool Equals(Downloader other)
-        {
-            if (other == null)
-                return false;
-
-            if (ReferenceEquals(this, other))
-            {
-                return true;
-            }
-
-            return this.FileName == other.FileName
-                && this.FileSize == other.FileSize
-                && this.CreatedDateTime == other.CreatedDateTime;
-        }
-
-        #endregion
     }
 }

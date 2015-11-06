@@ -18,6 +18,7 @@ namespace DownloadsManager.Helpers
         /// <summary>
         /// method for open new window and attach VM
         /// </summary>
+        /// <param name="model">view model</param>
         void OpenNewWindow(IMainVM model);
     }
 }

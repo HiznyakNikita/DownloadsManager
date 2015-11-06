@@ -11,12 +11,17 @@ namespace DownloadsManager.Core.Concrete.Helpers
     [Serializable]
     public class SpeedLimitHelper
     {
+        private const int UpBalance = 50;
+        private const int DownBalance = -80;
+
         private Downloader _downloader;
 
-        private const int upBalance = 50;
-        private const int downBalance = -80;
-
         private double currentWait;
+
+        public SpeedLimitHelper(Downloader downloader)
+        {
+            _downloader = downloader;
+        }
 
         #region Properties
 
@@ -36,13 +41,13 @@ namespace DownloadsManager.Core.Concrete.Helpers
         {
             double tempRate = _downloader.Rate;
 
-            if (tempRate > CurrentMaxRate*100)
+            if (tempRate > CurrentMaxRate * 100)
             {
-                currentWait += upBalance;
+                currentWait += UpBalance;
             }
             else
             {
-                currentWait = Math.Max(currentWait + downBalance, 0);
+                currentWait = Math.Max(currentWait + DownBalance, 0);
             }
 
             Thread.Sleep(TimeSpan.FromMilliseconds(currentWait));
@@ -50,15 +55,6 @@ namespace DownloadsManager.Core.Concrete.Helpers
             Debug.WriteLine("rate = " + tempRate);
             Debug.WriteLine("maxLimit = " + CurrentMaxRate);
             Debug.WriteLine("currentWait = " + currentWait);
-        }
-
-        #endregion
-
-        #region Constructor
-
-        public SpeedLimitHelper(Downloader downloader)
-        {
-            _downloader = downloader;
         }
 
         #endregion

@@ -32,14 +32,14 @@ namespace DownloadsManager.Helpers
                     return (List<Downloader>)new BinaryFormatter().Deserialize(fs);
                 }
             }
-            catch(FileNotFoundException)
+            catch (FileNotFoundException)
             {
-                using(var fs = File.Create("downloads.bin"))
+                using (var fs = File.Create("downloads.bin"))
                 {
                     return new List<Downloader>();
                 }
             }
-            catch(SerializationException)
+            catch (SerializationException)
             {
                 return new List<Downloader>();
             }

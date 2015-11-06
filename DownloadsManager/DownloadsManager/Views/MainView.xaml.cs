@@ -34,6 +34,7 @@ namespace DownloadsManager
         /// <summary>
         /// MainWindow ctor
         /// </summary>
+        /// <param name="model"> view model</param>
         public MainView(IMainWindowVM model)
         {
             InitializeComponent();

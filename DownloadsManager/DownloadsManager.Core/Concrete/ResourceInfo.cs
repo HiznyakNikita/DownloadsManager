@@ -124,7 +124,7 @@ namespace DownloadsManager.Core.Concrete
         /// <returns>proxy provider</returns>
         public IProtocolProvider BindProtocolProviderProxy(SpeedLimitHelper speedLimit)
         {
-            if(provider != null)
+            if (provider != null)
             {
                 provider = new HttpProtocolProviderSpeedLimitProxy(provider, speedLimit);
             }

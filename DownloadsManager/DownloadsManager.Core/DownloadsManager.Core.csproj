@@ -78,6 +78,7 @@
     <Compile Include="Concrete\Helpers\FileTypeIdentifier.cs" />
     <Compile Include="Concrete\Helpers\LocalFilesHelper.cs" />
     <Compile Include="Concrete\Helpers\SpeedLimitHelper.cs" />
+    <Compile Include="Concrete\InternetExplorerExtension\RegistryHelper.cs" />
     <Compile Include="Concrete\LimitedSpeedStreamProxy.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
