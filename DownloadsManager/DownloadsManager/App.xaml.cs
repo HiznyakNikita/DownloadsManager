@@ -22,8 +22,12 @@ namespace DownloadsManager
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App : Application, ISingleInstanceApp
     {
+
+        // TODO: Make this unique!
+        private const string Unique = "Change this to something that uniquely identifies your program.";
+
         /// <summary>
         /// Initialize IoC container
         /// </summary>
@@ -37,5 +41,27 @@ namespace DownloadsManager
             IWindowOpener opener = AutofacHelper.Container.Resolve<IWindowOpener>();
             opener.OpenNewWindow(AutofacHelper.Container.Resolve<IMainWindowVM>());
         }
+
+        [STAThread]
+        public static void Main()
+        {
+            if (SingleInstance<App>.InitializeAsFirstInstance(Unique))
+            {
+                var application = new App();
+                application.InitializeComponent();
+                application.Run();
+
+                // Allow single instance code to perform cleanup operations
+                SingleInstance<App>.Cleanup();
+            }
+        }
+
+        #region ISingleInstanceApp Members
+        public bool SignalExternalCommandLineArgs(IList<string> args)
+        {
+            // Handle command line arguments of second instance
+            return true;
+        }
+        #endregion
     }
 }
