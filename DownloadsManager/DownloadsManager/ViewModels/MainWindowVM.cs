@@ -76,6 +76,10 @@ namespace DownloadsManager.ViewModels
         /// </summary>
         public Command ShowInFolderCmd { get; set; }
 
+        [field: NonSerialized]
+        public event EventHandler DownloadEndedViewModel;
+
+
         public List<Downloader> DownloadsHistory
         { 
             get
@@ -211,6 +215,14 @@ namespace DownloadsManager.ViewModels
             DownloadsSerializer.Serialize(downloadsToSave);
         }
 
+        public void OnDownloadEnded(object sender, EventArgs e)
+        {
+            if (DownloadEndedViewModel != null)
+            {
+                DownloadEndedViewModel(this, e);
+            }
+        }
+
         /// <summary>
         /// Method for adding download
         /// </summary>
@@ -222,6 +234,7 @@ namespace DownloadsManager.ViewModels
                 IWindowOpener windowOpener = new WindowOpener();
                 windowOpener.OpenNewWindow(new NewDownloadVM());
                 Downloader fileToDownload = DownloaderManager.Instance.LastDownload;
+                fileToDownload.DownloadEnded += OnDownloadEnded;
 
                 IControlCreator controlCreator = new ControlCreator();
                 DownloadViewerVM model = new DownloadViewerVM(fileToDownload);

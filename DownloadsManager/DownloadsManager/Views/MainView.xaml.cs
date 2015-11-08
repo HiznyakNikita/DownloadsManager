@@ -42,22 +42,18 @@ namespace DownloadsManager
             timer.Interval = TimeSpan.FromSeconds(0.5);
             timer.Tick += Timer_Tick;
             timer.Start();
+            (model as MainWindowVM).DownloadEndedViewModel += DownloaderManager_DownloadEnded;
+        }
+
+        private void DownloaderManager_DownloadEnded(object sender, EventArgs e)
+        {
+            TrayIcon.ShowBalloonTip(5, "Download finished!", "Download: " + (e as DownloadEndedEventArgs).DownloadName + " finished!", System.Windows.Forms.ToolTipIcon.Info);
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
             this.itemsControlDownloads.ItemsSource = null;
             this.itemsControlDownloads.ItemsSource = _model.GetDownloaders().Values;
-        }
-
-        private void BtnCloseWindow_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
-        private void MenuItemAddDownload_Click(object sender, RoutedEventArgs e)
-        {
-            
         }
 
         private void BtnHideWindow_Click(object sender, RoutedEventArgs e)
@@ -75,6 +71,122 @@ namespace DownloadsManager
             {
                 MessageBox.Show("Wrong seleted dates");
             }
+        }
+
+        #region Tray
+        /// <summary>
+        /// override method for init
+        /// </summary>
+        /// <param name="e"></param>
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            // base for return in previous state
+            base.OnSourceInitialized(e);
+            CreateTrayIcon();
+        }
+        private System.Windows.Forms.NotifyIcon TrayIcon = null;
+        private System.Windows.Controls.ContextMenu TrayMenu = null;
+
+        private bool CreateTrayIcon()
+        {
+            bool result = false;
+            if (TrayIcon == null)
+            {
+                TrayIcon = new System.Windows.Forms.NotifyIcon();
+                TrayIcon.Icon = DownloadsManager.Properties.Resources.icon;
+                TrayIcon.Text = DownloadsManager.Properties.Resources.Name;
+                TrayMenu = Resources["TrayMenu"] as System.Windows.Controls.ContextMenu;
+                TrayIcon.Click += delegate(object sender, EventArgs e)
+                {
+                    if ((e as System.Windows.Forms.MouseEventArgs).Button == System.Windows.Forms.MouseButtons.Left)
+                    {
+
+                        ShowHideMainWindow(sender, null);
+                    }
+                    else
+                    {
+
+                        TrayMenu.IsOpen = true;
+                        Activate();
+                    }
+                };
+                result = true;
+            }
+            else
+            {
+                result = true;
+            }
+            TrayIcon.Visible = true;
+            return result;
+        }
+
+        private void ShowHideMainWindow(object sender, RoutedEventArgs e)
+        {
+            TrayMenu.IsOpen = false;
+            if (IsVisible)
+            {
+                Hide();
+
+                (TrayMenu.Items[0] as System.Windows.Controls.MenuItem).Header = "Show";
+            }
+            else
+            {
+                Show();
+
+                (TrayMenu.Items[0] as System.Windows.Controls.MenuItem).Header = "Hide";
+                WindowState = CurrentWindowState;
+                Activate();
+            }
+        }
+        
+        private WindowState fCurrentWindowState = WindowState.Maximized;
+        
+        /// <summary>
+        /// Temporary window state
+        /// </summary>
+        public WindowState CurrentWindowState
+        {
+            get { return fCurrentWindowState; }
+            set { fCurrentWindowState = value; }
+        }
+
+        protected override void OnStateChanged(EventArgs e)
+        {
+            base.OnStateChanged(e);
+            if (this.WindowState == System.Windows.WindowState.Minimized)
+            {
+
+                Hide();
+
+                (TrayMenu.Items[0] as System.Windows.Controls.MenuItem).Header = "Show";
+            }
+            else
+            {
+                CurrentWindowState = WindowState;
+            }
+        }
+        private bool fCanClose = false;
+        public bool CanClose
+        {
+            get { return fCanClose; }
+            set { fCanClose = value; }
+        }
+
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            base.OnClosing(e);
+            if (!CanClose)
+            {
+
+            }
+        }
+        #endregion
+
+        private void ExitMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            TrayIcon.Icon = null;
+            Application.Current.Shutdown();
         }
     }
 }

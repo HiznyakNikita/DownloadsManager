@@ -39,6 +39,12 @@
         </Setter>
     </Style>
 
+    <Style TargetType="MenuItem"  x:Key="MenuItemContextMenuStyle">
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontFamily" Value="Segoe UI Light"/> 
+        <Setter Property="Foreground" Value="#FFD4D4D4"/> 
+    </Style>
+
     <Style TargetType="Button" x:Key="ButtonStyle">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Template">

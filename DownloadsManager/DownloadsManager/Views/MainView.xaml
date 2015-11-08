@@ -8,9 +8,17 @@
         xmlns:datavis="clr-namespace:System.Windows.Controls.DataVisualization;assembly=‌​System.Windows.Controls.DataVisualization.Toolkit"
         xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
         xmlns:visualizationToolkit="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"
-        Title="MainWindow" Height="850" Width="1313.612" 
+        Title="Downloads manager" Height="850" Width="1313.612" 
         Background="#FF575757" WindowStyle="None" ResizeMode="NoResize" WindowState="Maximized">
     <Window.Resources>
+        <ContextMenu x:Key="TrayMenu" Background="#FF4A4A4A">
+            <MenuItem Header="Hide" Click="ShowHideMainWindow" Style="{StaticResource MenuItemContextMenuStyle}"/>
+            <MenuItem Header="Add download" Style="{StaticResource MenuItemContextMenuStyle}"
+                      Command="{Binding AddDownloadCmd}" 
+                      CommandParameter="{Binding ElementName=AddDownloadsStackPanel}" 
+                      />
+            <MenuItem Header="Exit" Click="ExitMenuItem_Click"  Style="{StaticResource MenuItemContextMenuStyle}"/>
+        </ContextMenu>
         <DataTemplate DataType="{x:Type vm:MainWindowVM}"/>
     </Window.Resources>
     <Grid>
@@ -23,35 +31,34 @@
                         x:Name="BtnHideWindow" 
                         Style="{StaticResource hideWindowButtonStyle}"/>
                 <Button HorizontalAlignment="Right" 
-                        Click="BtnCloseWindow_Click" 
                         Command="{Binding CloseCmd}" 
                         VerticalAlignment="Top" 
                         Width="20" Height="20" 
                         x:Name="BtnCloseWindow" 
-                        Style="{StaticResource closeWindowButtonStyle}"/>
+                        Style="{StaticResource closeWindowButtonStyle}" Click="ExitMenuItem_Click"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Background="#363636">
                 <Image Source="/Resources/icons/arrow-download-icon.png" HorizontalAlignment="Left"
                        Height="110" Width="110" Margin="10"/>
                 <StackPanel Orientation="Vertical">
                     <Label Style="{StaticResource LabelSmallStyle}" FontSize="24" Content="Downloads" Margin="10"></Label>
-                    <Label Style="{StaticResource LabelSmallStyle}" FontSize="18" Content="Sky downloads manager for Windows"></Label>
+                    <Label Style="{StaticResource LabelSmallStyle}" FontSize="18" Content="Downloads manager for Windows"></Label>
                 </StackPanel>
                 <StackPanel Width="20"/>
-                <StackPanel Orientation="Vertical" Margin="30" Width="680">
+                <StackPanel Orientation="Vertical" Margin="30" Width="719">
                     <StackPanel Orientation="Horizontal">
                         <Label Content="Total downloads:" 
                                        Style="{StaticResource LabelSmallFont20Style}"/>
                         <Label x:Name="lblTotalDownloads" 
                                        Content="{Binding ItemsToDownloaders.Count}"
-                                       Style="{StaticResource LabelSmallFont20Style}" Height="35" Width="500"/>
+                                       Style="{StaticResource LabelSmallFont20Style}" Height="35" Width="556"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Label Content="Total downloaded:" 
                                        Style="{StaticResource LabelSmallFont20Style}"/>
                         <Label x:Name="lblTotalBytesDownloaded" 
                                        Content="{Binding TotalBytesDownloadedStatistic, UpdateSourceTrigger=PropertyChanged}" 
-                                       Style="{StaticResource LabelSmallFont20Style}" FontSize="14" Height="35" Width="500" RenderTransformOrigin="0.5,0.5">
+                                       Style="{StaticResource LabelSmallFont20Style}" FontSize="14" Height="35" Width="542" RenderTransformOrigin="0.5,0.5">
                         </Label>
                     </StackPanel>
                 </StackPanel>
@@ -192,8 +199,10 @@
         </StackPanel>
     </Grid>
     <Window.ContextMenu>
-        <ContextMenu>
-            <MenuItem x:Name="menuItemAddDownload" Command="{Binding AddDownloadCmd}" CommandParameter="{Binding ElementName=AddDownloadsStackPanel}" Header="Add download" Click="MenuItemAddDownload_Click"></MenuItem>
+        <ContextMenu Background="#FF4A4A4A">
+            <MenuItem x:Name="menuItemAddDownload" Command="{Binding AddDownloadCmd}"  
+                      Header="Add download"
+                      Style="{StaticResource MenuItemContextMenuStyle}"></MenuItem>
         </ContextMenu>
     </Window.ContextMenu>
 </Window>

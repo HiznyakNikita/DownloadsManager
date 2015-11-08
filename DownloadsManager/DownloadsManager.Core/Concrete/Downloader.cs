@@ -137,6 +137,8 @@ namespace DownloadsManager.Core.Concrete
         public event EventHandler RemoteFileInfoChanged;
         [field: NonSerialized]
         public event EventHandler StateChanged;
+        [field: NonSerialized]
+        public event EventHandler DownloadEnded;
 
         #endregion
 
@@ -726,6 +728,7 @@ namespace DownloadsManager.Core.Concrete
             }
 
             State.SetState(new DownloadEndedState(this));
+            OnDownloadEnded(this);
             OnStateChanged();
         }
 
@@ -761,6 +764,18 @@ namespace DownloadsManager.Core.Concrete
             Thread.Sleep((int)delay);
 
             return hasErrors;
+        }
+
+        protected virtual void OnDownloadEnded(Downloader downloader)
+        {
+            DownloadEndedEventArgs e = new DownloadEndedEventArgs(null);
+            if (downloader != null)
+                e = new DownloadEndedEventArgs(downloader.FileName);
+
+            if (DownloadEnded != null)
+            {
+                DownloadEnded(this, e);
+            }
         }
 
         private void StartSegment(FileSegment newSegment)
