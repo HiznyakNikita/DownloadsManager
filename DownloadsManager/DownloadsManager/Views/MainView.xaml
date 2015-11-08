@@ -8,7 +8,7 @@
         xmlns:datavis="clr-namespace:System.Windows.Controls.DataVisualization;assembly=‌​System.Windows.Controls.DataVisualization.Toolkit"
         xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
         xmlns:visualizationToolkit="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"
-        Title="MainWindow" Height="850" Width="1236" 
+        Title="MainWindow" Height="850" Width="1313.612" 
         Background="#FF575757" WindowStyle="None" ResizeMode="NoResize" WindowState="Maximized">
     <Window.Resources>
         <DataTemplate DataType="{x:Type vm:MainWindowVM}"/>
@@ -30,30 +30,40 @@
                         x:Name="BtnCloseWindow" 
                         Style="{StaticResource closeWindowButtonStyle}"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" Background="#363636">
                 <Image Source="/Resources/icons/arrow-download-icon.png" HorizontalAlignment="Left"
                        Height="110" Width="110" Margin="10"/>
                 <StackPanel Orientation="Vertical">
                     <Label Style="{StaticResource LabelSmallStyle}" FontSize="24" Content="Downloads" Margin="10"></Label>
                     <Label Style="{StaticResource LabelSmallStyle}" FontSize="18" Content="Sky downloads manager for Windows"></Label>
                 </StackPanel>
-                <StackPanel Width="100"/>
-                <StackPanel Orientation="Vertical" Margin="30" Width="666">
+                <StackPanel Width="20"/>
+                <StackPanel Orientation="Vertical" Margin="30" Width="680">
                     <StackPanel Orientation="Horizontal">
-                                    <Label Content="Total downloads:" 
+                        <Label Content="Total downloads:" 
                                        Style="{StaticResource LabelSmallFont20Style}"/>
-                                    <Label x:Name="lblTotalDownloads" 
+                        <Label x:Name="lblTotalDownloads" 
                                        Content="{Binding ItemsToDownloaders.Count}"
-                                       Style="{StaticResource LabelSmallFont20Style}" Height="38" Width="503"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Content="Total downloaded:" 
+                                       Style="{StaticResource LabelSmallFont20Style}" Height="35" Width="500"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Total downloaded:" 
                                        Style="{StaticResource LabelSmallFont20Style}"/>
-                                    <Label x:Name="lblTotalBytesDownloaded" 
+                        <Label x:Name="lblTotalBytesDownloaded" 
                                        Content="{Binding TotalBytesDownloadedStatistic, UpdateSourceTrigger=PropertyChanged}" 
-                                       Style="{StaticResource LabelSmallFont20Style}" FontSize="14" Height="34" Width="492"/>
-                                </StackPanel>
+                                       Style="{StaticResource LabelSmallFont20Style}" FontSize="14" Height="35" Width="500" RenderTransformOrigin="0.5,0.5">
+                        </Label>
+                    </StackPanel>
                 </StackPanel>
+                <StackPanel Orientation="Vertical" Height="60" Width="109">
+                    <Button x:Name="btnPause" Command="{Binding PauseAllDownloadCommand}" 
+                                Content="Pause All" Style="{StaticResource pauseButtonWithPictureAndTextStyle}" 
+                                Width="90" Height="25"/>
+                    <Button x:Name="btnRemove" Command="{Binding RemoveAllCommand}"
+                                Content="Remove All" Style="{StaticResource removeButtonWithPictureAndTextStyle}" 
+                                Width="90" Height="25" Margin="7"/>
+                </StackPanel>
+                
             </StackPanel>
             <TabControl  x:Name="tabControl" Background="#FF575757" Style="{StaticResource TabControlStyle}" BorderBrush="Transparent">
                 <TabControl.Resources>
@@ -89,9 +99,9 @@
                                                            ItemsSource="{Binding Path=DownloadStatesStatistic, UpdateSourceTrigger=PropertyChanged}" 
                                                            IsSelectionEnabled="True" />
                                 <chartingToolkit:Chart.PlotAreaStyle>
-                                        <Style TargetType="Grid">
-                                            <Setter Property="Background" Value="Transparent" />
-                                        </Style>
+                                    <Style TargetType="Grid">
+                                        <Setter Property="Background" Value="Transparent" />
+                                    </Style>
                                 </chartingToolkit:Chart.PlotAreaStyle>
                                 <chartingToolkit:Chart.LegendStyle>
                                     <Style TargetType="visualizationToolkit:Legend">
@@ -127,7 +137,7 @@
                                                         Foreground="WhiteSmoke"
                                                         VerticalAlignment="Top" Height="341" Margin="0,0,10,0"
                                                         >
-                                        <chartingToolkit:LineSeries  
+                                    <chartingToolkit:LineSeries  
                                         DependentValuePath="Value" IndependentValuePath="Key" 
                                                                  ItemsSource="{Binding Path=RatesStatistic, UpdateSourceTrigger=PropertyChanged}" 
                                                                  IsSelectionEnabled="True"/>

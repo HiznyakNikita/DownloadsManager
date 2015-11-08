@@ -40,10 +40,27 @@ namespace DownloadsManager.ViewModels
             this.AddDownloadCmd = new Command(this.AddDownload);
             this.CloseCmd = new Command(this.Close);
             this.ShowInFolderCmd = new Command(this.ShowInFolder);
+            this.PauseAllDownloadCommand = new Command(PauseAllDownloads);
+            this.RemoveAllCommand = new Command(RemoveAllDownloads);
+            DownloaderManager.Instance.DownloadRemoved += DownloaderManager_DownloadRemoved;
             AddSavedDownloads();
 
         }
 
+        void DownloaderManager_DownloadRemoved(object sender, EventArgs e)
+        {
+            List<Downloader> keys = _itemsToDownloaders.Keys.OfType<Downloader>().ToList();
+            foreach(Downloader d in keys)
+            {
+                if (!DownloaderManager.Instance.Downloads.Contains(d))
+                    _itemsToDownloaders.Remove(d);
+                NotifyPropertyChanged("ItemsToDownloaders");
+            }
+        }
+
+        public Command PauseAllDownloadCommand { get; set; }
+
+        public Command RemoveAllCommand { get; set; }
         /// <summary>
         /// Gets or sets Command for adding download
         /// </summary>
@@ -76,7 +93,8 @@ namespace DownloadsManager.ViewModels
                 Dictionary<DateTime,double> result = new Dictionary<DateTime,double>();
                 foreach(var view in _itemsToDownloaders.Values)
                 {
-                    foreach(KeyValuePair<DateTime,double> t in (view as DownloadViewer).Model.RatesStatistic)
+                    Dictionary<DateTime, double> viewRes = (view as DownloadViewer).Model.RatesStatistic;
+                    foreach(KeyValuePair<DateTime,double> t in viewRes)
                     {
                         result.Add(t.Key, t.Value);
                     }
@@ -199,11 +217,6 @@ namespace DownloadsManager.ViewModels
         /// <param name="param">Download param</param>
         private void AddDownload(object param)
         {
-            //string wmiQuery = string.Format("select CommandLine from Win32_Process where Name='{0}'", "DownloadsManager");
-            //ManagementObjectSearcher searcher = new ManagementObjectSearcher(wmiQuery);
-            //ManagementObjectCollection retObjectCollection = searcher.Get();
-            //foreach (ManagementObject retObject in retObjectCollection)
-            //    Console.WriteLine("[{0}]", retObject["CommandLine"]);
             try
             {
                 IWindowOpener windowOpener = new WindowOpener();
@@ -225,6 +238,29 @@ namespace DownloadsManager.ViewModels
                 NotifyPropertyChanged("DownloadTypesStatistic");
             }
             catch (ArgumentNullException)
+            {
+
+            }
+        }
+
+        private void RemoveAllDownloads(object param)
+        {
+            List<Downloader> keys = _itemsToDownloaders.Keys.OfType<Downloader>().ToList();
+            foreach (var d in keys)
+                _itemsToDownloaders.Remove(d);
+            NotifyPropertyChanged("ItemsToDownloaders");
+        }
+
+        private void PauseAllDownloads(object param)
+        {
+            try
+            {
+                foreach (var d in _itemsToDownloaders.Keys)
+                {
+                    (d as Downloader).Pause();
+                }
+            }
+            catch(InvalidOperationException)
             {
 
             }

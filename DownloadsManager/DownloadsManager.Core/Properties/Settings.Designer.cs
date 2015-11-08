@@ -85,7 +85,7 @@ namespace DownloadsManager.Core.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
         public int RetrySleepInterval {
             get {
                 return ((int)(this["RetrySleepInterval"]));

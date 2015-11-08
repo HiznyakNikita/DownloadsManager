@@ -18,7 +18,7 @@
       <Value Profile="(Default)">5</Value>
     </Setting>
     <Setting Name="RetrySleepInterval" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">5</Value>
+      <Value Profile="(Default)">50</Value>
     </Setting>
     <Setting Name="MinSegmentWidthToNewSegment" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">30</Value>

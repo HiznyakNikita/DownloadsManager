@@ -223,6 +223,47 @@
         </Setter>
     </Style>
 
+    <Style x:Key="removeButtonWithPictureAndTextStyle" TargetType="Button">
+        <Setter Property="Background" Value="#FF575757" />
+        <Setter Property="BorderBrush" Value="WhiteSmoke" />
+        <Setter Property="Foreground" Value="WhiteSmoke" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Resources/icons/remove_unselected.png" />
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="BorderBrush">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="  #6495ED"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="BorderBrush">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="#FF7A7A7A"/>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="#FF7A7A7A"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="pauseButtonWithPictureAndTextStyle" TargetType="Button">
         <Setter Property="Background" Value="#FF575757" />
         <Setter Property="BorderBrush" Value="WhiteSmoke" />
@@ -321,7 +362,7 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="BorderBrush">
                                 <Setter.Value>
-                                    <SolidColorBrush Color="  #6495ED"/>
+                                    <SolidColorBrush Color="#6495ED"/>
                                 </Setter.Value>
                             </Setter>
                         </Trigger>

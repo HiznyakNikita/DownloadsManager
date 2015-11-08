@@ -77,9 +77,20 @@ namespace DownloadsManager.Core.Concrete
             }
         }
 
+        [field: NonSerialized]
+        public event EventHandler DownloadRemoved;
+
         #endregion
 
         #region Methods
+
+        protected virtual void OnDownloadRemoved()
+        {
+            if (DownloadRemoved != null)
+            {
+                DownloadRemoved(this, EventArgs.Empty);
+            }
+        }
 
         public void RemoveDownload(int index)
         {
@@ -94,7 +105,14 @@ namespace DownloadsManager.Core.Concrete
                     downloader.State.State != DownloadState.Ended ||
                     downloader.State.State != DownloadState.Paused)
                 {
-                    downloader.Pause();
+                    try
+                    {
+                        downloader.Pause();
+                    }
+                    catch(InvalidOperationException)
+                    {
+                        
+                    }
                 }
 
                 lock (lockObj)
@@ -102,6 +120,8 @@ namespace DownloadsManager.Core.Concrete
                     downloads.Remove(downloader);
                 }
             }
+
+            OnDownloadRemoved();
         }
 
         public void ClearEnded()
