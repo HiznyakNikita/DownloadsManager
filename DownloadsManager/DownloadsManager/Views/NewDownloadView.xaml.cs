@@ -127,6 +127,7 @@ namespace DownloadsManager.Views
         {
             if (checkBoxAlternative.IsChecked == true)
             {
+                lblUrl.Visibility = Visibility.Visible;
                 btnAddUrl.IsEnabled = true;
                 btnRemoveUrl.IsEnabled = true;
                 tbUrlToDownloadAlternative.IsEnabled = true;
@@ -134,6 +135,7 @@ namespace DownloadsManager.Views
             }
             else
             {
+                lblUrl.Visibility = Visibility.Hidden;
                 btnAddUrl.IsEnabled = false;
                 btnRemoveUrl.IsEnabled = false;
                 tbUrlToDownloadAlternative.IsEnabled = false;

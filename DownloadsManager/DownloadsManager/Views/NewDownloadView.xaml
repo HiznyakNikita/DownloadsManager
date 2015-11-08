@@ -40,7 +40,7 @@
                                 Width="75" Click="BtnRemove_Click" 
                                 Style="{StaticResource buttonWithTextStyle}" Height="20"/>
                     </StackPanel>
-                    <Label Content="URL:" IsEnabled="False" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource LabelSmallStyle}"/>
+                    <Label Content="URL:" IsEnabled="False" HorizontalAlignment="Left" x:Name="lblUrl" VerticalAlignment="Top" Style="{StaticResource LabelSmallStyle}"/>
                     <TextBox IsEnabled ="False" Margin="5,5,0,5" x:Name="tbUrlToDownloadAlternative" Style="{StaticResource TextBoxInListStyle}" 
                              Height="23" Width="261"/>
                     <ListBox x:Name="lstBoxAlternativeUrl" Margin="5,5,0,5" HorizontalAlignment="Left" 

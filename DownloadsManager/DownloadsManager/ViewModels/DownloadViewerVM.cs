@@ -19,6 +19,7 @@ namespace DownloadsManager.ViewModels
     public class DownloadViewerVM : MainVM, IDownloadViewerVM
     {
         private Downloader download;
+        private readonly Dictionary<DateTime, double> _ratesStatistic = new Dictionary<DateTime,double>();
 
         /// <summary>
         /// ctor    
@@ -44,6 +45,14 @@ namespace DownloadsManager.ViewModels
             }
             catch (NullReferenceException)
             {
+            }
+        }
+
+        public Dictionary<DateTime, double> RatesStatistic
+        {
+            get
+            {
+                return _ratesStatistic;
             }
         }
 
@@ -205,6 +214,8 @@ namespace DownloadsManager.ViewModels
             NotifyPropertyChanged("Progress");
             NotifyPropertyChanged("Rate");
             NotifyPropertyChanged("SizeInfo");
+            //save rate statistic
+            RatesStatistic.Add(DateTime.Now,download.Rate);
         }
 
         private void Download_StateChanged(object sender, EventArgs e)

@@ -14,6 +14,10 @@ using DownloadsManager.Helpers;
 using Autofac.Core;
 using DownloadsManager.Properties;
 using DownloadsManager.Core.Concrete.InternetExplorerExtension;
+using System.IO;
+using System.Globalization;
+using System.Management;
+using System.Diagnostics;
 
 namespace DownloadsManager
 {
@@ -25,8 +29,7 @@ namespace DownloadsManager
     public partial class App : Application, ISingleInstanceApp
     {
 
-        // TODO: Make this unique!
-        private const string Unique = "Change this to something that uniquely identifies your program.";
+        private const string Unique = "DownloadManager Author: Hiznyak Nikita";
 
         /// <summary>
         /// Initialize IoC container
@@ -34,17 +37,29 @@ namespace DownloadsManager
         /// <param name="e">events</param>
         protected override void OnStartup(StartupEventArgs e)
         {
+            //if (e.Args != null)
+            //    foreach (var s in e.Args)
+            //        MessageBox.Show(s);
             //Guid IEExtensionGuid = Guid.NewGuid();
            // RegistryHelper.AddNewRegistryKey(IEExtensionGuid);
             //RegistryHelper.SetRegistryKeyValues(IEExtensionGuid);
             AutofacHelper.OnStartupInit();
             IWindowOpener opener = AutofacHelper.Container.Resolve<IWindowOpener>();
             opener.OpenNewWindow(AutofacHelper.Container.Resolve<IMainWindowVM>());
+
         }
 
         [STAThread]
-        public static void Main()
+        public static void Main(string[] args)
         {
+            if (args != null)
+                foreach (var s in args)
+                    MessageBox.Show(s);
+            //string wmiQuery = string.Format("select CommandLine from Win32_Process where Name='{0}'", "DownloadsManager");
+            //ManagementObjectSearcher searcher = new ManagementObjectSearcher(wmiQuery);
+            //ManagementObjectCollection retObjectCollection = searcher.Get();
+            //foreach (ManagementObject retObject in retObjectCollection)
+            //    Console.WriteLine("[{0}]", retObject["CommandLine"]);
             if (SingleInstance<App>.InitializeAsFirstInstance(Unique))
             {
                 var application = new App();

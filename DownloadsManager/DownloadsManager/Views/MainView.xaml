@@ -3,7 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:DownloadsManager.ViewModels"
         xmlns:uc="clr-namespace:DownloadsManager.UserControls"
+        xmlns:sparrow="http://sparrowtoolkit.codeplex.com/wpf"
         xmlns:metroChart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart"
+        xmlns:datavis="clr-namespace:System.Windows.Controls.DataVisualization;assembly=‌​System.Windows.Controls.DataVisualization.Toolkit"
+        xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+        xmlns:visualizationToolkit="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"
         Title="MainWindow" Height="850" Width="1236" 
         Background="#FF575757" WindowStyle="None" ResizeMode="NoResize" WindowState="Maximized">
     <Window.Resources>
@@ -26,76 +30,127 @@
                         x:Name="BtnCloseWindow" 
                         Style="{StaticResource closeWindowButtonStyle}"/>
             </StackPanel>
-        <TabControl  x:Name="tabControl" Background="#FF575757" Style="{StaticResource TabControlStyle}" BorderBrush="Transparent">
-            <TabControl.Resources>
-                <Style TargetType="TabItem" BasedOn="{StaticResource TabItemsStyle}"/>
-            </TabControl.Resources>
-            <TabItem Header="DOWNLOADS">
-                <Grid>
-                    <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
-                            <ItemsControl  Width="Auto" 
-                       Height="Auto" x:Name="itemsControlDownloads"
-                       ItemsSource="{Binding ItemsToDownloaders.Values, UpdateSourceTrigger=PropertyChanged}">
-                                <ItemsControl.ItemContainerStyle>
-                                <Style>
-                                    <Setter Property="FrameworkElement.Margin" Value="5"/>
-                                </Style>
-                            </ItemsControl.ItemContainerStyle>
-                        </ItemsControl>
-                    </ScrollViewer>
-                </Grid>
-            </TabItem>
-            <TabItem Header="STATISTIC">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="/Resources/icons/arrow-download-icon.png" HorizontalAlignment="Left"
+                       Height="110" Width="110" Margin="10"/>
                 <StackPanel Orientation="Vertical">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <metroChart:PieChart
-                        ChartTitle="Downloads types"
-                        ChartSubTitle="statistic"
-                        Height="310" Width="588">
-                                <metroChart:PieChart.Series>
-                                <metroChart:ChartSeries
-                                SeriesTitle="Types"
-                                DisplayMember="FileType"
-                                ValueMember="Count"
-                                ItemsSource="{Binding Path=DownloadTypesStatistic, UpdateSourceTrigger=PropertyChanged}" />
-                            </metroChart:PieChart.Series>
-                        </metroChart:PieChart>
-
-                        <metroChart:PieChart
-                        ChartTitle="Downloads states"
-                        ChartSubTitle="statistic"
-                        Height="310" Width="604">
-                            <metroChart:PieChart.Series>
-                                <metroChart:ChartSeries
-                                SeriesTitle="States"
-                                DisplayMember="State"
-                                ValueMember="Count"
-                                ItemsSource="{Binding Path=DownloadStatesStatistic, UpdateSourceTrigger=PropertyChanged}" />
-                            </metroChart:PieChart.Series>
-                        </metroChart:PieChart>
-                    </StackPanel>
+                    <Label Style="{StaticResource LabelSmallStyle}" FontSize="24" Content="Downloads" Margin="10"></Label>
+                    <Label Style="{StaticResource LabelSmallStyle}" FontSize="18" Content="Sky downloads manager for Windows"></Label>
+                </StackPanel>
+                <StackPanel Width="100"/>
+                <StackPanel Orientation="Vertical" Margin="30" Width="666">
                     <StackPanel Orientation="Horizontal">
-                        <StackPanel Orientation="Vertical">
-                            <StackPanel Orientation="Horizontal">
                                     <Label Content="Total downloads:" 
                                        Style="{StaticResource LabelSmallFont20Style}"/>
                                     <Label x:Name="lblTotalDownloads" 
                                        Content="{Binding ItemsToDownloaders.Count}"
-                                       Style="{StaticResource LabelSmallFont20Style}" Height="38" Width="444"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Total downloaded:" 
+                                       Style="{StaticResource LabelSmallFont20Style}" Height="38" Width="503"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Total downloaded:" 
                                        Style="{StaticResource LabelSmallFont20Style}"/>
-                                <Label x:Name="lblTotalBytesDownloaded" 
+                                    <Label x:Name="lblTotalBytesDownloaded" 
                                        Content="{Binding TotalBytesDownloadedStatistic, UpdateSourceTrigger=PropertyChanged}" 
-                                       Style="{StaticResource LabelSmallFont20Style}" FontSize="14" Height="34" Width="440"/>
-                            </StackPanel>
+                                       Style="{StaticResource LabelSmallFont20Style}" FontSize="14" Height="34" Width="492"/>
+                                </StackPanel>
+                </StackPanel>
+            </StackPanel>
+            <TabControl  x:Name="tabControl" Background="#FF575757" Style="{StaticResource TabControlStyle}" BorderBrush="Transparent">
+                <TabControl.Resources>
+                    <Style TargetType="TabItem" BasedOn="{StaticResource TabItemsStyle}"/>
+                </TabControl.Resources>
+                <TabItem Header="DOWNLOADS">
+                    <Grid>
+                        <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
+                            <ItemsControl  Width="Auto" 
+                       Height="Auto" x:Name="itemsControlDownloads"
+                       ItemsSource="{Binding ItemsToDownloaders.Values, UpdateSourceTrigger=PropertyChanged}">
+                                <ItemsControl.ItemContainerStyle>
+                                    <Style>
+                                        <Setter Property="FrameworkElement.Margin" Value="5"/>
+                                    </Style>
+                                </ItemsControl.ItemContainerStyle>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="STATISTIC">
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <chartingToolkit:Chart  Name="pieChartStates" Title="Downloads states"
+                                                    VerticalAlignment="Top" Height="290" Width="490"
+                                                    BorderBrush="Transparent"
+                                                    Foreground="WhiteSmoke"
+                                                    Background="#FF575757"
+                                                    >
+                                <chartingToolkit:PieSeries 
+                                    Background="#FF575757"
+                                    DependentValuePath="Count" IndependentValuePath="State" 
+                                                           ItemsSource="{Binding Path=DownloadStatesStatistic, UpdateSourceTrigger=PropertyChanged}" 
+                                                           IsSelectionEnabled="True" />
+                                <chartingToolkit:Chart.PlotAreaStyle>
+                                        <Style TargetType="Grid">
+                                            <Setter Property="Background" Value="Transparent" />
+                                        </Style>
+                                </chartingToolkit:Chart.PlotAreaStyle>
+                                <chartingToolkit:Chart.LegendStyle>
+                                    <Style TargetType="visualizationToolkit:Legend">
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                    </Style>
+                                </chartingToolkit:Chart.LegendStyle>
+                            </chartingToolkit:Chart>
+                            <chartingToolkit:Chart  Name="pieChartTypes" Title="Downloads types" 
+                                                    VerticalAlignment="Top" Height="290" Width="490"
+                                                    BorderBrush="Transparent"
+                                                    Foreground="WhiteSmoke">
+                                <chartingToolkit:PieSeries DependentValuePath="Count" IndependentValuePath="FileType" 
+                                                           ItemsSource="{Binding Path=DownloadTypesStatistic, UpdateSourceTrigger=PropertyChanged}"
+                                                           IsSelectionEnabled="True" />
+                                <chartingToolkit:Chart.PlotAreaStyle>
+                                    <Style TargetType="Grid">
+                                        <Setter Property="Background" Value="Transparent" />
+                                    </Style>
+                                </chartingToolkit:Chart.PlotAreaStyle>
+                                <chartingToolkit:Chart.LegendStyle>
+                                    <Style TargetType="visualizationToolkit:Legend">
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                    </Style>
+                                </chartingToolkit:Chart.LegendStyle>
+                            </chartingToolkit:Chart>
                         </StackPanel>
-                            <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Right" Width="588">
+                        <StackPanel Orientation="Horizontal" Height="342" HorizontalAlignment="Center" Margin="128,0,44,0" Width="1064">
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="540">
+                                <chartingToolkit:Chart  Name="lineChart" Title="Rate statistic" 
+                                                        BorderBrush="Transparent"
+                                                        Foreground="WhiteSmoke"
+                                                        VerticalAlignment="Top" Height="341" Margin="0,0,10,0"
+                                                        >
+                                        <chartingToolkit:LineSeries  
+                                        DependentValuePath="Value" IndependentValuePath="Key" 
+                                                                 ItemsSource="{Binding Path=RatesStatistic, UpdateSourceTrigger=PropertyChanged}" 
+                                                                 IsSelectionEnabled="True"/>
+                                    <chartingToolkit:Chart.PlotAreaStyle>
+                                        <Style TargetType="Grid">
+                                            <Setter Property="Background" Value="Transparent" />
+                                        </Style>
+                                    </chartingToolkit:Chart.PlotAreaStyle>
+                                    <chartingToolkit:Chart.LegendStyle>
+                                        <Style TargetType="visualizationToolkit:Legend">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="BorderBrush" Value="Transparent"/>
+                                            <Setter Property="Height" Value="0"/>
+                                        </Style>
+                                    </chartingToolkit:Chart.LegendStyle>
+                                </chartingToolkit:Chart>
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Right" Width="515">
                                 <Label Content="Download history"
                     		FontSize="24" 
                     		Style="{StaticResource LabelSmallInListStyle}"/>
-                                <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                                <StackPanel Orientation="Horizontal" Margin="0,2,30,0">
                                     <Label Content="Period from:" 
                     			Style="{StaticResource LabelSmallInListStyle}"/>
                                     <DatePicker x:Name="datePickerFrom" Width="154"/>
@@ -103,15 +158,15 @@
                     			Style="{StaticResource LabelSmallInListStyle}"/>
                                     <DatePicker x:Name="datePickerTo" Width="154"/>
                                     <Button 
-                    			Content="Set" 
-                    			VerticalAlignment="Top" Width="75" Height="25" Margin="2"
-                    			x:Name="BtnChooseHistoryPeriod" Style="{StaticResource buttonWithTextStyle}" Click="BtnChooseHistoryPeriod_Click"/>
+                                    	Content="Set" 
+                                    	VerticalAlignment="Top" Width="75" Height="25" Margin="2"
+                                    	x:Name="BtnChooseHistoryPeriod" Style="{StaticResource buttonWithTextStyle}" Click="BtnChooseHistoryPeriod_Click"/>
                                 </StackPanel>
-                                <ListBox x:Name="lstBoxDownloadsHistory" Margin="5,5,0,5" Width="573" HorizontalAlignment="Left"
+                                <ListBox x:Name="lstBoxDownloadsHistory" Margin="5,5,0,5" Width="480" HorizontalAlignment="Left"
                     		ItemsSource="{Binding DownloadsHistory, UpdateSourceTrigger=PropertyChanged}"
-                    		ScrollViewer.VerticalScrollBarVisibility="Disabled" BorderBrush="  #6495ED" 
-                    		Foreground="  #6495ED" Background="Transparent" DisplayMemberPath="FileName" 
-                    		Height="350"  VerticalAlignment="Top" IsEnabled="True">
+                    		ScrollViewer.VerticalScrollBarVisibility="Disabled" BorderBrush="  #858585" 
+                    		Foreground="  #858585" Background="Transparent" DisplayMemberPath="FileName" 
+                    		Height="243"  VerticalAlignment="Top" IsEnabled="True">
                                     <ListBox.ContextMenu>
                                         <ContextMenu>
                                             <MenuItem Header="Show in folder" Command="{Binding ShowInFolderCmd}"
@@ -121,9 +176,9 @@
                                 </ListBox>
                             </StackPanel>
                         </StackPanel>
-                </StackPanel>
-            </TabItem>
-        </TabControl>
+                    </StackPanel>
+                </TabItem>
+            </TabControl>
         </StackPanel>
     </Grid>
     <Window.ContextMenu>

@@ -14,6 +14,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Management;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -65,6 +66,22 @@ namespace DownloadsManager.ViewModels
                 return _itemsToDownloaders.Keys.OfType<Downloader>()
                     .Where(d => d.CreatedDateTime.CompareTo(_historyPeriodFrom) > 0 &&
                         d.CreatedDateTime.CompareTo(_historyPeriodTo) < 0).ToList();
+            }
+        }
+
+        public Dictionary<DateTime,double> RatesStatistic
+        {
+            get 
+            {
+                Dictionary<DateTime,double> result = new Dictionary<DateTime,double>();
+                foreach(var view in _itemsToDownloaders.Values)
+                {
+                    foreach(KeyValuePair<DateTime,double> t in (view as DownloadViewer).Model.RatesStatistic)
+                    {
+                        result.Add(t.Key, t.Value);
+                    }
+                }
+                return result;
             }
         }
 
@@ -182,6 +199,11 @@ namespace DownloadsManager.ViewModels
         /// <param name="param">Download param</param>
         private void AddDownload(object param)
         {
+            //string wmiQuery = string.Format("select CommandLine from Win32_Process where Name='{0}'", "DownloadsManager");
+            //ManagementObjectSearcher searcher = new ManagementObjectSearcher(wmiQuery);
+            //ManagementObjectCollection retObjectCollection = searcher.Get();
+            //foreach (ManagementObject retObject in retObjectCollection)
+            //    Console.WriteLine("[{0}]", retObject["CommandLine"]);
             try
             {
                 IWindowOpener windowOpener = new WindowOpener();

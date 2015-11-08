@@ -769,7 +769,7 @@ namespace DownloadsManager.Core.Concrete
             segmentThread.Start(newSegment);
             OnThreadAdded();
             if (threads == null)
-
+                threads = new List<Thread>();
             lock (threads)
             {
                 threads.Add(segmentThread);
