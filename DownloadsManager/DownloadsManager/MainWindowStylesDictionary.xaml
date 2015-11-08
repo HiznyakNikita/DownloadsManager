@@ -204,11 +204,6 @@
                                     <SolidColorBrush Color="  #6495ED"/>
                                 </Setter.Value>
                             </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <SolidColorBrush Color="  #6495ED"/>
-                                </Setter.Value>
-                            </Setter>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="BorderBrush">
@@ -246,11 +241,6 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="BorderBrush">
-                                <Setter.Value>
-                                    <SolidColorBrush Color="  #6495ED"/>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
                                 <Setter.Value>
                                     <SolidColorBrush Color="  #6495ED"/>
                                 </Setter.Value>
@@ -296,11 +286,6 @@
                                     <SolidColorBrush Color="  #6495ED"/>
                                 </Setter.Value>
                             </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <SolidColorBrush Color="  #6495ED"/>
-                                </Setter.Value>
-                            </Setter>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="BorderBrush">
@@ -335,11 +320,6 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="BorderBrush">
-                                <Setter.Value>
-                                    <SolidColorBrush Color="  #6495ED"/>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
                                 <Setter.Value>
                                     <SolidColorBrush Color="  #6495ED"/>
                                 </Setter.Value>
