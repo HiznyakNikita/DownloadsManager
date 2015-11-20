@@ -61,7 +61,7 @@ namespace DownloadsManager.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\DownloadsDM")]
         public string DefaultSavePathDocuments {
             get {
                 return ((string)(this["DefaultSavePathDocuments"]));
@@ -104,6 +104,18 @@ namespace DownloadsManager.Properties {
             }
             set {
                 this["IEExtensionGuid"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ArgsUrl {
+            get {
+                return ((string)(this["ArgsUrl"]));
+            }
+            set {
+                this["ArgsUrl"] = value;
             }
         }
     }

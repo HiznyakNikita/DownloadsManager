@@ -61,6 +61,15 @@ namespace DownloadsManager.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string ArgsUrl {
+            get {
+                return ResourceManager.GetString("ArgsUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon icon {

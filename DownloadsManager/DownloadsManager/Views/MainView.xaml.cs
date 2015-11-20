@@ -1,4 +1,5 @@
 ﻿using DownloadsManager.Core.Concrete;
+using DownloadsManager.Properties;
 using DownloadsManager.UserControls;
 using DownloadsManager.ViewModels;
 using DownloadsManager.ViewModels.Infrastructure;
@@ -43,11 +44,16 @@ namespace DownloadsManager
             timer.Tick += Timer_Tick;
             timer.Start();
             (model as MainWindowVM).DownloadEndedViewModel += DownloaderManager_DownloadEnded;
+            if(!string.IsNullOrEmpty(Settings.Default.ArgsUrl))
+            {
+                _model.AddDownloadFromArgs();
+            }
         }
 
         private void DownloaderManager_DownloadEnded(object sender, EventArgs e)
         {
-            TrayIcon.ShowBalloonTip(5, "Download finished!", "Download: " + (e as DownloadEndedEventArgs).DownloadName + " finished!", System.Windows.Forms.ToolTipIcon.Info);
+            trayIcon.ShowBalloonTip(5, "Download finished!", "Download: "
+                + (e as DownloadEndedEventArgs).DownloadName + " finished!", System.Windows.Forms.ToolTipIcon.Info);
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -74,30 +80,31 @@ namespace DownloadsManager
         }
 
         #region Tray
+
         /// <summary>
         /// override method for init
         /// </summary>
-        /// <param name="e"></param>
-
+        /// <param name="e">args</param>
         protected override void OnSourceInitialized(EventArgs e)
         {
             // base for return in previous state
             base.OnSourceInitialized(e);
             CreateTrayIcon();
         }
-        private System.Windows.Forms.NotifyIcon TrayIcon = null;
-        private System.Windows.Controls.ContextMenu TrayMenu = null;
+
+        private System.Windows.Forms.NotifyIcon trayIcon = null;
+        private System.Windows.Controls.ContextMenu trayMenu = null;
 
         private bool CreateTrayIcon()
         {
             bool result = false;
-            if (TrayIcon == null)
+            if (trayIcon == null)
             {
-                TrayIcon = new System.Windows.Forms.NotifyIcon();
-                TrayIcon.Icon = DownloadsManager.Properties.Resources.icon;
-                TrayIcon.Text = DownloadsManager.Properties.Resources.Name;
-                TrayMenu = Resources["TrayMenu"] as System.Windows.Controls.ContextMenu;
-                TrayIcon.Click += delegate(object sender, EventArgs e)
+                trayIcon = new System.Windows.Forms.NotifyIcon();
+                trayIcon.Icon = DownloadsManager.Properties.Resources.icon;
+                trayIcon.Text = DownloadsManager.Properties.Resources.Name;
+                trayMenu = Resources["TrayMenu"] as System.Windows.Controls.ContextMenu;
+                trayIcon.Click += delegate(object sender, EventArgs e)
                 {
                     if ((e as System.Windows.Forms.MouseEventArgs).Button == System.Windows.Forms.MouseButtons.Left)
                     {
@@ -107,7 +114,7 @@ namespace DownloadsManager
                     else
                     {
 
-                        TrayMenu.IsOpen = true;
+                        trayMenu.IsOpen = true;
                         Activate();
                     }
                 };
@@ -117,38 +124,39 @@ namespace DownloadsManager
             {
                 result = true;
             }
-            TrayIcon.Visible = true;
+
+            trayIcon.Visible = true;
             return result;
         }
 
         private void ShowHideMainWindow(object sender, RoutedEventArgs e)
         {
-            TrayMenu.IsOpen = false;
+            trayMenu.IsOpen = false;
             if (IsVisible)
             {
                 Hide();
 
-                (TrayMenu.Items[0] as System.Windows.Controls.MenuItem).Header = "Show";
+                (trayMenu.Items[0] as System.Windows.Controls.MenuItem).Header = "Show";
             }
             else
             {
                 Show();
 
-                (TrayMenu.Items[0] as System.Windows.Controls.MenuItem).Header = "Hide";
+                (trayMenu.Items[0] as System.Windows.Controls.MenuItem).Header = "Hide";
                 WindowState = CurrentWindowState;
                 Activate();
             }
         }
         
-        private WindowState fCurrentWindowState = WindowState.Maximized;
+        private WindowState currentWindowState = WindowState.Maximized;
         
         /// <summary>
         /// Temporary window state
         /// </summary>
         public WindowState CurrentWindowState
         {
-            get { return fCurrentWindowState; }
-            set { fCurrentWindowState = value; }
+            get { return currentWindowState; }
+            set { currentWindowState = value; }
         }
 
         protected override void OnStateChanged(EventArgs e)
@@ -159,18 +167,19 @@ namespace DownloadsManager
 
                 Hide();
 
-                (TrayMenu.Items[0] as System.Windows.Controls.MenuItem).Header = "Show";
+                (trayMenu.Items[0] as System.Windows.Controls.MenuItem).Header = "Show";
             }
             else
             {
                 CurrentWindowState = WindowState;
             }
         }
-        private bool fCanClose = false;
+
+        private bool canClose = false;
         public bool CanClose
         {
-            get { return fCanClose; }
-            set { fCanClose = value; }
+            get { return canClose; }
+            set { canClose = value; }
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
@@ -185,7 +194,7 @@ namespace DownloadsManager
 
         private void ExitMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            TrayIcon.Icon = null;
+            trayIcon.Icon = null;
             Application.Current.Shutdown();
         }
     }

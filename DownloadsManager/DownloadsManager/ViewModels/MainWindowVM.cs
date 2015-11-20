@@ -3,6 +3,7 @@ using DownloadsManager.Core.Concrete;
 using DownloadsManager.Core.Concrete.DownloadStates;
 using DownloadsManager.Core.Concrete.Enums;
 using DownloadsManager.Helpers;
+using DownloadsManager.Properties;
 using DownloadsManager.UserControls;
 using DownloadsManager.ViewModels.Infrastructure;
 using DownloadsManager.Views;
@@ -18,6 +19,7 @@ using System.Management;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -42,12 +44,12 @@ namespace DownloadsManager.ViewModels
             this.ShowInFolderCmd = new Command(this.ShowInFolder);
             this.PauseAllDownloadCommand = new Command(PauseAllDownloads);
             this.RemoveAllCommand = new Command(RemoveAllDownloads);
-            DownloaderManager.Instance.DownloadRemoved += DownloaderManager_DownloadRemoved;
+            DownloaderManager.Instance.DownloadRemoved += DownloaderManagerDownloadRemoved;
             AddSavedDownloads();
 
         }
 
-        void DownloaderManager_DownloadRemoved(object sender, EventArgs e)
+        public void DownloaderManagerDownloadRemoved(object sender, EventArgs e)
         {
             List<Downloader> keys = _itemsToDownloaders.Keys.OfType<Downloader>().ToList();
             foreach(Downloader d in keys)
@@ -61,6 +63,7 @@ namespace DownloadsManager.ViewModels
         public Command PauseAllDownloadCommand { get; set; }
 
         public Command RemoveAllCommand { get; set; }
+
         /// <summary>
         /// Gets or sets Command for adding download
         /// </summary>
@@ -78,7 +81,6 @@ namespace DownloadsManager.ViewModels
 
         [field: NonSerialized]
         public event EventHandler DownloadEndedViewModel;
-
 
         public List<Downloader> DownloadsHistory
         { 
@@ -102,7 +104,9 @@ namespace DownloadsManager.ViewModels
                     {
                         result.Add(t.Key, t.Value);
                     }
+                
                 }
+
                 return result;
             }
         }
@@ -120,6 +124,14 @@ namespace DownloadsManager.ViewModels
             get
             {
                 return GetStatesStatistic();
+            }
+        }
+
+        public void OnDownloadEnded(object sender, EventArgs e)
+        {
+            if (DownloadEndedViewModel != null)
+            {
+                DownloadEndedViewModel(this, e);
             }
         }
 
@@ -215,14 +227,6 @@ namespace DownloadsManager.ViewModels
             DownloadsSerializer.Serialize(downloadsToSave);
         }
 
-        public void OnDownloadEnded(object sender, EventArgs e)
-        {
-            if (DownloadEndedViewModel != null)
-            {
-                DownloadEndedViewModel(this, e);
-            }
-        }
-
         /// <summary>
         /// Method for adding download
         /// </summary>
@@ -256,6 +260,30 @@ namespace DownloadsManager.ViewModels
             }
         }
 
+        public void AddDownload(string mirror)
+        {
+            ResourceInfo info = new ResourceInfo();
+            info.Url = mirror;
+            string fileName = string.Empty;
+            fileName = info != null
+                ? GetFileName(info)
+                : "";
+
+            Downloader fileToDownload = new Downloader(
+                info,
+                null,
+                Settings.Default.DefaultSavePathDocuments,
+                fileName);
+            DownloaderManager.Instance.Add(fileToDownload, true);
+        }
+
+        private static string GetFileName(ResourceInfo mirror)
+        {
+            Uri uri = new Uri(mirror.Url);
+            var fileName = uri.Segments[uri.Segments.Length - 1];
+            return HttpUtility.UrlDecode(fileName).Replace("/", "\\");
+        }
+
         private void RemoveAllDownloads(object param)
         {
             List<Downloader> keys = _itemsToDownloaders.Keys.OfType<Downloader>().ToList();
@@ -274,6 +302,32 @@ namespace DownloadsManager.ViewModels
                 }
             }
             catch(InvalidOperationException)
+            {
+
+            }
+        }
+
+        public void AddDownloadFromArgs()
+        {
+            try
+            {
+                AddDownload(Settings.Default.ArgsUrl);
+                Downloader fileToDownload = DownloaderManager.Instance.LastDownload;
+                IControlCreator controlCreator = new ControlCreator();
+                DownloadViewerVM model = new DownloadViewerVM(fileToDownload);
+                var viewer = controlCreator.CreateControl(model);
+
+                if (!_itemsToDownloaders.Keys.OfType<Downloader>().Contains(fileToDownload))
+                {
+                    _itemsToDownloaders.Add(fileToDownload, viewer);
+                    NotifyPropertyChanged("ItemsToDownloaders");
+                }
+
+                NotifyPropertyChanged("TotalBytesDownloadedStatistic");
+                NotifyPropertyChanged("DownloadStatesStatistic");
+                NotifyPropertyChanged("DownloadTypesStatistic");
+            }
+            catch (ArgumentNullException)
             {
 
             }

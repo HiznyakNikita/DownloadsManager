@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.Core.Concrete
 {
-    public class DownloadEndedEventArgs: EventArgs
+    public class DownloadEndedEventArgs : EventArgs
     {
+        public DownloadEndedEventArgs(string downloadName)
+        {
+            this.DownloadName = downloadName;
+        }
+
         public string DownloadName
         {
             get;
             private set;
-        }
-
-        public DownloadEndedEventArgs(string downloadName)
-        {
-            this.DownloadName = downloadName;
         }
     }
 }

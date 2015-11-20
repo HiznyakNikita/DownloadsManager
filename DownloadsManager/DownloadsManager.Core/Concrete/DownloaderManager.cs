@@ -18,7 +18,12 @@ namespace DownloadsManager.Core.Concrete
         private static object lockObj = new object();
         private readonly List<Downloader> downloads = new List<Downloader>();
 
-        private DownloaderManager() { }
+        private DownloaderManager()
+        {
+        }
+
+        [field: NonSerialized]
+        public event EventHandler DownloadRemoved;
 
         public static DownloaderManager Instance
         {
@@ -77,20 +82,9 @@ namespace DownloadsManager.Core.Concrete
             }
         }
 
-        [field: NonSerialized]
-        public event EventHandler DownloadRemoved;
-
         #endregion
 
         #region Methods
-
-        protected virtual void OnDownloadRemoved()
-        {
-            if (DownloadRemoved != null)
-            {
-                DownloadRemoved(this, EventArgs.Empty);
-            }
-        }
 
         public void RemoveDownload(int index)
         {
@@ -109,7 +103,7 @@ namespace DownloadsManager.Core.Concrete
                     {
                         downloader.Pause();
                     }
-                    catch(InvalidOperationException)
+                    catch (InvalidOperationException)
                     {
                         
                     }
@@ -195,6 +189,14 @@ namespace DownloadsManager.Core.Concrete
             lock (lockObj)
             {
                 InternalSwap(index);
+            }
+        }
+
+        protected virtual void OnDownloadRemoved()
+        {
+            if (DownloadRemoved != null)
+            {
+                DownloadRemoved(this, EventArgs.Empty);
             }
         }
 

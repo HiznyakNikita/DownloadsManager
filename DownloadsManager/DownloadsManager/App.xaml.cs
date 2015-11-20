@@ -31,30 +31,13 @@ namespace DownloadsManager
 
         private const string Unique = "DownloadManager Author: Hiznyak Nikita";
 
-        /// <summary>
-        /// Initialize IoC container
-        /// </summary>
-        /// <param name="e">events</param>
-        protected override void OnStartup(StartupEventArgs e)
-        {
-            //if (e.Args != null)
-            //    foreach (var s in e.Args)
-            //        MessageBox.Show(s);
-            //Guid IEExtensionGuid = Guid.NewGuid();
-           // RegistryHelper.AddNewRegistryKey(IEExtensionGuid);
-            //RegistryHelper.SetRegistryKeyValues(IEExtensionGuid);
-            AutofacHelper.OnStartupInit();
-            IWindowOpener opener = AutofacHelper.Container.Resolve<IWindowOpener>();
-            opener.OpenNewWindow(AutofacHelper.Container.Resolve<IMainWindowVM>());
-
-        }
-
         [STAThread]
         public static void Main(string[] args)
         {
+            Settings.Default.ArgsUrl = "";
             if (args != null)
                 foreach (var s in args)
-                    MessageBox.Show(s);
+                    Settings.Default.ArgsUrl = s.ToString();
             //string wmiQuery = string.Format("select CommandLine from Win32_Process where Name='{0}'", "DownloadsManager");
             //ManagementObjectSearcher searcher = new ManagementObjectSearcher(wmiQuery);
             //ManagementObjectCollection retObjectCollection = searcher.Get();
@@ -78,5 +61,22 @@ namespace DownloadsManager
             return true;
         }
         #endregion
+
+        /// <summary>
+        /// Initialize IoC container
+        /// </summary>
+        /// <param name="e">events</param>
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            //if (e.Args != null)
+            //    foreach (var s in e.Args)
+            //        MessageBox.Show(s);
+            //Guid IEExtensionGuid = Guid.NewGuid();
+            RegistryHelper.SetRegistryKeyValues();
+            AutofacHelper.OnStartupInit();
+            IWindowOpener opener = AutofacHelper.Container.Resolve<IWindowOpener>();
+            opener.OpenNewWindow(AutofacHelper.Container.Resolve<IMainWindowVM>());
+
+        }
     }
 }

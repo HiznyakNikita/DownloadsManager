@@ -10,5 +10,6 @@ namespace DownloadsManager.ViewModels.Infrastructure
     public interface IMainWindowVM : IMainVM
     {
         Hashtable GetDownloaders();
+        void AddDownloadFromArgs();
     }
 }

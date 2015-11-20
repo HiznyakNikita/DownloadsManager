@@ -9,26 +9,13 @@ namespace DownloadsManager.Core.Concrete.InternetExplorerExtension
 {
     public static class RegistryHelper
     {
-        public static void AddNewRegistryKey(Guid extensionPathValue)
+        public static void SetRegistryKeyValues()
         {
             Microsoft.Win32.RegistryKey key;
-            key = Microsoft.Win32.Registry.LocalMachine
-                .CreateSubKey(@"SOFTWARE\Microsoft\Internet Explorer\Extensions\" + extensionPathValue.ToString());
-            key.Close();
-        }
-
-        public static void SetRegistryKeyValues(Guid extensionPathValue)
-        {
-            Microsoft.Win32.RegistryKey key;
-            key = Microsoft.Win32.Registry.LocalMachine
-                .CreateSubKey(@"SOFTWARE\Microsoft\Internet Explorer\Extensions\{"
-                + extensionPathValue.ToString().ToUpper(CultureInfo.CurrentCulture) + "}");
-            key.SetValue("ButtonText", "Download via Download manager");
-            key.SetValue("HotIcon",@"C:\Users\nikit_000\Downloads\1.ico");
-            key.SetValue("Icon", @"C:\Users\nikit_000\Downloads\1.ico");
-            key.SetValue("CLSID", "{1FBA04EE-3024-11D2-8F1F-0000F87ABD16}");
-            key.SetValue("Exec", @"D:\C#\DownloadsManager\DownloadsManager\DownloadsManager\bin\Debug\DownloadsManager.exe");
-            key.SetValue("Default Visible", "Yes");
+            key = Microsoft.Win32.Registry.CurrentUser
+                .CreateSubKey(@"Software\Microsoft\Internet Explorer\MenuExt\Download by DM\");
+            key.SetValue(null, System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase.Substring(8)) + "\\IErun.htm");
+            key.SetValue("Contexts",1);
             key.Close();
         }
     }

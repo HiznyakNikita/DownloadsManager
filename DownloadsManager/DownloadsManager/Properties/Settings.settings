@@ -12,7 +12,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="DefaultSavePathDocuments" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">C:\DownloadsDM</Value>
     </Setting>
     <Setting Name="DefaultSavePathVideo" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -21,6 +21,9 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="IEExtensionGuid" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ArgsUrl" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

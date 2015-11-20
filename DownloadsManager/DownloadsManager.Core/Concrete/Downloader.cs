@@ -673,6 +673,17 @@ namespace DownloadsManager.Core.Concrete
             }
         }
 
+        protected virtual void OnDownloadEnded(Downloader downloader)
+        {
+            DownloadEndedEventArgs e = new DownloadEndedEventArgs(null);
+            if (downloader != null)
+                e = new DownloadEndedEventArgs(downloader.FileName);
+
+            if (DownloadEnded != null)
+            {
+                DownloadEnded(this, e);
+            }
+        }
         #endregion
 
         /// <summary>
@@ -764,18 +775,6 @@ namespace DownloadsManager.Core.Concrete
             Thread.Sleep((int)delay);
 
             return hasErrors;
-        }
-
-        protected virtual void OnDownloadEnded(Downloader downloader)
-        {
-            DownloadEndedEventArgs e = new DownloadEndedEventArgs(null);
-            if (downloader != null)
-                e = new DownloadEndedEventArgs(downloader.FileName);
-
-            if (DownloadEnded != null)
-            {
-                DownloadEnded(this, e);
-            }
         }
 
         private void StartSegment(FileSegment newSegment)

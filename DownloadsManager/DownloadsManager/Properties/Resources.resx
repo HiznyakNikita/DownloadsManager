@@ -124,4 +124,7 @@
   <data name="Name" xml:space="preserve">
     <value>Downloads manager</value>
   </data>
+  <data name="ArgsUrl" xml:space="preserve">
+    <value />
+  </data>
 </root>
