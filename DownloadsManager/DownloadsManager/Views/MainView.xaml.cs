@@ -49,6 +49,7 @@ namespace DownloadsManager
             {
                 _model.AddDownloadFromArgs();
             }
+
             App.SingleMainWindow = this;
         }
 

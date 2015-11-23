@@ -18,8 +18,8 @@ namespace DownloadsManager.ViewModels
     /// </summary>
     public class DownloadViewerVM : MainVM, IDownloadViewerVM
     {
+        private readonly Dictionary<DateTime, double> _ratesStatistic = new Dictionary<DateTime, double>();
         private Downloader download;
-        private readonly Dictionary<DateTime, double> _ratesStatistic = new Dictionary<DateTime,double>();
 
         /// <summary>
         /// ctor    
@@ -81,7 +81,7 @@ namespace DownloadsManager.ViewModels
                 if (download != null)
                     return download.FileName;
                 else
-                    return "";
+                    return string.Empty;
             }
         }
 
@@ -92,10 +92,10 @@ namespace DownloadsManager.ViewModels
         { 
             get
             {
-                if(download!=null)
+                if (download != null)
                     return ((download.TransferBytes / 1000) + " kb from ") + ((download.FileSize / 1000) + " kb");
                 else
-                    return "";
+                    return string.Empty;
             }
         }
 
@@ -109,7 +109,7 @@ namespace DownloadsManager.ViewModels
                 if (download != null)
                     return download.State.ToString();
                 else
-                    return "";
+                    return string.Empty;
             }
         }
 
@@ -120,10 +120,10 @@ namespace DownloadsManager.ViewModels
         { 
             get
             {
-                if(download!=null)
-                return "Added: " + download.CreatedDateTime.ToString();
+                if (download != null)
+                    return "Added: " + download.CreatedDateTime.ToString();
                 else
-                    return "";
+                    return string.Empty;
             }
         }
 
@@ -134,12 +134,12 @@ namespace DownloadsManager.ViewModels
         { 
             get
             {
-                if(download!=null)
-                    return (download.Rate / 100).ToString(CultureInfo.InvariantCulture) != "0" ? 
+                if (download != null)
+                    return (download.Rate / 100).ToString(CultureInfo.InvariantCulture) != "0" ?
                     (download.Rate / 100).ToString(CultureInfo.InvariantCulture).Substring(0, 4) + " kb/sec" :
                     "0 kb/sec";
                 else
-                    return "";
+                    return string.Empty;
             }
         }
 
@@ -150,10 +150,10 @@ namespace DownloadsManager.ViewModels
         { 
             get
             {
-                if(download!=null)
+                if (download != null)
                     return "Url: " + download.ResourceInfo.Url.ToString();
                 else
-                    return "";
+                    return string.Empty;
             }
         }
 
@@ -164,10 +164,10 @@ namespace DownloadsManager.ViewModels
         { 
             get
             {
-                if(download!=null)
+                if (download != null)
                     return Math.Round(download.Progress, 1).ToString(CultureInfo.CurrentCulture) + " %";
                 else
-                    return "";
+                    return string.Empty;
             }
         }
 
@@ -179,22 +179,22 @@ namespace DownloadsManager.ViewModels
 
         public Command RemoveCommand { get; set; }
 
+        /// <summary>
+        /// Command for showing download in folder
+        /// </summary>
+        public Command ShowInFolderCommand { get; set; }
+
         private void RemoveDownload(object param)
         {
             try
             {
                 DownloaderManager.Instance.RemoveDownload(this.Download);
             }
-            catch(Exception)
+            catch (Exception)
             {
 
             }
         }
-
-        /// <summary>
-        /// Command for showing download in folder
-        /// </summary>
-        public Command ShowInFolderCommand { get; set; }
 
         private void DownloadSettings(object param)
         {
@@ -258,7 +258,7 @@ namespace DownloadsManager.ViewModels
                 //save rate statistic
                 RatesStatistic.Add(DateTime.Now, download.Rate);
             }
-            catch(ArgumentException)
+            catch (ArgumentException)
             {
 
             }

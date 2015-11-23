@@ -30,12 +30,17 @@ namespace DownloadsManager
     {
 
         private const string Unique = "DownloadManager Author: Hiznyak Nikita";
-        public static Window SingleMainWindow;
+        public static Window SingleMainWindow
+        {
+            get;
+            set;
+        }
 
         [STAThread]
         public static void Main(string[] args)
         {
-            Settings.Default.ArgsUrl = "";
+            Settings.Default.ArgsUrl = string.Empty;
+
             if (args != null)
                 foreach (var s in args)
                     Settings.Default.ArgsUrl = s.ToString();
@@ -58,7 +63,7 @@ namespace DownloadsManager
         #region ISingleInstanceApp Members
         public bool SignalExternalCommandLineArgs(IList<string> args)
         {
-            Settings.Default.ArgsUrl = "";
+            Settings.Default.ArgsUrl = string.Empty;
             if (args != null)
                 foreach (var s in args)
                     Settings.Default.ArgsUrl = s.ToString();

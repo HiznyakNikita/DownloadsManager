@@ -100,8 +100,8 @@
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Controls.DataVisualization.Toolkit">
-	      <HintPath>..\packages\System.Windows.Controls.DataVisualization.Toolkit.dll</HintPath>
-	</Reference>
+      <HintPath>..\packages\System.Windows.Controls.DataVisualization.Toolkit.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -129,7 +129,9 @@
     <Compile Include="Helpers\DownloadStatisticWrapper.cs" />
     <Compile Include="Helpers\Abstract\IControlCreator.cs" />
     <Compile Include="Helpers\Abstract\IWindowOpener.cs" />
-    <Compile Include="Helpers\SingleInstance.cs" />
+    <Compile Include="Helpers\SingleInstance.cs">
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
     <Compile Include="Helpers\WindowOpener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserControls\Abstract\IControl.cs" />
@@ -169,6 +171,7 @@
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
       <SubType>Code</SubType>
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>
     <Page Include="MainWindowStylesDictionary.xaml">
       <SubType>Designer</SubType>

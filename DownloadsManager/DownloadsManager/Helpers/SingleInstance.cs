@@ -316,7 +316,8 @@ namespace DownloadsManager.Helpers
         #region Private Methods
 
         /// <summary>
-        /// Gets command line args - for ClickOnce deployed applications, command line args may not be passed directly, they have to be retrieved.
+        /// Gets command line args -
+        /// for ClickOnce deployed applications, command line args may not be passed directly, they have to be retrieved.
         /// </summary>
         /// <returns>List of command line arg strings.</returns>
         private static IList<string> GetCommandLineArgs(string uniqueApplicationName)
@@ -405,7 +406,8 @@ namespace DownloadsManager.Helpers
             string remotingServiceUrl = IpcProtocol + channelName + "/" + RemoteServiceName;
 
             // Obtain a reference to the remoting service exposed by the server i.e the first instance of the application
-            IPCRemoteService firstInstanceRemoteServiceReference = (IPCRemoteService)RemotingServices.Connect(typeof(IPCRemoteService), remotingServiceUrl);
+            IPCRemoteService firstInstanceRemoteServiceReference = (IPCRemoteService)RemotingServices.
+                Connect(typeof(IPCRemoteService), remotingServiceUrl);
 
             // Check that the remote service exists, in some cases the first instance may not yet have created one, in which case
             // the second instance should just exit
@@ -465,7 +467,9 @@ namespace DownloadsManager.Helpers
                 {
                     // Do an asynchronous call to ActivateFirstInstance function
                     Application.Current.Dispatcher.BeginInvoke(
-                        DispatcherPriority.Normal, new DispatcherOperationCallback(SingleInstance<TApplication>.ActivateFirstInstanceCallback), args);
+                        DispatcherPriority.Normal, 
+                        new DispatcherOperationCallback
+                            (SingleInstance<TApplication>.ActivateFirstInstanceCallback), args);
                 }
             }
 
