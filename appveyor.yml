@@ -10,7 +10,7 @@ assembly_info:
 install:
 - cmd: 
 before_build:
-- ps: "if($env:APPVEYOR_REPO_BRANCH -eq \"master\"){\nif($env:APPVEYOR_REPO_TAG -eq $true){\n$env:CONFIGURATION = \"Release\"\nWrite-Host \"Switch to Release configuration\"\n}\nelse{\n$env:CONFIGURATION = \"Debug\"\nWrite-Host \"Switch to Debug configuration\"\n \n}\n}"
+- ps: "if($env:APPVEYOR_REPO_BRANCH -eq "master"){if($env:APPVEYOR_REPO_TAG -eq $true){$env:CONFIGURATION = "Release" Write-Host "Switch to Release configuration"} else{$env:CONFIGURATION = "Debug" Write-Host "Switch to Debug configuration"}}"
 build:
   verbosity: normal
 after_build:
