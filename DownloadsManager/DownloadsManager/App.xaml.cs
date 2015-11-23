@@ -30,6 +30,7 @@ namespace DownloadsManager
     {
 
         private const string Unique = "DownloadManager Author: Hiznyak Nikita";
+        // need for open current window on repeat opening program
         public static Window SingleMainWindow
         {
             get;
