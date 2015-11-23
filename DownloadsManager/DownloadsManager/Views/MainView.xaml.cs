@@ -3,6 +3,7 @@ using DownloadsManager.Properties;
 using DownloadsManager.UserControls;
 using DownloadsManager.ViewModels;
 using DownloadsManager.ViewModels.Infrastructure;
+using System.Windows.Controls.DataVisualization.Charting;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -4,7 +4,6 @@
         xmlns:vm="clr-namespace:DownloadsManager.ViewModels"
         xmlns:uc="clr-namespace:DownloadsManager.UserControls"
         xmlns:sparrow="http://sparrowtoolkit.codeplex.com/wpf"
-        xmlns:metroChart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart"
         xmlns:datavis="clr-namespace:System.Windows.Controls.DataVisualization;assembly=‌​System.Windows.Controls.DataVisualization.Toolkit"
         xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
         xmlns:visualizationToolkit="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"
