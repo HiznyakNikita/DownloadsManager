@@ -69,6 +69,7 @@ namespace DownloadsManager
                 foreach (var s in args)
                     Settings.Default.ArgsUrl = s.ToString();
             // Handle command line arguments of second instance
+            //and open already opened main window with args from browser(if they are required)
             (SingleMainWindow as MainView).ShowWrapper();
 
             return true;
