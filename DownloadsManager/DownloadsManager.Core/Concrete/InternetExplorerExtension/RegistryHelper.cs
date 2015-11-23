@@ -9,6 +9,9 @@ namespace DownloadsManager.Core.Concrete.InternetExplorerExtension
 {
     public static class RegistryHelper
     {
+        /// <summary>
+        /// Method for registrating key value pair in registry to enable DM in IE context menu
+        /// </summary>
         public static void SetRegistryKeyValues()
         {
             Microsoft.Win32.RegistryKey key;
