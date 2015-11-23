@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Management;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows;
@@ -262,19 +263,27 @@ namespace DownloadsManager.ViewModels
 
         public void AddDownload(string mirror)
         {
-            ResourceInfo info = new ResourceInfo();
-            info.Url = mirror;
-            string fileName = string.Empty;
-            fileName = info != null
-                ? GetFileName(info)
-                : "";
+            try
+            {
+                ResourceInfo info = new ResourceInfo();
+                info.Url = mirror;
+                string fileName = string.Empty;
+                fileName = info != null
+                    ? GetFileName(info)
+                    : "";
 
-            Downloader fileToDownload = new Downloader(
-                info,
-                null,
-                Settings.Default.DefaultSavePathDocuments,
-                fileName);
-            DownloaderManager.Instance.Add(fileToDownload, true);
+                Downloader fileToDownload = new Downloader(
+                    info,
+                    null,
+                    Settings.Default.DefaultSavePathDocuments,
+                    fileName);
+                DownloaderManager.Instance.Add(fileToDownload, true);
+             
+            }
+            catch (ArgumentException)
+            {
+
+            }
         }
 
         private static string GetFileName(ResourceInfo mirror)
@@ -312,6 +321,8 @@ namespace DownloadsManager.ViewModels
             try
             {
                 AddDownload(Settings.Default.ArgsUrl);
+                //for update info
+                Thread.Sleep(2000);
                 Downloader fileToDownload = DownloaderManager.Instance.LastDownload;
                 IControlCreator controlCreator = new ControlCreator();
                 DownloadViewerVM model = new DownloadViewerVM(fileToDownload);

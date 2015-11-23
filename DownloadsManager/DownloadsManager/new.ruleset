@@ -146,7 +146,7 @@
     <Rule Id="CA2001" Action="Error" />
     <Rule Id="CA2002" Action="Error" />
     <Rule Id="CA2003" Action="Error" />
-    <Rule Id="CA2004" Action="Error" />
+    <Rule Id="CA2004" Action="None" />
     <Rule Id="CA2006" Action="Error" />
     <Rule Id="CA2100" Action="Error" />
     <Rule Id="CA2101" Action="Error" />
@@ -200,7 +200,7 @@
     <Rule Id="CA2207" Action="Error" />
     <Rule Id="CA2208" Action="Error" />
     <Rule Id="CA2210" Action="Error" />
-    <Rule Id="CA2211" Action="Error" />
+    <Rule Id="CA2211" Action="None" />
     <Rule Id="CA2212" Action="Error" />
     <Rule Id="CA2213" Action="Error" />
     <Rule Id="CA2214" Action="Error" />

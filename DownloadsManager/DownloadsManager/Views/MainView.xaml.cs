@@ -48,6 +48,16 @@ namespace DownloadsManager
             {
                 _model.AddDownloadFromArgs();
             }
+            App.SingleMainWindow = this;
+        }
+
+        public void ShowWrapper()
+        {
+            Show();
+            if (!string.IsNullOrEmpty(Settings.Default.ArgsUrl))
+            {
+                _model.AddDownloadFromArgs();
+            }
         }
 
         private void DownloaderManager_DownloadEnded(object sender, EventArgs e)
@@ -64,6 +74,7 @@ namespace DownloadsManager
 
         private void BtnHideWindow_Click(object sender, RoutedEventArgs e)
         {
+            (trayMenu.Items[0] as System.Windows.Controls.MenuItem).Header = "Show";
             this.Hide();
         }
 
