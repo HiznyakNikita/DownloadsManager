@@ -48,7 +48,7 @@ namespace DownloadsManager.Tests
             remoteFileInfo.FileSize = 1773484;
             int segmentCount = 6;
             List<CalculatedFileSegment> segments = calculator.GetSegments(segmentCount, remoteFileInfo);
-            Assert.AreEqual(segments[0].SegmentEndPosition, 354696);
+            Assert.AreEqual(segments[0].SegmentEndPosition, 295580);
         }
     }
 }
