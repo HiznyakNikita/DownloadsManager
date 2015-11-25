@@ -73,21 +73,21 @@ namespace DownloadsManager.Views
             }
         }
 
-        private void BtnRemove_Click(object sender, RoutedEventArgs e)
-        {
-            if (lstBoxAlternativeUrl.SelectedItem != null)
-            {
-                _model.RemoveMirrorFromList(lstBoxAlternativeUrl.SelectedValue.ToString());
-            }
-        }
+        //private void BtnRemove_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (lstBoxAlternativeUrl.SelectedItem != null)
+        //    {
+        //        _model.RemoveMirrorFromList(lstBoxAlternativeUrl.SelectedValue.ToString());
+        //    }
+        //}
 
-        private void BtnAdd_Click(object sender, RoutedEventArgs e)
-        {
-            if (!string.IsNullOrEmpty(tbUrlToDownloadAlternative.Text))
-            {
-                _model.AddMirrorToList(tbUrlToDownloadAlternative.Text);
-            }
-        }
+        //private void BtnAdd_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (!string.IsNullOrEmpty(tbUrlToDownloadAlternative.Text))
+        //    {
+        //        _model.AddMirrorToList(tbUrlToDownloadAlternative.Text);
+        //    }
+        //}
 
         private void BtnCloseWindow_Click(object sender, RoutedEventArgs e)
         {
@@ -123,24 +123,24 @@ namespace DownloadsManager.Views
 
         #endregion
 
-        private void CheckBoxAlternative_Checked(object sender, RoutedEventArgs e)
-        {
-            if (checkBoxAlternative.IsChecked == true)
-            {
-                lblUrl.Visibility = Visibility.Visible;
-                btnAddUrl.IsEnabled = true;
-                btnRemoveUrl.IsEnabled = true;
-                tbUrlToDownloadAlternative.IsEnabled = true;
-                lstBoxAlternativeUrl.IsEnabled = true;
-            }
-            else
-            {
-                lblUrl.Visibility = Visibility.Hidden;
-                btnAddUrl.IsEnabled = false;
-                btnRemoveUrl.IsEnabled = false;
-                tbUrlToDownloadAlternative.IsEnabled = false;
-                lstBoxAlternativeUrl.IsEnabled = false;
-            }
-        }
+        //private void CheckBoxAlternative_Checked(object sender, RoutedEventArgs e)
+        //{
+        //    if (checkBoxAlternative.IsChecked == true)
+        //    {
+        //        lblUrl.Visibility = Visibility.Visible;
+        //        btnAddUrl.IsEnabled = true;
+        //        btnRemoveUrl.IsEnabled = true;
+        //        tbUrlToDownloadAlternative.IsEnabled = true;
+        //        lstBoxAlternativeUrl.IsEnabled = true;
+        //    }
+        //    else
+        //    {
+        //        lblUrl.Visibility = Visibility.Hidden;
+        //        btnAddUrl.IsEnabled = false;
+        //        btnRemoveUrl.IsEnabled = false;
+        //        tbUrlToDownloadAlternative.IsEnabled = false;
+        //        lstBoxAlternativeUrl.IsEnabled = false;
+        //    }
+        //}
     }
 }

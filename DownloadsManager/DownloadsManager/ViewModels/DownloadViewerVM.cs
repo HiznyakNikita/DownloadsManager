@@ -52,6 +52,9 @@ namespace DownloadsManager.ViewModels
             }
         }
 
+        /// <summary>
+        /// Rate statistic dictionary -> dateTime of download - rate of download
+        /// </summary>
         public Dictionary<DateTime, double> RatesStatistic
         {
             get
@@ -175,6 +178,9 @@ namespace DownloadsManager.ViewModels
 
         public Command StartDownloadCommand { get; set; }
 
+        /// <summary>
+        /// Command for add max rate to download settings
+        /// </summary>
         public Command DownloadSettingsCommand { get; set; }
 
         public Command RemoveCommand { get; set; }

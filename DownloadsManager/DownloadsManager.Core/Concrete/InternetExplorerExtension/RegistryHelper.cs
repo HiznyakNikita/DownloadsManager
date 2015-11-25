@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.Core.Concrete.InternetExplorerExtension
 {
+    /// <summary>
+    /// Helper class for add key to registry
+    /// </summary>
     public static class RegistryHelper
     {
         /// <summary>

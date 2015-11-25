@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.Core.Concrete
 {
+    /// <summary>
+    /// Proxy for stream with maximum download rate implementation
+    /// </summary>
     public class LimitedSpeedProxyStream : Stream
     {
         private Stream proxy;

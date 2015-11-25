@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.ViewModels
 {
+    /// <summary>
+    /// View model for AppSettings window
+    /// </summary>
     public class AppSettingsVM : MainVM, IAppSettingsVM
     {
         public AppSettingsVM()
@@ -72,6 +75,7 @@ namespace DownloadsManager.ViewModels
 
         public Command SaveSettingsCmd { get; set; }
 
+        //save settings  for DM
         private void SaveSettings()
         {
             Settings.Default.CleanEndedDownloads = CleanEndedDownloads;

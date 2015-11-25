@@ -21,7 +21,9 @@ using DownloadsManager.Core.Concrete.Enums;
 
 namespace DownloadsManager.UserControls
 {
-
+    /// <summary>
+    /// Converterbetween icons and filetype 
+    /// </summary>
     public class FileTypeToTypeIconConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

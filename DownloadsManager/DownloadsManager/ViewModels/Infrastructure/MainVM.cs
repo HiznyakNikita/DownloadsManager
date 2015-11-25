@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.ViewModels.Infrastructure
 {
+    /// <summary>
+    /// Abstract MainVM. Need for INotifyPropertyChanged implementation in child classes
+    /// </summary>
     public class MainVM : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;

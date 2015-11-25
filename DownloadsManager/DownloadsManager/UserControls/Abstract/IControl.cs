@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.UserControls.Abstract
 {
+    /// <summary>
+    /// Interface for UserControl, need for IoC
+    /// </summary>
     public interface IControl
     {
     }

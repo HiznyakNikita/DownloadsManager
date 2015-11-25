@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.ViewModels.Infrastructure
 {
+    /// <summary>
+    /// Interface for AppSettingsVM
+    /// </summary>
     public interface IAppSettingsVM : IMainVM
     {
     }

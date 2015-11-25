@@ -120,19 +120,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Helpers\AutofacExtension.cs" />
-    <Compile Include="Helpers\AutofacHelper.cs" />
-    <Compile Include="Helpers\ClipboardState.cs" />
-    <Compile Include="Helpers\ControlCreator.cs" />
-    <Compile Include="Helpers\Converters.cs" />
-    <Compile Include="Helpers\DownloadsSerializer.cs" />
-    <Compile Include="Helpers\DownloadStatisticWrapper.cs" />
+    <Compile Include="Helpers\Autofac\AutofacExtension.cs" />
+    <Compile Include="Helpers\Autofac\AutofacHelper.cs" />
+    <Compile Include="Helpers\Concrete\ControlCreator.cs" />
+    <Compile Include="Helpers\Concrete\Converters.cs" />
+    <Compile Include="Helpers\Concrete\DownloadsSerializer.cs" />
+    <Compile Include="Helpers\Concrete\DownloadStatisticWrapper.cs" />
     <Compile Include="Helpers\Abstract\IControlCreator.cs" />
     <Compile Include="Helpers\Abstract\IWindowOpener.cs" />
-    <Compile Include="Helpers\SingleInstance.cs">
+    <Compile Include="Helpers\Concrete\SingleInstance.cs">
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>
-    <Compile Include="Helpers\WindowOpener.cs" />
+    <Compile Include="Helpers\Concrete\WindowOpener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserControls\Abstract\IControl.cs" />
     <Compile Include="UserControls\DownloadViewer.xaml.cs">
@@ -154,9 +153,6 @@
     <Compile Include="ViewModels\Infrastructure\MainVM.cs" />
     <Compile Include="ViewModels\MainWindowVM.cs" />
     <Compile Include="ViewModels\NewDownloadVM.cs" />
-    <Compile Include="Views\AppSettingsView.xaml.cs">
-      <DependentUpon>AppSettingsView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\NewDownloadView.xaml.cs">
       <DependentUpon>NewDownloadView.xaml</DependentUpon>
     </Compile>
@@ -182,10 +178,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\FindFolderControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\AppSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

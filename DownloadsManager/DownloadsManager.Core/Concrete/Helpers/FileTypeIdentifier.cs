@@ -8,8 +8,12 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.Core.Concrete.Helpers
 {
+    /// <summary>
+    /// class for identify type of file by extension
+    /// </summary>
     public static class FileTypeIdentifier
     {
+        //regex patterns
         private static string videoPattern = ".*\\.(wmv|mov|avi|divx|mpeg|mpg|m4p|avi)";
         private static string picturePattern = ".*\\.(jpg|jpeg|jfif|exitf|tiff|gif|bmp|png|ppm|pgm|pbm|pnm|webp)";
         private static string documentPattern = ".*\\.(pdf|doc|docx|djvu|txt|dot|docm|dotx|dotm|docb|xls|xlt|xlm|xlsx"
