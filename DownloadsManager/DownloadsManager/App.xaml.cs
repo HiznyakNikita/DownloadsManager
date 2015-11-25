@@ -18,6 +18,8 @@ using System.IO;
 using System.Globalization;
 using System.Management;
 using System.Diagnostics;
+using DownloadsManager.Helpers.Concrete;
+using DownloadsManager.Helpers.Autofac;
 
 namespace DownloadsManager
 {
