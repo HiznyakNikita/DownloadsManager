@@ -5,6 +5,7 @@ using DownloadsManager.Core.Concrete.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -68,6 +69,28 @@ namespace DownloadsManager.Tests
             int segmentCount = 6;
             List<CalculatedFileSegment> segments = calculator.GetSegments(segmentCount, remoteFileInfo);
             Assert.AreEqual(segments[0].SegmentEndPosition, 295580);
+        }
+
+        [TestMethod]
+        public void LocateLocalFileExistsTest()
+        {
+            LocalFilesHelper.LocateLocalFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                "TestFileName.txt", 10);
+            Assert.AreEqual(true, System.IO.File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+                + "\\TestFileName.txt"));
+        }
+
+        [TestMethod]
+        public void LocateLocalFileSizeTest()
+        {
+            LocalFilesHelper.LocateLocalFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+               "TestFileName.txt", 10);
+            using (FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+                + "\\TestFileName.txt"
+                , FileMode.Open, FileAccess.Read))
+            {
+                Assert.AreEqual(10, fs.Length);
+            }
         }
 
     }
