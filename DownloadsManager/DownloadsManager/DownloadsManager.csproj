@@ -84,7 +84,7 @@
   <ItemGroup>
     <Reference Include="Autofac, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\Autofac.dll</HintPath>
+      <HintPath>..\packages\Autofac.3.3.0\lib\net40</HintPath>
     </Reference>
     <Reference Include="StyleCop">
       <HintPath>..\packages\StyleCop.4.7.49.0\lib\net35\StyleCop.dll</HintPath>
