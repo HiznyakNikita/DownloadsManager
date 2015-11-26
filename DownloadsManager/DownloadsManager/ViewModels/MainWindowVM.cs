@@ -3,7 +3,6 @@ using DownloadsManager.Core.Concrete;
 using DownloadsManager.Core.Concrete.DownloadStates;
 using DownloadsManager.Core.Concrete.Enums;
 using DownloadsManager.Helpers;
-using DownloadsManager.Helpers;
 using DownloadsManager.Helpers.Concrete;
 using DownloadsManager.Properties;
 using DownloadsManager.UserControls;
