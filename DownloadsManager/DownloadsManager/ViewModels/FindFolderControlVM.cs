@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.ViewModels
 {
+    /// <summary>
+    /// VM fro find folder control
+    /// </summary>
     public class FindFolderControlVM : MainVM, IFindFolderControlVM
     {
         public FindFolderControlVM() 
