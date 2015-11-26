@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.Tests
 {
+    /// <summary>
+    /// Tests for UI converters
+    /// </summary>
     [TestClass]
     public class UiHelpersTest
     {
