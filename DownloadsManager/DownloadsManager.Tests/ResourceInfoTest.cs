@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.Tests
 {
+    /// <summary>
+    /// Test for ResourceInfo class
+    /// </summary>
     [TestClass]
     public class ResourceInfoTest
     {
