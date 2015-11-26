@@ -121,8 +121,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Helpers\Autofac\AutofacExtension.cs" />
-    <Compile Include="Helpers\Autofac\AutofacHelper.cs" />
+    <Compile Include="Helpers\Concrete\AutofacExtension.cs" />
+    <Compile Include="Helpers\Concrete\AutofacHelper.cs" />
     <Compile Include="Helpers\Concrete\ControlCreator.cs" />
     <Compile Include="Helpers\Concrete\Converters.cs" />
     <Compile Include="Helpers\Concrete\DownloadsSerializer.cs" />

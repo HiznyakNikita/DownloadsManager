@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using DownloadsManager.Helpers.Autofac;
+using DownloadsManager.Helpers;
 using DownloadsManager.UserControls;
 using DownloadsManager.UserControls.Abstract;
 using DownloadsManager.ViewModels;

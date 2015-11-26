@@ -1,4 +1,4 @@
-﻿using DownloadsManager.Helpers.Autofac;
+﻿using DownloadsManager.Helpers;
 using DownloadsManager.ViewModels;
 using DownloadsManager.ViewModels.Infrastructure;
 using DownloadsManager.Views;
