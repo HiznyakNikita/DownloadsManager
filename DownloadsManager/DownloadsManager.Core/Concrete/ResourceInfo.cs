@@ -8,6 +8,9 @@ using System.Text;
 
 namespace DownloadsManager.Core.Concrete
 {
+    /// <summary>
+    /// Information about downloading resource
+    /// </summary>
     [Serializable]
     public class ResourceInfo
     {
@@ -124,7 +127,7 @@ namespace DownloadsManager.Core.Concrete
         /// <returns>proxy provider</returns>
         public IProtocolProvider BindProtocolProviderProxy(SpeedLimitHelper speedLimit)
         {
-            if (provider != null)
+            if (provider == null)
             {
                 provider = new HttpProtocolProviderSpeedLimitProxy(provider, speedLimit);
             }

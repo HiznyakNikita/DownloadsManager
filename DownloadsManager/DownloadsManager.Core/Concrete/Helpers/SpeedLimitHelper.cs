@@ -25,6 +25,9 @@ namespace DownloadsManager.Core.Concrete.Helpers
 
         #region Properties
 
+        /// <summary>
+        /// current maximum download rate
+        /// </summary>
         public double CurrentMaxRate
         {
             get { return _downloader.MaxRate; }
@@ -50,6 +53,7 @@ namespace DownloadsManager.Core.Concrete.Helpers
                 currentWait = Math.Max(currentWait + DownBalance, 0);
             }
 
+            //wait for download in milliseonds
             Thread.Sleep(TimeSpan.FromMilliseconds(currentWait));
 
             Debug.WriteLine("rate = " + tempRate);

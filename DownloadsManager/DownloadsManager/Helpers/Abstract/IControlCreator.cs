@@ -9,6 +9,9 @@ using System.Windows.Controls;
 
 namespace DownloadsManager.Helpers
 {
+    /// <summary>
+    /// Interfae for control creator
+    /// </summary>
     public interface IControlCreator
     {
         IControl CreateControl(IMainVM model);

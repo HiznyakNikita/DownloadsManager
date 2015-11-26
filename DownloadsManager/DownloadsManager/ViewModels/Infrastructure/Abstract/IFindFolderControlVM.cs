@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.ViewModels.Infrastructure
 {
+    /// <summary>
+    /// Interface for FindFolderControl
+    /// </summary>
     public interface IFindFolderControlVM : IMainVM
     {
     }

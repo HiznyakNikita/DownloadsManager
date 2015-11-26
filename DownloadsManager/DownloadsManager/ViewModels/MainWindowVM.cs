@@ -3,6 +3,7 @@ using DownloadsManager.Core.Concrete;
 using DownloadsManager.Core.Concrete.DownloadStates;
 using DownloadsManager.Core.Concrete.Enums;
 using DownloadsManager.Helpers;
+using DownloadsManager.Helpers.Concrete;
 using DownloadsManager.Properties;
 using DownloadsManager.UserControls;
 using DownloadsManager.ViewModels.Infrastructure;
@@ -45,9 +46,9 @@ namespace DownloadsManager.ViewModels
             this.ShowInFolderCmd = new Command(this.ShowInFolder);
             this.PauseAllDownloadCommand = new Command(PauseAllDownloads);
             this.RemoveAllCommand = new Command(RemoveAllDownloads);
+
             DownloaderManager.Instance.DownloadRemoved += DownloaderManagerDownloadRemoved;
             AddSavedDownloads();
-
         }
 
         [field: NonSerialized]
@@ -72,6 +73,9 @@ namespace DownloadsManager.ViewModels
         /// </summary>
         public Command ShowInFolderCmd { get; set; }
 
+        /// <summary>
+        /// history of downloads
+        /// </summary>
         public List<Downloader> DownloadsHistory
         { 
             get
@@ -82,6 +86,9 @@ namespace DownloadsManager.ViewModels
             }
         }
 
+        /// <summary>
+        /// Rate statistic dictionary (date time of download and rate of download) 
+        /// </summary>
         public Dictionary<DateTime, double> RatesStatistic
         {
             get 
@@ -101,6 +108,9 @@ namespace DownloadsManager.ViewModels
             }
         }
 
+        /// <summary>
+        /// downloads statistic by types
+        /// </summary>
         public List<DownloadStatisticWrapper> DownloadTypesStatistic 
         { 
             get
@@ -109,6 +119,9 @@ namespace DownloadsManager.ViewModels
             }
         }
 
+        /// <summary>
+        /// downloads statistic by states
+        /// </summary>
         public List<DownloadStatisticWrapper> DownloadStatesStatistic
         {
             get
@@ -117,6 +130,9 @@ namespace DownloadsManager.ViewModels
             }
         }
 
+        /// <summary>
+        /// total statistic of downloads
+        /// </summary>
         public string TotalBytesDownloadedStatistic
         { 
             get
@@ -129,6 +145,9 @@ namespace DownloadsManager.ViewModels
             }
         }
 
+        /// <summary>
+        /// COnformity between download viewer windows and downloads
+        /// </summary>
         public Hashtable ItemsToDownloaders
         {
             get
@@ -156,6 +175,11 @@ namespace DownloadsManager.ViewModels
             }
         }
 
+        /// <summary>
+        /// Adding parameters for downloads history
+        /// </summary>
+        /// <param name="from">time from history</param>
+        /// <param name="to">time to history</param>
         public void AddHistoryParams(DateTime from, DateTime to)
         {
             _historyPeriodFrom = from;
@@ -163,11 +187,19 @@ namespace DownloadsManager.ViewModels
             NotifyPropertyChanged("DownloadsHistory");
         }
 
+        /// <summary>
+        /// Get current downloads
+        /// </summary>
+        /// <returns>omformity hashtable</returns>
         public Hashtable GetDownloaders()
         {
             return ItemsToDownloaders;
         }
 
+        /// <summary>
+        /// Add new download
+        /// </summary>
+        /// <param name="mirror">download mirror</param>
         public void AddDownload(string mirror)
         {
             try
@@ -193,6 +225,10 @@ namespace DownloadsManager.ViewModels
             }
         }
 
+        /// <summary>
+        /// Add new download from console argument url
+        /// Need when we run DM from browser (run by cmd command with url param)
+        /// </summary>
         public void AddDownloadFromArgs()
         {
             try
@@ -296,28 +332,38 @@ namespace DownloadsManager.ViewModels
         {
             try
             {
+                //create opener for new download adding window
                 IWindowOpener windowOpener = new WindowOpener();
                 windowOpener.OpenNewWindow(new NewDownloadVM());
-                Downloader fileToDownload = DownloaderManager.Instance.LastDownload;
-                fileToDownload.DownloadEnded += OnDownloadEnded;
-
-                IControlCreator controlCreator = new ControlCreator();
-                DownloadViewerVM model = new DownloadViewerVM(fileToDownload);
-                var viewer = controlCreator.CreateControl(model);
-
-                if (!_itemsToDownloaders.Keys.OfType<Downloader>().Contains(fileToDownload))
+                if (DownloaderManager.Instance.LastDownload != null
+                    && !_itemsToDownloaders.Contains(DownloaderManager.Instance.LastDownload))
                 {
-                    _itemsToDownloaders.Add(fileToDownload, viewer);
-                    NotifyPropertyChanged("ItemsToDownloaders");
-                }
+                    Downloader fileToDownload = DownloaderManager.Instance.LastDownload;
+                    fileToDownload.DownloadEnded += OnDownloadEnded;
 
-                NotifyPropertyChanged("TotalBytesDownloadedStatistic");
-                NotifyPropertyChanged("DownloadStatesStatistic");
-                NotifyPropertyChanged("DownloadTypesStatistic");
+                    //create download viewer control
+                    IControlCreator controlCreator = new ControlCreator();
+                    DownloadViewerVM model = new DownloadViewerVM(fileToDownload);
+                    var viewer = controlCreator.CreateControl(model);
+
+                    if (!_itemsToDownloaders.Keys.OfType<Downloader>().Contains(fileToDownload))
+                    {
+                        _itemsToDownloaders.Add(fileToDownload, viewer);
+                        NotifyPropertyChanged("ItemsToDownloaders");
+                    }
+
+                    NotifyPropertyChanged("TotalBytesDownloadedStatistic");
+                    NotifyPropertyChanged("DownloadStatesStatistic");
+                    NotifyPropertyChanged("DownloadTypesStatistic");
+                }
             }
             catch (ArgumentNullException)
             {
 
+            }
+            catch (UriFormatException)
+            {
+                MessageBox.Show("Invalid url format", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -347,6 +393,7 @@ namespace DownloadsManager.ViewModels
         #endregion
 
         #region Statistic
+
         private List<DownloadStatisticWrapper> GetTypesStatistic()
         {
             List<DownloadStatisticWrapper> result = new List<DownloadStatisticWrapper>();

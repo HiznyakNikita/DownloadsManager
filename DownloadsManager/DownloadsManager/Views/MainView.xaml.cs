@@ -50,6 +50,8 @@ namespace DownloadsManager
                 _model.AddDownloadFromArgs();
             }
 
+            //Attach this window like current application window. Need for open the same window and doesn't reopen new 
+            // when we open download from browser
             App.SingleMainWindow = this;
         }
 
@@ -92,6 +94,7 @@ namespace DownloadsManager
             }
         }
 
+        //Tray realization
         #region Tray
 
         /// <summary>

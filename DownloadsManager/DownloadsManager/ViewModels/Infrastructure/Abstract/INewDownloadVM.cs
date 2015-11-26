@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.ViewModels.Infrastructure
 {
+    /// <summary>
+    /// Interface for NewDownlaodWindowVM
+    /// </summary>
     public interface INewDownloadVM : IMainVM
     {
         void AddMirrorToList(string mirrorToAdd);

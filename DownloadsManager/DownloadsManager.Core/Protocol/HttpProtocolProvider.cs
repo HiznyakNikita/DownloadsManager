@@ -12,9 +12,19 @@ using System.Threading.Tasks;
 
 namespace DownloadsManager.Core.Concrete
 {
+    /// <summary>
+    /// protocol provider for downloading
+    /// </summary>
     [Serializable]
     public class HttpProtocolProvider : IProtocolProvider
     {
+        /// <summary>
+        /// creating response stream
+        /// </summary>
+        /// <param name="resourceInfo">downloading link</param>
+        /// <param name="startRangePosition">range start position</param>
+        /// <param name="endRangePosition">range end position</param>
+        /// <returns></returns>
         public Stream CreateResponseStream(ResourceInfo resourceInfo, int startRangePosition, int endRangePosition)
         {
             if (resourceInfo != null)
@@ -42,6 +52,12 @@ namespace DownloadsManager.Core.Concrete
                 return null;
         }
 
+        /// <summary>
+        /// Method for getting file information
+        /// </summary>
+        /// <param name="resourceInfo">link</param>
+        /// <param name="stream">download stream</param>
+        /// <returns>information about downloading file</returns>
         public RemoteFileInfo GetFileInfo(ResourceInfo resourceInfo, out Stream stream)
         {
             if (resourceInfo != null)

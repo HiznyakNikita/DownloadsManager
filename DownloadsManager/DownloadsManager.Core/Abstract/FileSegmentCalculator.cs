@@ -10,6 +10,7 @@ namespace DownloadsManager.Core.Abstract
 {
     /// <summary>
     /// Insterface for calculating file segment size and optimal segments count
+    /// Have template method abstract
     /// </summary>
     [Serializable]
     public abstract class FileSegmentCalculator
@@ -21,6 +22,12 @@ namespace DownloadsManager.Core.Abstract
             return GetCalculatedSegments(segmentCount, remoteFileInfo, calculatedSegmentSize, residueBytes);
         }
 
+        /// <summary>
+        /// calculate size of segment
+        /// </summary>
+        /// <param name="segmentCount"></param>
+        /// <param name="remoteFileInfo"></param>
+        /// <returns></returns>
         public virtual long CalculateSegmentSize(int segmentCount, RemoteFileInfo remoteFileInfo)
         {
             if (remoteFileInfo != null)
@@ -32,11 +39,26 @@ namespace DownloadsManager.Core.Abstract
             return 0;
         }
 
+        /// <summary>
+        /// calculate residue size bytes after dividing fole on segments
+        /// </summary>
+        /// <param name="segmentCount">count of segments</param>
+        /// <param name="remoteFileInfo">information about remote file</param>
+        /// <param name="calculatedSegmentSize"></param>
+        /// <returns></returns>
         public virtual long CalculateResidueBytes(int segmentCount, RemoteFileInfo remoteFileInfo, long calculatedSegmentSize)
         {
             return 0;
         }
 
+        /// <summary>
+        /// Get calculated segments of download
+        /// </summary>
+        /// <param name="segmentCount">count of segments</param>
+        /// <param name="remoteFileInfo">remote file info</param>
+        /// <param name="calculatedSegmentSize">size of calculated segment</param>
+        /// <param name="residueBytes">residue bytes of download</param>
+        /// <returns></returns>
         public virtual List<CalculatedFileSegment> GetCalculatedSegments(
             int segmentCount, 
             RemoteFileInfo remoteFileInfo, 

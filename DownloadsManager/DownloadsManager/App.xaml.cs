@@ -18,6 +18,7 @@ using System.IO;
 using System.Globalization;
 using System.Management;
 using System.Diagnostics;
+using DownloadsManager.Helpers.Concrete;
 
 namespace DownloadsManager
 {
@@ -42,14 +43,11 @@ namespace DownloadsManager
         {
             Settings.Default.ArgsUrl = string.Empty;
 
+            //read args of app run
             if (args != null)
                 foreach (var s in args)
                     Settings.Default.ArgsUrl = s.ToString();
-            //string wmiQuery = string.Format("select CommandLine from Win32_Process where Name='{0}'", "DownloadsManager");
-            //ManagementObjectSearcher searcher = new ManagementObjectSearcher(wmiQuery);
-            //ManagementObjectCollection retObjectCollection = searcher.Get();
-            //foreach (ManagementObject retObject in retObjectCollection)
-            //    Console.WriteLine("[{0}]", retObject["CommandLine"]);
+
             if (SingleInstance<App>.InitializeAsFirstInstance(Unique))
             {
                 var application = new App();
@@ -82,10 +80,7 @@ namespace DownloadsManager
         /// <param name="e">events</param>
         protected override void OnStartup(StartupEventArgs e)
         {
-            //if (e.Args != null)
-            //    foreach (var s in e.Args)
-            //        MessageBox.Show(s);
-            //Guid IEExtensionGuid = Guid.NewGuid();
+            //registration of IE extension in registry
             RegistryHelper.SetRegistryKeyValues();
             AutofacHelper.OnStartupInit();
             IWindowOpener opener = AutofacHelper.Container.Resolve<IWindowOpener>();

@@ -61,16 +61,20 @@
                         </Label>
                     </StackPanel>
                 </StackPanel>
-                <StackPanel Orientation="Vertical" Height="60" Width="109">
+                <StackPanel Orientation="Vertical" Height="100" Width="115">
                     <Button x:Name="btnPause" Command="{Binding PauseAllDownloadCommand}" 
                                 Content="Pause All" Style="{StaticResource pauseButtonWithPictureAndTextStyle}" 
                                 Width="90" Height="25"/>
                     <Button x:Name="btnRemove" Command="{Binding RemoveAllCommand}"
                                 Content="Remove All" Style="{StaticResource removeButtonWithPictureAndTextStyle}" 
                                 Width="90" Height="25" Margin="7"/>
+                    <Button x:Name="btnAddDownload" Command="{Binding AddDownloadCmd}"
+                                Content="Add new" Style="{StaticResource startButtonWithPictureAndTextStyle}" 
+                                Width="90" Height="25" Margin="7"/>                  
                 </StackPanel>
                 
             </StackPanel>
+            
             <TabControl  x:Name="tabControl" Background="#FF575757" Style="{StaticResource TabControlStyle}" BorderBrush="Transparent">
                 <TabControl.Resources>
                     <Style TargetType="TabItem" BasedOn="{StaticResource TabItemsStyle}"/>
@@ -197,6 +201,7 @@
             </TabControl>
         </StackPanel>
     </Grid>
+    
     <Window.ContextMenu>
         <ContextMenu Background="#FF4A4A4A">
             <MenuItem x:Name="menuItemAddDownload" Command="{Binding AddDownloadCmd}"  

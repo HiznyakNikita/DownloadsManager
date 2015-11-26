@@ -11,7 +11,7 @@ using System.Windows;
 namespace DownloadsManager.Helpers
 {
     /// <summary>
-    /// Opener interface
+    /// WIndow Opener interface
     /// </summary>
     public interface IWindowOpener
     {
