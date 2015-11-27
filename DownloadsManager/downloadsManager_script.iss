@@ -29,22 +29,22 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 [Files]
 Source: {#Path}; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\Autofac.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\Autofac.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.Core.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.exe.CodeAnalysisLog.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.exe.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.exe.lastcodeanalysissucceeded"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.vshost.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.vshost.exe.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.vshost.exe.manifest"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\StyleCop.CSharp.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\StyleCop.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\System.Windows.Controls.DataVisualization.Toolkit.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\WPFToolkit.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\DownloadsManager\bin\Release\Autofac.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\DownloadsManager\bin\Release\Autofac.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.Core.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.exe.CodeAnalysisLog.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.exe.config"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.exe.lastcodeanalysissucceeded"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.vshost.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.vshost.exe.config"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.vshost.exe.manifest"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\DownloadsManager\bin\Release\StyleCop.CSharp.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\DownloadsManager\bin\Release\StyleCop.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\DownloadsManager\bin\Release\System.Windows.Controls.DataVisualization.Toolkit.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\DownloadsManager\bin\Release\WPFToolkit.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\DownloadsManager\DownloadsManager\bin\Release\WPFToolkit.pdb"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
