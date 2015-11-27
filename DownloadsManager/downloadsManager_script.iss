@@ -21,13 +21,14 @@ OutputDir=..\DownloadsManager\DownloadsManager\bin\Release\
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"
+Name: "ukrainian"; MessagesFile: "compiler:Languages\Ukrainian.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: {#Path}; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\Autofac.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\Autofac.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
