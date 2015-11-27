@@ -790,6 +790,7 @@ namespace DownloadsManager.Core.Concrete
             }
         }
 
+        //restarting failed or paused download
         private void RestartDownload()
         {
             Stream downloadStream;
@@ -948,6 +949,7 @@ namespace DownloadsManager.Core.Concrete
             }
         }
 
+        //segment read method via stream
         private void ReadSegment(FileSegment segment, int buffSize, byte[] buffer)
         {
             using (segment.InputStream)
