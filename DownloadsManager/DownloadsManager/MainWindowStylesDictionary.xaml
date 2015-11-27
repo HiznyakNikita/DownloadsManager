@@ -110,58 +110,6 @@
         </Setter>
     </Style>
 
-    <Style x:Key="leftScrollButtonStyle" TargetType="Button">
-        <Setter Property="OverridesDefaultStyle" Value="True"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Border Name="border" 
-                        BorderThickness="0" >
-                        <Border.Background>
-                            <ImageBrush ImageSource="/Resources/icons/left_unselected.png"/>
-                        </Border.Background>
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" TargetName="border">
-                                <Setter.Value>
-                                    <ImageBrush ImageSource="/Resources/icons/left_selected.png" />
-                                </Setter.Value>
-                            </Setter>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="rightScrollButtonStyle" TargetType="Button">
-        <Setter Property="OverridesDefaultStyle" Value="True"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Border Name="border" 
-                        BorderThickness="0" >
-                        <Border.Background>
-                            <ImageBrush ImageSource="/Resources/icons/right_unselected.png"/>
-                        </Border.Background>
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" TargetName="border">
-                                <Setter.Value>
-                                    <ImageBrush ImageSource="/Resources/icons/right_selected.png" />
-                                </Setter.Value>
-                            </Setter>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
     <Style x:Key="chooseFolderButtonStyle" TargetType="Button">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="Template">
