@@ -11,6 +11,9 @@ namespace DownloadsManager.Tests
     [TestClass]
     public class FileSegmentTest
     {
+        /// <summary>
+        /// Tests for file segment class
+        /// </summary>
         [TestMethod]
         public void TransferedBytesTest()
         {
