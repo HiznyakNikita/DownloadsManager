@@ -38,7 +38,6 @@ Source: "..\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.exe.C
 Source: "..\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.exe.lastcodeanalysissucceeded"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.vshost.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.vshost.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\DownloadsManager\DownloadsManager\bin\Release\DownloadsManager.vshost.exe.manifest"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\DownloadsManager\DownloadsManager\bin\Release\StyleCop.CSharp.dll"; DestDir: "{app}"; Flags: ignoreversion
