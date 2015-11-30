@@ -39,6 +39,18 @@ Source: "..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\Style
 Source: "..\DownloadsManager\DownloadsManager\DownloadsManager\bin\Release\System.Windows.Controls.DataVisualization.Toolkit.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 
+Source: {#Path}; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\bin\Release\Autofac.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\bin\Release\Autofac.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\bin\Release\DownloadsManager.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\bin\Release\DownloadsManager.Core.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\bin\Release\DownloadsManager.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\bin\Release\DownloadsManager.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\bin\Release\StyleCop.CSharp.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\bin\Release\StyleCop.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\bin\Release\System.Windows.Controls.DataVisualization.Toolkit.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\bin\Release\WPFToolkit.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\DownloadsManager\bin\Release\WPFToolkit.pdb"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\{#Name}"; Filename: "{app}\{#ExeName}"
